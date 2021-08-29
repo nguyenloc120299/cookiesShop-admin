@@ -11,8 +11,8 @@ const Navabar = ({ isMenu, showMenu }) => {
             <div className='links'>
                 <ul>
                     <li><Link to='/'>Dashboard</Link></li>
-                    <li><Link to='/'>Quản lý sản phẩm</Link></li>
-                    <li><Link to='/'>Quản lý nhà cung cấp</Link></li>
+                    <li><Link to='/product-manager'>Quản lý sản phẩm</Link></li>
+                    <li><Link to='/'>Quản lý khách hàng</Link></li>
 
                 </ul>
             </div>

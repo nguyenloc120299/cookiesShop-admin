@@ -1,0 +1,23 @@
+.btn-detail-1 {
+    border: transparent;
+    padding: 5px 10px;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    background: rgb(0, 105, 105, 100%);
+}
+.btn-detail-2 {
+    border: transparent;
+    padding: 5px 10px;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    background: rgb(0, 105, 105, 100%);
+}
+.btn-detail-1:hover {
+    background: rgb(0, 105, 105, 100%);
+    color: white;
+}
+.btn-detail-2:hover {
+    background: rgb(0, 105, 105, 100%);
+}

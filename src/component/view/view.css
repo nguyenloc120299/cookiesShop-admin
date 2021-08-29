@@ -1,0 +1,25 @@
+/* ----------------------------pagiination -------------------------- */
+.pagination {
+    margin-top: 20px;
+    width: 100%;
+    height: 40px;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.pagination a {
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    color: black;
+    border: 1px solid #aaa;
+    cursor: pointer;
+    text-decoration: none;
+}
+.pagination a:hover {
+    color: black;
+}
+.paginationActive a {
+    color: black !important;
+}
