@@ -1,0 +1,32 @@
+.header {
+    height: 50px;
+    background: #fff;
+    display: flex;
+    box-shadow: 0 0 5px #aaa;
+    justify-content: flex-end;
+}
+.menu {
+    font-size: 30px;
+    display: block;
+    margin-bottom: 10px !important;
+    margin-left: 10px;
+    display: none;
+}
+.info {
+    font-size: 20px;
+    margin: 10px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+@media (max-width: 720px) {
+    .header {
+        justify-content: space-between;
+    }
+    .menu {
+        display: block;
+    }
+    .close-menu {
+        display: block;
+    }
+}

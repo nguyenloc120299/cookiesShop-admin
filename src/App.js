@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Header from "./component/header/Header";
+import MainPage from "./component/main-page/MainPage";
+import Navabar from "./component/navabar/Navabar";
+import { BrowserRouter as Router } from 'react-router-dom'
+import './App.css'
+import { useState } from "react";
 function App() {
+  const [isMenu, setIsMenu] = useState(false)
+  const showMenu = () => {
+    setIsMenu(!isMenu)
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Navabar isMenu={isMenu} showMenu={showMenu} />
+        <div className='main-page'>
+          <Header showMenu={showMenu} isMenu={isMenu} />
+          <MainPage />
+        </div>
+      </div>
+
+
+
+
+
+    </Router>
   );
 }
 
