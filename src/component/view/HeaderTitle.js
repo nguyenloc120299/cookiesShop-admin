@@ -11,6 +11,7 @@ const HeaderTitle = ({ title, onChaneShowMoDal }) => {
             <div className=''>
                 <h5>Danh sách {title}</h5>
             </div>
+
             <div className='' style={{
                 color: 'green',
                 fontSize: '20px'

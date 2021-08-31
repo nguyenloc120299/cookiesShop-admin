@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useContext, useState } from 'react'
+import Search from '../../component/search/Search'
 import Alert from '../../component/untill/Alert'
 import HeaderTitle from '../../component/view/HeaderTitle'
 import Pagination from '../../component/view/Pagination'
@@ -10,7 +11,7 @@ const Categories = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
     const totalItem = 10;
-    const [categories] = context.categoriesApi.categories
+    const [categories, setCategories] = context.categoriesApi.categories
     const pageCount = Math.ceil(categories.length / totalItem);
     const [isModal, setIsModal] = useState(false)
 
@@ -21,6 +22,29 @@ const Categories = () => {
     const PageVisited = pageNumber * totalItem
     const changePage = ({ selected }) => {
         setPageNumber(selected)
+    }
+    const removeAccents = (str) => {
+        let AccentsMap = [
+            "aàảãáạăằẳẵắặâầẩẫấậ",
+            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+            "dđ", "DĐ",
+            "eèẻẽéẹêềểễếệ",
+            "EÈẺẼÉẸÊỀỂỄẾỆ",
+            "iìỉĩíị",
+            "IÌỈĨÍỊ",
+            "oòỏõóọôồổỗốộơờởỡớợ",
+            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+            "uùủũúụưừửữứự",
+            "UÙỦŨÚỤƯỪỬỮỨỰ",
+            "yỳỷỹýỵ",
+            "YỲỶỸÝỴ"
+        ];
+        for (let i = 0; i < AccentsMap.length; i++) {
+            let re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+            let char = AccentsMap[i][0];
+            str = str.replace(re, char);
+        }
+        return str;
     }
     const [categoriesValue, setCategoriesValue] = useState({
         name: '',
@@ -71,17 +95,18 @@ const Categories = () => {
             msg: msg
         })
     }
+
     const dislayTable = categories.slice(PageVisited, totalItem + PageVisited).map(item => (
-        <>
-            <tr key={item.id}>
-                <td >{item.id}</td>
-                <td >{item.name}</td>
-                <td>{item.code}</td>
-                <td>{item.totalproduct}</td>
-                <td><button className='btn-detail-1' onClick={() => onChaneShowMoDal('edit', item.id)}>Xem chi tiết</button></td>
-                <td><button className='btn-detail-2'>Xem sản phẩm</button></td>
-            </tr>
-        </>
+
+        <tr key={item.id}>
+            <td >{item.id}</td>
+            <td >{item.name}</td>
+            <td>{item.code}</td>
+            <td>{item.totalproduct}</td>
+            <td><button className='btn-detail-1' onClick={() => onChaneShowMoDal('edit', item.id)}>Chỉnh sửa</button></td>
+            <td><button className='btn-detail-2'>Xem sản phẩm</button></td>
+        </tr>
+
     ))
 
     const onCloseModal = () => {
@@ -101,7 +126,7 @@ const Categories = () => {
             if (isEdit) {
                 setIsLoading(true)
                 await axios.put('/categories', { ...categoriesValue })
-                //console.log(teacherValue)
+                //   console.log(teacherValue)
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
@@ -119,7 +144,7 @@ const Categories = () => {
         try {
             setIsLoading(true)
             // console.log(id)
-            const res = await axios.delete(`/categories/${id}`)
+            await axios.delete(`/categories/${id}`)
             setIsLoading(false)
             setCallBack(!callBack)
             setIsModal(false)
@@ -130,16 +155,40 @@ const Categories = () => {
         }
 
     }
+
+    const onSubmitSearch = (input) => {
+        let arr = []
+        //  setCallBack(!callBack)
+        if (input) {
+            //   setCallBack(!callBack)
+            categories.forEach(category => {
+                //  console.log(category.name.toLowerCase().search(input.toLowerCase()))
+                if (category.code.toLowerCase() === input.toLowerCase() || removeAccents(category.name.toLowerCase()).search(input.toLowerCase()) !== -1) {
+                    arr.push(category)
+                }
+
+                // console.log(category.name)
+            });
+        }
+        if (input === '') {
+            ShowAlert(true, 'danger', 'Không có loại sản phẩm cần tìm')
+            setCallBack(!callBack)
+        }
+        setCategories(arr)
+    }
     return (
         <>
-            {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
-            <div className='container'>
+
+            <div className='container' style={{
+                position: 'absolute'
+            }}>
+                {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
                 <HeaderTitle title='loại sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
                 <Modalcategories
                     isModal={isModal}
                     isEdit={isEdit}
                     isSave={isSave}
-                    isModal={isModal}
+
                     onCloseModal={onCloseModal}
                     onChangeInput={onChangeInput}
                     onSubmit={onSubmit}
@@ -147,8 +196,10 @@ const Categories = () => {
                     isLoading={isLoading}
                     onDelete={onDelete}
                 />
+                <Search onSubmitSearch={onSubmitSearch} />
                 <div className='row'>
                     <table className='table-hover table'>
+
                         <thead >
                             <tr>
                                 <th scope='col'>ID</th>

@@ -6,7 +6,7 @@ import Categories from './categories/Categories'
 const ProductManager = () => {
     return (
         <div>
-            <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="mb-3">
+            <Tabs defaultActiveKey="home" className="mb-3">
                 <Tab eventKey="home" title="Quản lý sản phẩm">
                     <p>Loc1</p>
                 </Tab>
