@@ -2,6 +2,7 @@ import React from 'react'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Categories from './categories/Categories'
+import Supplier from './suplier/Supplier'
 
 const ProductManager = () => {
     return (
@@ -14,7 +15,7 @@ const ProductManager = () => {
                     <Categories />
                 </Tab>
                 <Tab eventKey="nhaCC" title="Quản lý nhà cung cấp">
-                    <p>Loc3</p>
+                    <Supplier />
                 </Tab>
             </Tabs>
         </div>
