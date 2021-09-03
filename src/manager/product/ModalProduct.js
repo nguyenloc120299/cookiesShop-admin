@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Spinner from '../../component/untill/Spinner'
 import ModalFooter from '../../component/view/ModalFooter'
 import { AiOutlineUpload } from 'react-icons/ai'
-const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave, onCloseModal, isLoading, onDelete, img, handleUpLoad, handleDestroy, IsImgInput, closeImage }) => {
-    console.log(img)
-
-
+import { GlobalContext } from '../../GlobalContext'
+const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave, onCloseModal, isLoading, onDelete, img, handleUpLoad, handleDestroy, IsImgInput, closeImage }) => {
+    const context = useContext(GlobalContext)
+    const [categories] = context.categoriesApi.categories
+    const [supliers] = context.suppliersApi.suppliers
     return (
         <div className='modal' tabIndex='-1' style={isModal ? { display: 'block' } : { display: 'none' }}>
 
@@ -29,7 +30,7 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                     <div className='modal-body p-3'>
                         <div className='mb-3'>
 
-                            <input type='text' className='form-control' placeholder='Tên nhà cung cấp'
+                            <input type='text' className='form-control' placeholder='Tên sản phẩm'
                                 name='name'
                                 value={value.name}
                                 onChange={onChangeInput}
@@ -45,26 +46,91 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
 
                         </div>
                         <div className='mb-3'>
-                            <input type='text' className='form-control' placeholder='Email'
-                                name='email'
-                                value={value.email}
+                            <input type='text' className='form-control' placeholder='Mô tả ngắn'
+                                name='sort_description'
+                                value={value.sort_description}
                                 onChange={onChangeInput} />
 
                         </div>
                         <div className='mb-3'>
-                            <input type='text' className='form-control' placeholder='Số điện thoại'
-                                name='phone'
-                                value={value.phone}
+                            <input type='text' className='form-control' placeholder='Mô tả chi tiết'
+                                name='detail_description'
+                                value={value.detail_description}
+                                onChange={onChangeInput} />
+
+                        </div>
+                        {isEdit && <div className='mb-3'>
+                            <input type='text' className='form-control' placeholder='Bán nhanh'
+                                name='ban_nhanh'
+                                value={value.ban_nhanh}
+                                onChange={onChangeInput} />
+
+                        </div>
+                        }
+                        <div className='mb-3'>
+                            <input type='text' className='form-control' placeholder='Giá'
+                                name='price'
+                                value={value.price}
                                 onChange={onChangeInput} />
 
                         </div>
                         <div className='mb-3'>
-                            <input type='text' className='form-control' placeholder='Địa chỉ'
-                                name='address'
-                                value={value.address}
+                            <input type='text' className='form-control' placeholder='Featured'
+                                name='featured'
+                                value={value.featured}
                                 onChange={onChangeInput} />
 
                         </div>
+                        <div className='mb-3'>
+                            <input type='text' className='form-control' placeholder='competive_price'
+                                name='competive_price'
+                                value={value.competive_price}
+                                onChange={onChangeInput} />
+
+                        </div>
+                        <div className='mb-3'>
+                            <input type='date' className='form-control' placeholder='Ngày sale'
+                                name='date_sale'
+                                value={value.date_sale}
+                                onChange={onChangeInput} />
+
+                        </div>
+                        <div className='mb-3'>
+                            <input type='text' className='form-control' placeholder='Số lượng'
+                                name='quantity'
+                                value={value.quantity}
+                                onChange={onChangeInput} />
+
+                        </div>
+                        <div className='mb-3'>
+                            <select className='form-control' placeholder=''
+                                name='category'
+                                value={value.quantity}
+                                onChange={onChangeInput} >
+                                <option>Chọn loại sản phẩm</option>
+                                {
+                                    categories.map((item) => (
+                                        <option value={item.id}>{item.name}</option>
+                                    ))
+                                }
+                            </select>
+
+                        </div>
+                        <div className='mb-3'>
+                            <select className='form-control' placeholder=''
+                                name='supplier'
+                                value={value.quantity}
+                                onChange={onChangeInput} >
+                                <option>Chọn nhà cung cấp</option>
+                                {
+                                    supliers.map((item) => (
+                                        <option value={item.id}>{item.name}</option>
+                                    ))
+                                }
+                            </select>
+
+                        </div>
+
                         {isSave && <>
                             <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }}>
                                 <label htmlFor="fileInput">
@@ -75,7 +141,7 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                                         marginLeft: '10px',
                                         color: '#777',
                                         fontWeight: 'bold'
-                                    }}>Logo</h6>
+                                    }}>Hình ảnh</h6>
                                 </label>
 
                                 <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
@@ -114,7 +180,7 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                                             display: 'block'
                                         }}
                                         >
-                                            <img src={value.logo} alt='' style={{
+                                            <img src={value.avartar} alt='' style={{
                                                 width: '80px',
                                                 height: '80px',
 
@@ -136,7 +202,7 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                                                     <span style={{
                                                         marginLeft: '10px',
                                                         color: '#777'
-                                                    }}>Logo</span>
+                                                    }}>Hình ảnh</span>
                                                 </label>
 
                                                 <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
@@ -189,4 +255,4 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
     )
 }
 
-export default ModalSupplier
+export default ModalProduct

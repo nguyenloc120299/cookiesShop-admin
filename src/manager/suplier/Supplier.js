@@ -35,10 +35,8 @@ const Supplier = () => {
             let formData = new FormData()
             formData.append('file', file)
             setIsLoading(true)
-            //  console.log(formData)
-            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, {
-                headers: { 'content-type': 'multipart/form-data' }
-            })
+
+            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
             setIsLoading(false)
             setImg(res.data)
         } catch (err) {

@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { MdAddCircleOutline } from 'react-icons/md'
 const HeaderTitle = ({ title, onChaneShowMoDal }) => {
     return (
         <div className='header-title' style={{
@@ -13,11 +13,13 @@ const HeaderTitle = ({ title, onChaneShowMoDal }) => {
             </div>
 
             <div className='' style={{
-                color: 'green',
+                color: 'black',
                 fontSize: '20px'
             }}>
 
-                <i className="fas fa-plus" onClick={() => onChaneShowMoDal('add')} />
+                <MdAddCircleOutline onClick={() => onChaneShowMoDal('add')} style={{
+                    fontSize: '50px'
+                }} />
             </div>
         </div>
 

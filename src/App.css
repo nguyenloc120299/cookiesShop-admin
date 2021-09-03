@@ -9,4 +9,18 @@
 }
 .main-page {
   flex: 10;
+  height: 100vh;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.button-search:hover {
+  background: black;
+  color: white;
+  font-weight: bold;
+}
+.button__status {
+  padding: 4px;
+  border: 1px solid;
+  border-radius: 5px;
+  font-weight: bold;
 }

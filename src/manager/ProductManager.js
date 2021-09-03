@@ -3,13 +3,14 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Categories from './categories/Categories'
 import Supplier from './suplier/Supplier'
+import Product from './product/Product'
 
 const ProductManager = () => {
     return (
-        <div>
+        <div className='mt-5'>
             <Tabs defaultActiveKey="home" className="mb-3">
                 <Tab eventKey="home" title="Quản lý sản phẩm">
-                    <p>Loc1</p>
+                    <Product />
                 </Tab>
                 <Tab eventKey="loaiSP" title="Quản lý loại sản phẩm">
                     <Categories />

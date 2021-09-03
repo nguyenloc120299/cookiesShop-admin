@@ -35,7 +35,9 @@ const Search = ({ onSubmitSearch }) => {
                     value={valueSearch}
                     onChange={onChangeInput}
                 />
-                <button className="btn btn-outline-primary" onClick={() => onSubmitSearch(removeAccents(valueSearch))}>Tìm</button>
+                <button className="btn btn-outline button-search" onClick={() => onSubmitSearch(removeAccents(valueSearch))} style={{
+                    border: '1px solid black'
+                }}>Tìm</button>
             </div>
         </div>
     )
