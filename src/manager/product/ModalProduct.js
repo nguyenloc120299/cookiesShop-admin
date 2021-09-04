@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import Spinner from '../../component/untill/Spinner'
 import ModalFooter from '../../component/view/ModalFooter'
 import { AiOutlineUpload } from 'react-icons/ai'
@@ -53,13 +53,22 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
 
                         </div>
                         <div className='mb-3'>
-                            <input type='text' className='form-control' placeholder='Mô tả chi tiết'
-                                name='detail_description'
+                            <textarea type='text' className='form-control' placeholder='Mô tả chi tiết'
+                                name='detail_description' rows={5}
                                 value={value.detail_description}
                                 onChange={onChangeInput} />
 
                         </div>
+                        {isEdit &&
+                            <div className='mb-3'>
+                                <input type='text' className='form-control' placeholder='Khuyến mãi'
+                                    name='promotion'
+                                    value={value.promotion}
+                                    onChange={onChangeInput} />
 
+                            </div>
+
+                        }
                         <div className='mb-3'>
                             <input type='text' className='form-control' placeholder='Giá'
                                 name='price'

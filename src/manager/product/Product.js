@@ -6,6 +6,11 @@ import Pagination from '../../component/view/Pagination'
 import { GlobalContext } from '../../GlobalContext'
 import ModalProduct from './ModalProduct'
 import ButtonTable from '../../component/view/ButtonTable'
+import { ImCheckmark } from 'react-icons/im'
+import { MdCancel } from 'react-icons/md'
+import { BsFillCursorFill } from 'react-icons/bs'
+import { BsFillXSquareFill } from "react-icons/bs";
+import Alert from '../../component/untill/Alert'
 const Product = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
@@ -57,29 +62,29 @@ const Product = () => {
             return err.response.data.msg
         }
     }
-    const removeAccents = (str) => {
-        let AccentsMap = [
-            "aàảãáạăằẳẵắặâầẩẫấậ",
-            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
-            "dđ", "DĐ",
-            "eèẻẽéẹêềểễếệ",
-            "EÈẺẼÉẸÊỀỂỄẾỆ",
-            "iìỉĩíị",
-            "IÌỈĨÍỊ",
-            "oòỏõóọôồổỗốộơờởỡớợ",
-            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
-            "uùủũúụưừửữứự",
-            "UÙỦŨÚỤƯỪỬỮỨỰ",
-            "yỳỷỹýỵ",
-            "YỲỶỸÝỴ"
-        ];
-        for (let i = 0; i < AccentsMap.length; i++) {
-            let re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
-            let char = AccentsMap[i][0];
-            str = str.replace(re, char);
-        }
-        return str;
-    }
+    // const removeAccents = (str) => {
+    //     let AccentsMap = [
+    //         "aàảãáạăằẳẵắặâầẩẫấậ",
+    //         "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+    //         "dđ", "DĐ",
+    //         "eèẻẽéẹêềểễếệ",
+    //         "EÈẺẼÉẸÊỀỂỄẾỆ",
+    //         "iìỉĩíị",
+    //         "IÌỈĨÍỊ",
+    //         "oòỏõóọôồổỗốộơờởỡớợ",
+    //         "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+    //         "uùủũúụưừửữứự",
+    //         "UÙỦŨÚỤƯỪỬỮỨỰ",
+    //         "yỳỷỹýỵ",
+    //         "YỲỶỸÝỴ"
+    //     ];
+    //     for (let i = 0; i < AccentsMap.length; i++) {
+    //         let re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+    //         let char = AccentsMap[i][0];
+    //         str = str.replace(re, char);
+    //     }
+    //     return str;
+    // }
     const [productValue, setProductValue] = useState({
         name: '',
         code: '',
@@ -118,7 +123,8 @@ const Product = () => {
                 detail_description: '',
                 price: '',
                 avartar: '',
-                quantity: ''
+                quantity: '',
+                promotion: ''
 
             })
 
@@ -160,8 +166,8 @@ const Product = () => {
             <td >{item.id}</td>
             <td ><img src={item.avartar} alt='' style={{
 
-                width: '160px',
-                height: '80px',
+                width: '100px',
+                height: '150px',
                 objectFit: 'cover'
             }} /></td>
             <td >{item.name}</td>
@@ -174,23 +180,28 @@ const Product = () => {
 
             <td>{item.date_sale}</td>
             <td>{item.quantity}</td>
-            <td><button className='button__status' style={item.featured === 1 ? { color: 'green' } : { color: 'red' }}>{item.featured === 1 ? 'Có' : 'Không'}</button></td>
-            <td><button className='button__status'
-                style={item.status === 1 ? { color: 'green' } : { color: 'red' }}
-                onClick={() => onChangeSatus(item.id)}>
-                {item.status === 1 ? 'Đăng' : 'Chưa đăng'}
+            <td>{item.promotion}</td>
+            <td><button className={item.featured === 1 ? 'btn btn-outline-success' : 'btn btn-outline-danger'}
+
+                onClick={() => onChangeSatus(item.id, 'featured')}
+            >{item.featured === 1 ? <BsFillCursorFill /> : <BsFillXSquareFill />}</button></td>
+            <td><button className={item.status === 1 ? 'btn btn-outline-success' : 'btn btn-outline-danger'}
+
+                onClick={() => onChangeSatus(item.id, 'status')}>
+                {item.status === 1 ? <ImCheckmark /> : <MdCancel />}
             </button></td>
             <ButtonTable item={item} onChaneShowMoDal={onChaneShowMoDal} />
         </tr>
 
     ))
 
-    const onChangeSatus = async (id) => {
-        setId_Supplier('')
-        setId_Category('')
+    const onChangeSatus = async (id, type) => {
+
+        let producta = {}
         products.forEach(product => {
             if (product.id === id) {
-                setProductValue({ ...product })
+                //      setProductValue({ ...product })
+                producta = product
 
             }
 
@@ -213,26 +224,44 @@ const Product = () => {
         });
 
         setIsLoading(true)
-        if (productValue.status === 0) {
-            await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
-                ...productValue,
+        if (type === 'status') {
+            if (producta.status === 0) {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                    ...producta,
+                    status: 1,
+                })
+            }
+            if (producta.status === 1) {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                    ...producta,
 
-                status: 1,
+                    status: 0,
 
 
-            })
-        } else {
-            await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
-                ...productValue,
-
-                status: 0,
-
-
-            })
+                })
+            }
         }
+        if (type === 'featured') {
+            if (producta.featured === 0) {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                    ...producta,
+                    featured: 1,
+                })
+            }
+            if (producta.featured === 1) {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                    ...producta,
+
+                    featured: 0,
+
+
+                })
+            }
+        }
+
         setIsLoading(false)
         setCallBack(!callBack)
-        setIsModal(false)
+        // setIsModal(false)
         ShowAlert(true, 'success', 'Thành công')
     }
     const onSubmit = async (id) => {
@@ -241,7 +270,7 @@ const Product = () => {
             if (isSave) {
                 setIsLoading(true)
 
-                console.log({ ...productValue, avartar: img.url });
+
                 await axios.post(`/products/categories/${productValue.category}/suppliers/${productValue.supplier}/users/1`, {
                     ...productValue,
                     avartar: img.url,
@@ -249,7 +278,8 @@ const Product = () => {
                     status: 0,
                     ban_nhanh: 0,
                     competitive_price: 0,
-                    date_sale: new Date()
+                    date_sale: new Date(),
+                    promotion: 0
 
                 })
                 setIsLoading(false)
@@ -274,10 +304,11 @@ const Product = () => {
                     });
 
                 });
-                //  console.log(id_category, id_supplier)
+                console.log(supliers);
+                //   console.log(id_category, id_supplier)
                 setIsLoading(true)
                 if (IsImgInput) await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
-                    ...productValue
+                    ...productValue,
                 })
                 else
                     await await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
@@ -326,7 +357,7 @@ const Product = () => {
             <>
 
                 <div className='container'>
-                    {/* {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />} */}
+                    {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
                     <HeaderTitle title='sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
                     <ModalProduct
                         isModal={isModal}
@@ -342,6 +373,7 @@ const Product = () => {
                         isLoading={isLoading}
                         onDelete={onDelete}
                         IsImgInput={IsImgInput}
+                        closeImage={handleCloseImgaeInput}
                     />
                     <Search />
                     <div className='row'>
@@ -360,8 +392,10 @@ const Product = () => {
                                     <th scope='col'>Giá giảm</th>
                                     <th scope='col'>Ngày nhập</th>
                                     <th scope='col'>Số lượng</th>
+                                    <th scope='col'>Khuyến mãi</th>
                                     <th scope='col'>Nổi bật</th>
                                     <th scope='col'>Trang thái</th>
+
                                     <th scope='col'></th>
                                     <th scope='col'></th>
 

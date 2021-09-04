@@ -11,7 +11,7 @@ const Supplier = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
     const totalItem = 6;
-    const [supliers, setSuppliers] = context.suppliersApi.suppliers
+    const [supliers] = context.suppliersApi.suppliers
     const pageCount = Math.ceil(supliers.length / totalItem);
     const [isModal, setIsModal] = useState(false)
     const [IsImgInput, setIsImgInput] = useState(false)
@@ -54,29 +54,29 @@ const Supplier = () => {
             return err.response.data.msg
         }
     }
-    const removeAccents = (str) => {
-        let AccentsMap = [
-            "aàảãáạăằẳẵắặâầẩẫấậ",
-            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
-            "dđ", "DĐ",
-            "eèẻẽéẹêềểễếệ",
-            "EÈẺẼÉẸÊỀỂỄẾỆ",
-            "iìỉĩíị",
-            "IÌỈĨÍỊ",
-            "oòỏõóọôồổỗốộơờởỡớợ",
-            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
-            "uùủũúụưừửữứự",
-            "UÙỦŨÚỤƯỪỬỮỨỰ",
-            "yỳỷỹýỵ",
-            "YỲỶỸÝỴ"
-        ];
-        for (let i = 0; i < AccentsMap.length; i++) {
-            let re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
-            let char = AccentsMap[i][0];
-            str = str.replace(re, char);
-        }
-        return str;
-    }
+    // const removeAccents = (str) => {
+    //     let AccentsMap = [
+    //         "aàảãáạăằẳẵắặâầẩẫấậ",
+    //         "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+    //         "dđ", "DĐ",
+    //         "eèẻẽéẹêềểễếệ",
+    //         "EÈẺẼÉẸÊỀỂỄẾỆ",
+    //         "iìỉĩíị",
+    //         "IÌỈĨÍỊ",
+    //         "oòỏõóọôồổỗốộơờởỡớợ",
+    //         "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+    //         "uùủũúụưừửữứự",
+    //         "UÙỦŨÚỤƯỪỬỮỨỰ",
+    //         "yỳỷỹýỵ",
+    //         "YỲỶỸÝỴ"
+    //     ];
+    //     for (let i = 0; i < AccentsMap.length; i++) {
+    //         let re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+    //         let char = AccentsMap[i][0];
+    //         str = str.replace(re, char);
+    //     }
+    //     return str;
+    // }
     const [supplierValue, setSuppplierValue] = useState({
         name: '',
         code: '',
