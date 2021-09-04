@@ -10,6 +10,8 @@ const Product = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
     const [products] = context.productsApi.products
+    const [categories] = context.categoriesApi.categories
+    const [supliers] = context.suppliersApi.suppliers
     const totalItem = 6;
     const [callBack, setCallBack] = context.productsApi.callBack
     const pageCount = Math.ceil(products.length / totalItem);
@@ -23,7 +25,8 @@ const Product = () => {
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
-
+    const [id_category, setId_Category] = useState('')
+    const [id_supplier, setId_Supplier] = useState('')
     const [img, setImg] = useState(false)
 
     const handleUploadImg = async e => {
@@ -35,8 +38,7 @@ const Product = () => {
             let formData = new FormData()
             formData.append('file', file)
             setIsLoading(true)
-            //   console.log(formData)
-            // //  console.log(formData)
+
             const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
             setIsLoading(false)
             setImg(res.data)
@@ -83,12 +85,8 @@ const Product = () => {
         code: '',
         sort_description: '',
         detail_description: '',
-        ban_nhanh: 0,
-        price: 0,
-        feature: '',
-        competitive_price: 0,
+        price: '',
         avartar: '',
-        date_sale: '',
         quantity: ''
 
     })
@@ -103,14 +101,9 @@ const Product = () => {
                 code: '',
                 sort_description: '',
                 detail_description: '',
-                ban_nhanh: '',
-                price: 0,
-                feature: '',
-                competitive_price: 0,
+                price: '',
                 avartar: '',
-                date_sale: '',
                 quantity: ''
-
             })
             SetIsSave(true)
             setIsModal(!isModal)
@@ -123,15 +116,9 @@ const Product = () => {
                 code: '',
                 sort_description: '',
                 detail_description: '',
-                ban_nhanh: '',
-                price: 0,
-                featured: '',
-                competitive_price: 0,
+                price: '',
                 avartar: '',
-                date_sale: '',
-                quantity: '',
-                category: '',
-                supplier: ''
+                quantity: ''
 
             })
 
@@ -181,25 +168,90 @@ const Product = () => {
             <td>{item.code}</td>
             <td>{item.sort_description}</td>
             <td>{item.detail_description}</td>
-            <td style={item.ban_nhanh === 1 ? { color: 'green' } : { display: 'red' }}>{item.ban_nhanh === 1 ? 'Bán nhanh' : " Bán chậm"}</td>
+            <td style={item.ban_nhanh === 0 ? { color: 'green' } : { display: 'red' }}>{item.ban_nhanh === 1 ? 'Bán nhanh' : " Bán chậm"}</td>
             <td>{item.price}</td>
-            <td>{item.featured}</td>
+            <td>{item.competitive_price}</td>
+
             <td>{item.date_sale}</td>
             <td>{item.quantity}</td>
-
-            <td><button className='button__status' style={item.status === 1 ? { color: 'green' } : { color: 'red' }}>{item.status === 1 ? 'Đã đăng' : 'Chưa đăng'}</button></td>
+            <td><button className='button__status' style={item.featured === 1 ? { color: 'green' } : { color: 'red' }}>{item.featured === 1 ? 'Có' : 'Không'}</button></td>
+            <td><button className='button__status'
+                style={item.status === 1 ? { color: 'green' } : { color: 'red' }}
+                onClick={() => onChangeSatus(item.id)}>
+                {item.status === 1 ? 'Đăng' : 'Chưa đăng'}
+            </button></td>
             <ButtonTable item={item} onChaneShowMoDal={onChaneShowMoDal} />
         </tr>
 
     ))
-    const onSubmit = async () => {
+
+    const onChangeSatus = async (id) => {
+        setId_Supplier('')
+        setId_Category('')
+        products.forEach(product => {
+            if (product.id === id) {
+                setProductValue({ ...product })
+
+            }
+
+
+        });
+
+        categories.forEach(i => {
+
+            i.products.forEach(element => {
+                if (element.id === id) setId_Category(i.id)
+            });
+
+        });
+        supliers.forEach(i => {
+
+            i.products.forEach(element => {
+                if (element.id === id) setId_Supplier(i.id)
+            });
+
+        });
+
+        setIsLoading(true)
+        if (productValue.status === 0) {
+            await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                ...productValue,
+
+                status: 1,
+
+
+            })
+        } else {
+            await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                ...productValue,
+
+                status: 0,
+
+
+            })
+        }
+        setIsLoading(false)
+        setCallBack(!callBack)
+        setIsModal(false)
+        ShowAlert(true, 'success', 'Thành công')
+    }
+    const onSubmit = async (id) => {
         try {
             //console.log(teacherValue)
             if (isSave) {
                 setIsLoading(true)
 
                 console.log({ ...productValue, avartar: img.url });
-                await axios.post(`/products/categories/${productValue.category}/suppliers/${productValue.supplier}/users/1`, { ...productValue, avartar: img.url })
+                await axios.post(`/products/categories/${productValue.category}/suppliers/${productValue.supplier}/users/1`, {
+                    ...productValue,
+                    avartar: img.url,
+                    featured: 0,
+                    status: 0,
+                    ban_nhanh: 0,
+                    competitive_price: 0,
+                    date_sale: new Date()
+
+                })
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
@@ -207,9 +259,34 @@ const Product = () => {
             }
             if (isEdit) {
                 setIsLoading(true)
-                //  if (IsImgInput) await axios.put('/suppliers', { ...supplierValue })
-                //  else
-                //   await axios.put('/suppliers', { ...supplierValue, logo: img.url })
+                let id_category, id_supplier;
+                categories.forEach(i => {
+
+                    i.products.forEach(element => {
+                        if (element.id === id) id_category = i.id
+                    });
+
+                });
+                supliers.forEach(i => {
+
+                    i.products.forEach(element => {
+                        if (element.id === id) id_supplier = i.id
+                    });
+
+                });
+                //  console.log(id_category, id_supplier)
+                setIsLoading(true)
+                if (IsImgInput) await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                    ...productValue
+                })
+                else
+                    await await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                        ...productValue,
+
+                        avartar: img.url,
+
+
+                    })
 
                 setIsLoading(false)
                 setCallBack(!callBack)
@@ -264,6 +341,7 @@ const Product = () => {
                         value={productValue}
                         isLoading={isLoading}
                         onDelete={onDelete}
+                        IsImgInput={IsImgInput}
                     />
                     <Search />
                     <div className='row'>
@@ -279,10 +357,10 @@ const Product = () => {
                                     <th scope='col'>Chi tiết</th>
                                     <th scope='col'>Bán nhanh</th>
                                     <th scope='col'>Giá</th>
-                                    <th scope='col'>Featured</th>
-
-                                    <th scope='col'>Ngày giảm giá</th>
+                                    <th scope='col'>Giá giảm</th>
+                                    <th scope='col'>Ngày nhập</th>
                                     <th scope='col'>Số lượng</th>
+                                    <th scope='col'>Nổi bật</th>
                                     <th scope='col'>Trang thái</th>
                                     <th scope='col'></th>
                                     <th scope='col'></th>

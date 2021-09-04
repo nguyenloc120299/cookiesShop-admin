@@ -59,39 +59,11 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                                 onChange={onChangeInput} />
 
                         </div>
-                        {isEdit && <div className='mb-3'>
-                            <input type='text' className='form-control' placeholder='Bán nhanh'
-                                name='ban_nhanh'
-                                value={value.ban_nhanh}
-                                onChange={onChangeInput} />
 
-                        </div>
-                        }
                         <div className='mb-3'>
                             <input type='text' className='form-control' placeholder='Giá'
                                 name='price'
                                 value={value.price}
-                                onChange={onChangeInput} />
-
-                        </div>
-                        <div className='mb-3'>
-                            <input type='text' className='form-control' placeholder='Featured'
-                                name='featured'
-                                value={value.featured}
-                                onChange={onChangeInput} />
-
-                        </div>
-                        <div className='mb-3'>
-                            <input type='text' className='form-control' placeholder='competive_price'
-                                name='competive_price'
-                                value={value.competive_price}
-                                onChange={onChangeInput} />
-
-                        </div>
-                        <div className='mb-3'>
-                            <input type='date' className='form-control' placeholder='Ngày sale'
-                                name='date_sale'
-                                value={value.date_sale}
                                 onChange={onChangeInput} />
 
                         </div>
@@ -102,34 +74,37 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                                 onChange={onChangeInput} />
 
                         </div>
-                        <div className='mb-3'>
-                            <select className='form-control' placeholder=''
-                                name='category'
-                                value={value.quantity}
-                                onChange={onChangeInput} >
-                                <option>Chọn loại sản phẩm</option>
-                                {
-                                    categories.map((item) => (
-                                        <option value={item.id}>{item.name}</option>
-                                    ))
-                                }
-                            </select>
+                        {isSave && <>
+                            <div className='mb-3'>
+                                <select className='form-control' placeholder=''
+                                    name='category'
+                                    value={value.quantity}
+                                    onChange={onChangeInput} >
+                                    <option>Chọn loại sản phẩm</option>
+                                    {
+                                        categories.map((item) => (
+                                            <option value={item.id}>{item.name}</option>
+                                        ))
+                                    }
+                                </select>
 
-                        </div>
-                        <div className='mb-3'>
-                            <select className='form-control' placeholder=''
-                                name='supplier'
-                                value={value.quantity}
-                                onChange={onChangeInput} >
-                                <option>Chọn nhà cung cấp</option>
-                                {
-                                    supliers.map((item) => (
-                                        <option value={item.id}>{item.name}</option>
-                                    ))
-                                }
-                            </select>
+                            </div>
+                            <div className='mb-3'>
+                                <select className='form-control' placeholder=''
+                                    name='supplier'
+                                    value={value.quantity}
+                                    onChange={onChangeInput} >
+                                    <option>Chọn nhà cung cấp</option>
+                                    {
+                                        supliers.map((item) => (
+                                            <option value={item.id}>{item.name}</option>
+                                        ))
+                                    }
+                                </select>
 
-                        </div>
+                            </div>
+                        </>
+                        }
 
                         {isSave && <>
                             <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }}>
