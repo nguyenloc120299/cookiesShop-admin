@@ -5,17 +5,17 @@ import ButtonTable from '../../component/view/ButtonTable'
 import HeaderTitle from '../../component/view/HeaderTitle'
 import Pagination from '../../component/view/Pagination'
 import { GlobalContext } from '../../GlobalContext'
-import ModalSupplier from './ModalSupplier'
-
-const Supplier = () => {
+import ModalUser from './ModalUser'
+import './auth.css'
+const User = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
+    const [users] = context.usersApi.users
     const totalItem = 6;
-    const [supliers] = context.suppliersApi.suppliers
-    const pageCount = Math.ceil(supliers.length / totalItem);
+    const pageCount = Math.ceil(users.length / totalItem);
     const [isModal, setIsModal] = useState(false)
     const [IsImgInput, setIsImgInput] = useState(false)
-    const [callBack, setCallBack] = context.suppliersApi.callBack
+    const [callBack, setCallBack] = context.usersApi.callBack
     const [isSave, SetIsSave] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -25,7 +25,7 @@ const Supplier = () => {
     }
 
     const [img, setImg] = useState(false)
-
+    //upload img
     const handleUploadImg = async e => {
         e.preventDefault()
         try {
@@ -54,50 +54,28 @@ const Supplier = () => {
             return err.response.data.msg
         }
     }
-    // const removeAccents = (str) => {
-    //     let AccentsMap = [
-    //         "aàảãáạăằẳẵắặâầẩẫấậ",
-    //         "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
-    //         "dđ", "DĐ",
-    //         "eèẻẽéẹêềểễếệ",
-    //         "EÈẺẼÉẸÊỀỂỄẾỆ",
-    //         "iìỉĩíị",
-    //         "IÌỈĨÍỊ",
-    //         "oòỏõóọôồổỗốộơờởỡớợ",
-    //         "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
-    //         "uùủũúụưừửữứự",
-    //         "UÙỦŨÚỤƯỪỬỮỨỰ",
-    //         "yỳỷỹýỵ",
-    //         "YỲỶỸÝỴ"
-    //     ];
-    //     for (let i = 0; i < AccentsMap.length; i++) {
-    //         let re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
-    //         let char = AccentsMap[i][0];
-    //         str = str.replace(re, char);
-    //     }
-    //     return str;
-    // }
-    const [supplierValue, setSuppplierValue] = useState({
+    ///show modal
+    const [userValue, setUserValue] = useState({
         name: '',
-        code: '',
-
         address: '',
         phone: '',
-        email: ''
+        email: '',
+        password: '',
+        role: ''
     })
     const onChangeInput = e => {
         const { name, value } = e.target
-        setSuppplierValue({ ...supplierValue, [name]: value })
+        setUserValue({ ...userValue, [name]: value })
     }
     const onChaneShowMoDal = (type, id) => {
         if (type === 'add') {
-            setSuppplierValue({
+            setUserValue({
                 name: '',
-                code: '',
-
                 address: '',
                 phone: '',
-                email: ''
+                email: '',
+                password: '',
+                role: ''
             })
             SetIsSave(true)
             setIsModal(!isModal)
@@ -105,24 +83,24 @@ const Supplier = () => {
             setImg(false)
 
         } else if (type === 'edit') {
-            setSuppplierValue({
+            setUserValue({
                 name: '',
-                code: '',
-
                 address: '',
                 phone: '',
-                email: ''
+                email: '',
+                password: '',
+                role: ''
             })
 
             setIsEdit(true)
             setIsModal(!isModal)
             SetIsSave(false)
             setImg(false)
-            supliers.forEach(suplier => {
-                if (suplier.id === id) {
+            users.forEach(user => {
+                if (user.id === id) {
 
-                    setSuppplierValue({ ...suplier })
-                    setIsImgInput(suplier.logo)
+                    setUserValue({ ...user })
+                    setIsImgInput(user.avartar)
                 }
             });
 
@@ -132,34 +110,21 @@ const Supplier = () => {
     const onCloseModal = () => {
         setIsModal(false)
     }
-    const [alert, setAlert] = useState({
-        isShow: false,
-        type: '',
-        msg: ''
-
-
-    })
-    const ShowAlert = (isShow, type, msg) => {
-        setAlert({
-            isShow: isShow,
-            type: type,
-            msg: msg
-        })
-    }
-    const dislayTable = supliers.slice(PageVisited, totalItem + PageVisited).map(item => (
+    const dislayTable = users.slice(PageVisited, totalItem + PageVisited).map(item => (
 
         <tr key={item.id}>
             <td >{item.id}</td>
-            <td ><img src={item.logo} alt='' style={{
+            <td ><img src={item.avartar} alt='' style={{
 
                 width: '50px',
                 height: '50px'
             }} /></td>
             <td >{item.name}</td>
-            <td>{item.code}</td>
-            <td>{item.email}</td>
             <td>{item.phone}</td>
+            <td>{item.email}</td>
             <td>{item.address}</td>
+            <td>{item.role}</td>
+            <td>{item.status}</td>
 
             <ButtonTable item={item} onChaneShowMoDal={onChaneShowMoDal} />
         </tr>
@@ -171,28 +136,28 @@ const Supplier = () => {
             if (isSave) {
                 setIsLoading(true)
 
-                //console.log({ ...supplierValue, logo: img.url });
-                await axios.post('/suppliers', { ...supplierValue, logo: img.url })
+                //console.log({ ...userValue, avartar: img.url, status: 1 });
+                await axios.post('/users', { ...userValue, avartar: img.url, status: 1 })
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
-                ShowAlert(true, 'success', 'Thành công')
+                // ShowAlert(true, 'success', 'Thành công')
             }
             if (isEdit) {
                 setIsLoading(true)
-                if (IsImgInput) await axios.put('/suppliers', { ...supplierValue })
+                if (IsImgInput) await axios.put('/users', { ...userValue })
                 else
-                    await axios.put('/suppliers', { ...supplierValue, logo: img.url })
+                    await axios.put('/users', { ...userValue, avartar: img.url })
                 //   console.log(teacherValue)
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
-                ShowAlert(true, 'success', 'Thành công')
+                //  ShowAlert(true, 'success', 'Thành công')
                 setIsImgInput(false)
             }
 
         } catch (err) {
-            ShowAlert(true, 'danger', err.response.data.msg)
+            // ShowAlert(true, 'danger', err.response.data.msg)
             setIsLoading(false)
         }
 
@@ -202,13 +167,13 @@ const Supplier = () => {
         try {
             setIsLoading(true)
             // console.log(id)
-            await axios.delete(`/suppliers/${id}`)
+            await axios.delete(`/users/${id}`)
             setIsLoading(false)
             setCallBack(!callBack)
             setIsModal(false)
-            ShowAlert(true, 'success', "Đã xóa thành công")
+            //   ShowAlert(true, 'success', "Đã xóa thành công")
         } catch (err) {
-            ShowAlert(true, 'danger', err.response.data)
+            // ShowAlert(true, 'danger', err.response.data)
             setIsLoading(false)
         }
 
@@ -219,8 +184,10 @@ const Supplier = () => {
     }
     return (
         <>
-            <div className='container'>
-                <ModalSupplier
+            <div className='container mt-5'>
+                <HeaderTitle title='người dùng' onChaneShowMoDal={onChaneShowMoDal} />
+                <Search />
+                <ModalUser
                     isModal={isModal}
                     isEdit={isEdit}
                     isSave={isSave}
@@ -228,7 +195,7 @@ const Supplier = () => {
                     onCloseModal={onCloseModal}
                     onChangeInput={onChangeInput}
                     onSubmit={onSubmit}
-                    value={supplierValue}
+                    value={userValue}
                     isLoading={isLoading}
                     img={img}
                     handleUpLoad={handleUploadImg}
@@ -237,21 +204,19 @@ const Supplier = () => {
                     IsImgInput={IsImgInput}
                     closeImage={handleCloseImgaeInput}
                 />
-                <HeaderTitle title='nhà cung cấp' onChaneShowMoDal={onChaneShowMoDal} />
-                <Search />
                 <div className='row m-3'>
                     <table className='table-hover table'>
 
                         <thead >
                             <tr>
                                 <th scope='col'>ID</th>
-                                <th scope='col' >Logo</th>
-                                <th scope='col'>Tên nhà cung cấp</th>
-                                <th scope='col'>Code</th>
-
+                                <th scope='col' >Hình ảnh</th>
+                                <th scope='col'>Tên</th>
+                                <th scope='col'>Số ĐT</th>
                                 <th scope='col'>Email</th>
-                                <th scope='col'>Số điện thoại</th>
-                                <th scope='col' >Địa chỉ</th>
+                                <th scope='col'>Địa chỉ</th>
+                                <th scope='col' >Vai trò</th>
+                                <th scope='col' >Trạng thái</th>
                                 <th scope='col'></th>
                                 <th scope='col' ></th>
 
@@ -259,7 +224,6 @@ const Supplier = () => {
 
                         </thead>
                         <tbody className='mt-4'>
-
                             {dislayTable}
                         </tbody>
                     </table>
@@ -268,10 +232,10 @@ const Supplier = () => {
                 <div className='row'>
                     <Pagination pageCount={pageCount} changePage={changePage} />
                 </div>
-            </div>
 
+            </div>
         </>
     )
 }
 
-export default Supplier
+export default User

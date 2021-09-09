@@ -33,7 +33,7 @@ const Product = () => {
     const [id_category, setId_Category] = useState('')
     const [id_supplier, setId_Supplier] = useState('')
     const [img, setImg] = useState(false)
-
+    const res = JSON.parse(localStorage.getItem('login_admin'))
     const handleUploadImg = async e => {
         e.preventDefault()
         try {
@@ -226,13 +226,13 @@ const Product = () => {
         setIsLoading(true)
         if (type === 'status') {
             if (producta.status === 0) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}  `, {
                     ...producta,
                     status: 1,
                 })
             }
             if (producta.status === 1) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}   `, {
                     ...producta,
 
                     status: 0,
@@ -243,13 +243,13 @@ const Product = () => {
         }
         if (type === 'featured') {
             if (producta.featured === 0) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}   `, {
                     ...producta,
                     featured: 1,
                 })
             }
             if (producta.featured === 1) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}  `, {
                     ...producta,
 
                     featured: 0,
@@ -271,7 +271,7 @@ const Product = () => {
                 setIsLoading(true)
 
 
-                await axios.post(`/products/categories/${productValue.category}/suppliers/${productValue.supplier}/users/1`, {
+                await axios.post(`/products/categories/${productValue.category}/suppliers/${productValue.supplier}/users/${res.id} `, {
                     ...productValue,
                     avartar: img.url,
                     featured: 0,
@@ -307,11 +307,11 @@ const Product = () => {
                 console.log(supliers);
                 //   console.log(id_category, id_supplier)
                 setIsLoading(true)
-                if (IsImgInput) await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                if (IsImgInput) await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}   `, {
                     ...productValue,
                 })
                 else
-                    await await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/1  `, {
+                    await await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}   `, {
                         ...productValue,
 
                         avartar: img.url,
@@ -354,66 +354,66 @@ const Product = () => {
     }
     return (
         <>
-            <>
 
-                <div className='container'>
-                    {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
-                    <HeaderTitle title='sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
-                    <ModalProduct
-                        isModal={isModal}
-                        isEdit={isEdit}
-                        isSave={isSave}
-                        img={img}
-                        onCloseModal={onCloseModal}
-                        handleUpLoad={handleUploadImg}
-                        handleDestroy={handleDestroy}
-                        onChangeInput={onChangeInput}
-                        onSubmit={onSubmit}
-                        value={productValue}
-                        isLoading={isLoading}
-                        onDelete={onDelete}
-                        IsImgInput={IsImgInput}
-                        closeImage={handleCloseImgaeInput}
-                    />
-                    <Search />
-                    <div className='row'>
-                        <table className='table-hover table'>
 
-                            <thead >
-                                <tr>
-                                    <th scope='col'>ID</th>
-                                    <th scope='col'>Ảnh</th>
-                                    <th scope='col'>Tên sản phẩm</th>
-                                    <th scope='col'>Code</th>
-                                    <th scope='col' >Mô tả</th>
-                                    <th scope='col'>Chi tiết</th>
-                                    <th scope='col'>Bán nhanh</th>
-                                    <th scope='col'>Giá</th>
-                                    <th scope='col'>Giá giảm</th>
-                                    <th scope='col'>Ngày nhập</th>
-                                    <th scope='col'>Số lượng</th>
-                                    <th scope='col'>Khuyến mãi</th>
-                                    <th scope='col'>Nổi bật</th>
-                                    <th scope='col'>Trang thái</th>
+            <div className='container'>
+                {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
+                <HeaderTitle title='sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
+                <ModalProduct
+                    isModal={isModal}
+                    isEdit={isEdit}
+                    isSave={isSave}
+                    img={img}
+                    onCloseModal={onCloseModal}
+                    handleUpLoad={handleUploadImg}
+                    handleDestroy={handleDestroy}
+                    onChangeInput={onChangeInput}
+                    onSubmit={onSubmit}
+                    value={productValue}
+                    isLoading={isLoading}
+                    onDelete={onDelete}
+                    IsImgInput={IsImgInput}
+                    closeImage={handleCloseImgaeInput}
+                />
+                <Search />
+                <div className='row'>
+                    <table className='table-hover table'>
 
-                                    <th scope='col'></th>
-                                    <th scope='col'></th>
+                        <thead >
+                            <tr>
+                                <th scope='col'>ID</th>
+                                <th scope='col'>Ảnh</th>
+                                <th scope='col'>Tên sản phẩm</th>
+                                <th scope='col'>Code</th>
+                                <th scope='col' >Mô tả</th>
+                                <th scope='col'>Chi tiết</th>
+                                <th scope='col'>Bán nhanh</th>
+                                <th scope='col'>Giá</th>
+                                <th scope='col'>Giá giảm</th>
+                                <th scope='col'>Ngày nhập</th>
+                                <th scope='col'>Số lượng</th>
+                                <th scope='col'>Khuyến mãi</th>
+                                <th scope='col'>Nổi bật</th>
+                                <th scope='col'>Trang thái</th>
 
-                                </tr>
+                                <th scope='col'></th>
+                                <th scope='col'></th>
 
-                            </thead>
-                            <tbody className='mt-4'>
-                                {dislayTable}
+                            </tr>
 
-                            </tbody>
-                        </table>
+                        </thead>
+                        <tbody className='mt-4'>
+                            {dislayTable}
 
-                    </div>
-                    <div className='row'>
-                        <Pagination pageCount={pageCount} changePage={changePage} />
-                    </div>
+                        </tbody>
+                    </table>
+
                 </div>
-            </>
+                <div className='row'>
+                    <Pagination pageCount={pageCount} changePage={changePage} />
+                </div>
+            </div>
+
         </>
     )
 }

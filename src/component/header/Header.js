@@ -2,6 +2,12 @@ import React from 'react'
 import './header.css'
 import { BiMenuAltLeft } from 'react-icons/bi'
 const Header = ({ showMenu }) => {
+    const res = JSON.parse(localStorage.getItem('login_admin'))
+    const logout = () => {
+        localStorage.setItem('login_admin', false)
+        window.location.href = '/'
+    }
+
     return (
         <div className='header'>
 
@@ -9,7 +15,12 @@ const Header = ({ showMenu }) => {
                 <BiMenuAltLeft onClick={() => showMenu()} />
             </div>
             <div className='info'>
-                <h5>Xin chào : Nguyễn Lộc</h5>
+                <div className="dropdown">
+                    <span style={{ fontWeight: 'bold' }} className='dropdown-toggle' id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">Xin chào : {res.name}</span>
+                    <ul className="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <li><button className="dropdown-item" type="button" onClick={() => logout()}>Đăng xuất</button></li>
+                    </ul>
+                </div>
 
             </div>
 

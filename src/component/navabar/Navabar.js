@@ -18,7 +18,7 @@ const Navabar = ({ isMenu, showMenu }) => {
                 <ul>
                     <li><Link to='/'> <AiFillDashboard className='icon-nvarbar' />Dashboard</Link></li>
                     <li><Link to='/product-manager'> <ImListNumbered className='icon-nvarbar' />Quản lý sản phẩm</Link></li>
-                    <li><Link to='/'><VscAccount className='icon-nvarbar' />Quản lý khách hàng</Link></li>
+                    <li><Link to='/user'><VscAccount className='icon-nvarbar' />Quản lý người dùng</Link></li>
 
                 </ul>
             </div>

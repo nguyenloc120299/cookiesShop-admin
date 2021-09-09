@@ -8,7 +8,7 @@ import Product from './product/Product'
 const ProductManager = () => {
     return (
         <div className='mt-5'>
-            <Tabs defaultActiveKey="home" className="mb-3">
+            <Tabs defaultActiveKey="home" className="mb-3 text-color-dark" >
                 <Tab eventKey="home" title="Quản lý sản phẩm">
                     <Product />
                 </Tab>

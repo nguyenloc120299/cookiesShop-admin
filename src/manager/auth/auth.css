@@ -1,0 +1,14 @@
+/* ------------------login------------------------- */
+.login {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "Sigmar One", cursive;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+
+    padding: 15px;
+    color: white;
+    background: black;
+}
