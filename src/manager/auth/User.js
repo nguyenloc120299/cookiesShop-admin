@@ -5,6 +5,8 @@ import ButtonTable from '../../component/view/ButtonTable'
 import HeaderTitle from '../../component/view/HeaderTitle'
 import Pagination from '../../component/view/Pagination'
 import { GlobalContext } from '../../GlobalContext'
+
+import { BsPersonFill } from 'react-icons/bs'
 import ModalUser from './ModalUser'
 import './auth.css'
 const User = () => {
@@ -23,7 +25,7 @@ const User = () => {
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
-
+    const res = JSON.parse(localStorage.getItem('login_admin'))
     const [img, setImg] = useState(false)
     //upload img
     const handleUploadImg = async e => {
@@ -57,11 +59,12 @@ const User = () => {
     ///show modal
     const [userValue, setUserValue] = useState({
         name: '',
+        username: '',
         address: '',
         phone: '',
         email: '',
         password: '',
-        role: ''
+
     })
     const onChangeInput = e => {
         const { name, value } = e.target
@@ -71,11 +74,11 @@ const User = () => {
         if (type === 'add') {
             setUserValue({
                 name: '',
+                username: '',
                 address: '',
                 phone: '',
                 email: '',
                 password: '',
-                role: ''
             })
             SetIsSave(true)
             setIsModal(!isModal)
@@ -85,11 +88,11 @@ const User = () => {
         } else if (type === 'edit') {
             setUserValue({
                 name: '',
+                username: '',
                 address: '',
                 phone: '',
                 email: '',
                 password: '',
-                role: ''
             })
 
             setIsEdit(true)
@@ -110,7 +113,15 @@ const User = () => {
     const onCloseModal = () => {
         setIsModal(false)
     }
+    const onChangeRoles = async (id_role, name, id_user) => {
+        await axios.put(`/roles/users/${id_user}`, {
+            id: id_role,
+            role: name
+        })
+        setCallBack(!callBack)
+    }
     const dislayTable = users.slice(PageVisited, totalItem + PageVisited).map(item => (
+
 
         <tr key={item.id}>
             <td >{item.id}</td>
@@ -123,9 +134,19 @@ const User = () => {
             <td>{item.phone}</td>
             <td>{item.email}</td>
             <td>{item.address}</td>
-            <td>{item.role}</td>
+            <td>
+                <div className="dropdown">
+                    <span style={{ fontWeight: 'bold' }} className='dropdown-toggle' id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> {item.listroles[0].role}</span>
+                    <ul className="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <li><button className="dropdown-item" type="button" onClick={() => onChangeRoles(item.listroles[0].id, 'Admin', item.id)}>Admin</button></li>
+                        <li><button className="dropdown-item" type="button" onClick={() => onChangeRoles(item.listroles[0].id, 'Buyer', item.id)}>Buyer</button></li>
+                        <li><button className="dropdown-item" type="button" onClick={() => onChangeRoles(item.listroles[0].id, 'user', item.id)}>user</button></li>
+                    </ul>
+                </div></td>
             <td>{item.status}</td>
+            <td>
 
+            </td>
             <ButtonTable item={item} onChaneShowMoDal={onChaneShowMoDal} />
         </tr>
 
@@ -136,8 +157,8 @@ const User = () => {
             if (isSave) {
                 setIsLoading(true)
 
-                //console.log({ ...userValue, avartar: img.url, status: 1 });
-                await axios.post('/users', { ...userValue, avartar: img.url, status: 1 })
+                //console.log({ ...userValue });
+                await axios.post('/sigup', { ...userValue })
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)

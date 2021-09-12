@@ -28,9 +28,18 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                     <div className='modal-body p-3'>
                         <div className='mb-3'>
 
-                            <input type='text' className='form-control' placeholder='Tên người dùng'
+                            <input type='text' className='form-control' placeholder='Họ và tên'
                                 name='name'
                                 value={value.name}
+                                onChange={onChangeInput}
+                            />
+
+                        </div>
+                        <div className='mb-3'>
+
+                            <input type='text' className='form-control' placeholder='Tên người dùng'
+                                name='username'
+                                value={value.username}
                                 onChange={onChangeInput}
                             />
 
@@ -66,7 +75,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
 
                         </div>
 
-                        <div className='mb-3'>
+                        {/* <div className='mb-3'>
                             <select className='form-control' placeholder=''
                                 name='role'
                                 value={value.role}
@@ -82,9 +91,9 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
 
                             </select>
 
-                        </div>
+                        </div> */}
 
-                        {isSave && <>
+                        {/* {isSave && <>
                             <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }}>
                                 <label htmlFor="fileInput">
                                     <AiOutlineUpload style={{
@@ -122,7 +131,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                                 }} onClick={() => handleDestroy()}>X</p>
                             </div>
                         </>
-                        }
+                        } */}
                         {
                             isEdit &&
                             <>
