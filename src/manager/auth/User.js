@@ -59,11 +59,10 @@ const User = () => {
     ///show modal
     const [userValue, setUserValue] = useState({
         name: '',
-        username: '',
         address: '',
         phone: '',
         email: '',
-        password: '',
+
 
     })
     const onChangeInput = e => {
@@ -74,11 +73,11 @@ const User = () => {
         if (type === 'add') {
             setUserValue({
                 name: '',
-                username: '',
+
                 address: '',
                 phone: '',
                 email: '',
-                password: '',
+
             })
             SetIsSave(true)
             setIsModal(!isModal)
@@ -88,21 +87,28 @@ const User = () => {
         } else if (type === 'edit') {
             setUserValue({
                 name: '',
-                username: '',
+
                 address: '',
                 phone: '',
                 email: '',
-                password: '',
+
             })
 
             setIsEdit(true)
             setIsModal(!isModal)
             SetIsSave(false)
             setImg(false)
+
             users.forEach(user => {
                 if (user.id === id) {
 
-                    setUserValue({ ...user })
+                    setUserValue({
+                        id: user.id,
+                        name: user.name,
+                        address: user.address,
+                        phone: user.phone,
+                        email: user.email
+                    })
                     setIsImgInput(user.avartar)
                 }
             });
@@ -151,7 +157,7 @@ const User = () => {
         </tr>
 
     ))
-    const onSubmit = async () => {
+    const onSubmit = async (id) => {
         try {
             //console.log(teacherValue)
             if (isSave) {
@@ -166,14 +172,29 @@ const User = () => {
             }
             if (isEdit) {
                 setIsLoading(true)
-                if (IsImgInput) await axios.put('/users', { ...userValue })
+                console.log({
+                    id: userValue.id,
+                    name: userValue.name,
+                    address: userValue.address,
+                    phone: userValue.phone,
+                    email: userValue.email,
+                    avartar: IsImgInput
+                });
+                if (IsImgInput) await axios.put('/users', {
+                    id,
+                    name: userValue.name,
+                    address: userValue.address,
+                    phone: userValue.phone,
+                    email: userValue.email,
+                    avartar: IsImgInput
+                })
                 else
-                    await axios.put('/users', { ...userValue, avartar: img.url })
-                //   console.log(teacherValue)
-                setIsLoading(false)
+                    await axios.put('/users', { id, ...userValue, avartar: img.url })
+
                 setCallBack(!callBack)
                 setIsModal(false)
-                //  ShowAlert(true, 'success', 'Thành công')
+                setIsLoading(false)
+                // ShowAlert(true, 'success', 'Thành công')
                 setIsImgInput(false)
             }
 
@@ -184,6 +205,7 @@ const User = () => {
 
 
     }
+
     const onDelete = async (id) => {
         try {
             setIsLoading(true)
@@ -192,6 +214,7 @@ const User = () => {
             setIsLoading(false)
             setCallBack(!callBack)
             setIsModal(false)
+            setIsLoading(false)
             //   ShowAlert(true, 'success', "Đã xóa thành công")
         } catch (err) {
             // ShowAlert(true, 'danger', err.response.data)

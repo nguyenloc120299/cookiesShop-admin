@@ -1,7 +1,7 @@
 import React from 'react'
 import Spinner from '../../component/untill/Spinner'
 import ModalFooter from '../../component/view/ModalFooter'
-import { AiOutlineUpload } from 'react-icons/ai'
+// import { AiOutlineUpload } from 'react-icons/ai'
 const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave, onCloseModal, isLoading, onDelete, img, handleUpLoad, handleDestroy, IsImgInput, closeImage }) => {
 
 
@@ -35,15 +35,19 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                             />
 
                         </div>
-                        <div className='mb-3'>
+                        {
+                            !isEdit &&
 
-                            <input type='text' className='form-control' placeholder='Tên người dùng'
-                                name='username'
-                                value={value.username}
-                                onChange={onChangeInput}
-                            />
+                            <div className='mb-3'>
 
-                        </div>
+                                <input type='text' className='form-control' placeholder='Tên người dùng'
+                                    name='username'
+                                    value={value.username}
+                                    onChange={onChangeInput}
+                                />
+
+                            </div>
+                        }
                         <div className='mb-3'>
                             <input type='text' className='form-control' placeholder='Số điện thoại'
                                 name='phone'
@@ -59,14 +63,17 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                                 onChange={onChangeInput} />
 
                         </div>
-                        <div className='mb-3'>
-                            <input type='text' className='form-control' placeholder='password'
-                                name='password'
-                                value={value.password}
-                                onChange={onChangeInput} />
+                        {
+                            !isEdit &&
 
-                        </div>
+                            <div className='mb-3'>
+                                <input type='text' className='form-control' placeholder='password'
+                                    name='password'
+                                    value={value.password}
+                                    onChange={onChangeInput} />
 
+                            </div>
+                        }
                         <div className='mb-3'>
                             <input type='text' className='form-control' placeholder='Địa chỉ'
                                 name='address'

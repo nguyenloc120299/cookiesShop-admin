@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import Search from '../../component/search/Search'
 import HeaderTitle from '../../component/view/HeaderTitle'
 import Pagination from '../../component/view/Pagination'
@@ -14,6 +14,8 @@ import Alert from '../../component/untill/Alert'
 const Product = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
+    const [users] = context.usersApi.users
+    const [id_user, setId_user] = useState('')
     const [products] = context.productsApi.products
     const [categories] = context.categoriesApi.categories
     const [supliers] = context.suppliersApi.suppliers
@@ -194,7 +196,9 @@ const Product = () => {
         </tr>
 
     ))
+    useEffect(() => {
 
+    }, [users])
     const onChangeSatus = async (id, type) => {
 
         let producta = {}
@@ -207,7 +211,11 @@ const Product = () => {
 
 
         });
-
+        users.forEach(element => {
+            element.products.forEach(element1 => {
+                if (element1.id === id) setId_user(element.id);
+            });
+        });
         categories.forEach(i => {
 
             i.products.forEach(element => {
@@ -226,13 +234,13 @@ const Product = () => {
         setIsLoading(true)
         if (type === 'status') {
             if (producta.status === 0) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}  `, {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${id_user}  `, {
                     ...producta,
                     status: 1,
                 })
             }
             if (producta.status === 1) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}   `, {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${id_user}   `, {
                     ...producta,
 
                     status: 0,
@@ -243,13 +251,13 @@ const Product = () => {
         }
         if (type === 'featured') {
             if (producta.featured === 0) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}   `, {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${id_user}   `, {
                     ...producta,
                     featured: 1,
                 })
             }
             if (producta.featured === 1) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}  `, {
+                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${id_user}  `, {
                     ...producta,
 
                     featured: 0,
