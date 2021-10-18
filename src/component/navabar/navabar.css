@@ -1,8 +1,9 @@
 .navabar {
     height: 100vh;
-    background: black;
+    background: rgb(45, 45, 45);
     display: flex;
     flex-direction: column;
+    width: 17%;
 }
 .logo {
     display: flex;
@@ -14,6 +15,11 @@
     color: white;
     font-family: "Sigmar One", cursive;
 }
+.links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .links ul li {
     margin-top: 50px;
     list-style: none;
@@ -21,11 +27,22 @@
 .links ul li a {
     color: #ccc;
     text-decoration: none;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: bold;
 }
 .links ul li a:hover {
     color: whitesmoke;
+}
+.active_links {
+    color: whitesmoke !important;
+    background: blue;
+    height: 3rem;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    display: flex;
+    width: 13rem;
+    font-weight: 700;
 }
 .close-menu {
     margin: 5px;

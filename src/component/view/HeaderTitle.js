@@ -18,7 +18,7 @@ const HeaderTitle = ({ title, onChaneShowMoDal }) => {
             }}>
 
                 <MdAddCircleOutline onClick={() => onChaneShowMoDal('add')} style={{
-                    fontSize: '50px'
+                    fontSize: '30px'
                 }} />
             </div>
         </div>

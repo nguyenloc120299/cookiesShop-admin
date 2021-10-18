@@ -7,6 +7,7 @@
     width: 100%;
     top: 0;
     z-index: 99;
+    align-items: center;
 }
 .menu {
     font-size: 30px;
@@ -16,14 +17,15 @@
     display: none;
 }
 .info {
-    font-size: 20px;
-
+    font-size: 12px;
+    cursor: pointer;
+    /* 
     cursor: pointer;
     position: absolute;
     top: 50%;
     left: 60%;
     transform: translateY(-50%);
-    color: black;
+    color: black; */
 }
 
 @media (max-width: 720px) {

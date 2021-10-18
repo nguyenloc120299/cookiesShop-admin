@@ -219,7 +219,7 @@ const Supplier = () => {
     }
     return (
         <>
-            <div className='container'>
+            <div className='m-3'>
                 <ModalSupplier
                     isModal={isModal}
                     isEdit={isEdit}

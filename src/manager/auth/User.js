@@ -142,7 +142,7 @@ const User = () => {
             <td>{item.address}</td>
             <td>
                 <div className="dropdown">
-                    <span style={{ fontWeight: 'bold' }} className='dropdown-toggle' id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> {item.listroles[0].role}</span>
+                    <span style={{ fontWeight: 'bold', cursor: 'pointer' }} className='dropdown-toggle' id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> {item.listroles[0].role}</span>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenu2">
                         <li><button className="dropdown-item" type="button" onClick={() => onChangeRoles(item.listroles[0].id, 'Admin', item.id)}>Admin</button></li>
                         <li><button className="dropdown-item" type="button" onClick={() => onChangeRoles(item.listroles[0].id, 'Buyer', item.id)}>Buyer</button></li>
@@ -228,7 +228,7 @@ const User = () => {
     }
     return (
         <>
-            <div className='container mt-5'>
+            <div className='m-3 mt-5'>
                 <HeaderTitle title='người dùng' onChaneShowMoDal={onChaneShowMoDal} />
                 <Search />
                 <ModalUser

@@ -11,6 +11,7 @@ import { MdCancel } from 'react-icons/md'
 import { BsFillCursorFill } from 'react-icons/bs'
 import { BsFillXSquareFill } from "react-icons/bs";
 import Alert from '../../component/untill/Alert'
+import swal from 'sweetalert';
 const Product = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
@@ -270,7 +271,7 @@ const Product = () => {
         setIsLoading(false)
         setCallBack(!callBack)
         // setIsModal(false)
-        ShowAlert(true, 'success', 'Thành công')
+        swal("Thay đổi thành công!", "", "success");
     }
     const onSubmit = async (id) => {
         try {
@@ -293,7 +294,7 @@ const Product = () => {
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
-                ShowAlert(true, 'success', 'Thành công')
+                swal("Thay đổi thành công!", "", "success");
             }
             if (isEdit) {
                 setIsLoading(true)
@@ -330,7 +331,7 @@ const Product = () => {
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
-                ShowAlert(true, 'success', 'Thành công')
+                swal("Thay đổi thành công!", "", "success");
                 setIsImgInput(false)
             }
 
@@ -345,11 +346,26 @@ const Product = () => {
         try {
             setIsLoading(true)
             // console.log(id)
-            await axios.delete(`/products/${id}`)
-            setIsLoading(false)
-            setCallBack(!callBack)
-            setIsModal(false)
-            ShowAlert(true, 'success', "Đã xóa thành công")
+            swal({
+                title: " Bạn có chắc không? ",
+
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then(async (willDelete) => {
+                    if (willDelete) {
+                        await axios.delete(`/products/${id}`)
+                        setIsLoading(false)
+                        setCallBack(!callBack)
+                        setIsModal(false)
+                        swal(" Bạn đã xóa sản phẩm khỏi giỏi hàng ", {
+                            icon: "success",
+                        });
+                    }
+                });
+
+
         } catch (err) {
             ShowAlert(true, 'danger', err.response.data.msg)
             setIsLoading(false)
@@ -364,7 +380,7 @@ const Product = () => {
         <>
 
 
-            <div className='container'>
+            <div className='m-3'>
                 {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
                 <HeaderTitle title='sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
                 <ModalProduct

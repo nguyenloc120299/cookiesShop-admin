@@ -181,7 +181,7 @@ const Categories = () => {
     return (
         <>
 
-            <div className='container'>
+            <div className='m-3'>
                 {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
                 <HeaderTitle title='loại sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
                 <Modalcategories
