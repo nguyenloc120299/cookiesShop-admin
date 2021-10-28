@@ -62,8 +62,6 @@ const User = () => {
         address: '',
         phone: '',
         email: '',
-
-
     })
     const onChangeInput = e => {
         const { name, value } = e.target
@@ -149,7 +147,7 @@ const User = () => {
                         <li><button className="dropdown-item" type="button" onClick={() => onChangeRoles(item.listroles[0].id, 'user', item.id)}>user</button></li>
                     </ul>
                 </div></td>
-            <td>{item.status}</td>
+
             <td>
 
             </td>
@@ -260,7 +258,7 @@ const User = () => {
                                 <th scope='col'>Email</th>
                                 <th scope='col'>Địa chỉ</th>
                                 <th scope='col' >Vai trò</th>
-                                <th scope='col' >Trạng thái</th>
+
                                 <th scope='col'></th>
                                 <th scope='col' ></th>
 

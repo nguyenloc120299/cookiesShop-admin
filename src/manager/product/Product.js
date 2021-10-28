@@ -25,7 +25,7 @@ const Product = () => {
     const pageCount = Math.ceil(products.length / totalItem);
     const [isModal, setIsModal] = useState(false)
     const [IsImgInput, setIsImgInput] = useState(false)
-
+    const [img1, img2] = useState(false)
     const [isSave, SetIsSave] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -36,33 +36,55 @@ const Product = () => {
     const [id_category, setId_Category] = useState('')
     const [id_supplier, setId_Supplier] = useState('')
     const [img, setImg] = useState(false)
+    const [imgArr, setImgArr] = useState([])
     const res = JSON.parse(localStorage.getItem('login_admin'))
     const handleUploadImg = async e => {
         e.preventDefault()
         try {
-            const file = e.target.files[0];
-            if (!file) return alert("file không tồn tại")
-            if (file.type !== 'image/jpge' && file.type !== 'image/png') return alert('file không đúng định dạng')
-            let formData = new FormData()
-            formData.append('file', file)
-            setIsLoading(true)
+            const files = [...e.target.files];
+            let newImage = []
+            let newImageURL = []
+            files.forEach(async file => {
 
-            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
-            setIsLoading(false)
-            setImg(res.data)
+
+                if (!file) return alert("file không tồn tại")
+                if (file.type !== 'image/jpge' && file.type !== 'image/png') return alert('file không đúng định dạng')
+                newImageURL.push(file)
+                let formData = new FormData()
+                formData.append('file', file)
+                setIsLoading(true)
+
+                const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
+                setIsLoading(false)
+                //console.log(res.data);
+
+                if (res && res.data) newImage.push({ ...res.data })
+
+                //setImg(res.data)
+                //console.log(newImage);
+            });
+            setImg(newImage)
+            //  console.log('aaaaaaa', ...newImageURL);
+            setImgArr([...imgArr, ...newImageURL])
         } catch (err) {
 
         }
     }
-    const handleDestroy = async () => {
+
+    const deleteImages = (index) => {
+        const newArr = [...imgArr]
+        newArr.splice(index, 1)
+        setImgArr(newArr)
+    }
+    const handleDestroy = async (item) => {
 
         try {
             setIsLoading(true)
-            await axios.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: img.public_id })
+            await axios.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: item.public_id })
             setIsLoading(false)
             setImg(false)
         } catch (err) {
-            return err.response.data.msg
+            console.log(err);
         }
     }
     // const removeAccents = (str) => {
@@ -172,12 +194,16 @@ const Product = () => {
                 width: '100px',
                 height: '150px',
                 objectFit: 'cover'
-            }} /></td>
+            }} />
+
+
+
+            </td>
             <td >{item.name}</td>
             <td>{item.code}</td>
             <td>{item.sort_description}</td>
             <td>{item.detail_description}</td>
-            <td style={item.ban_nhanh === 0 ? { color: 'green' } : { display: 'red' }}>{item.ban_nhanh === 1 ? 'Bán nhanh' : " Bán chậm"}</td>
+            <td>{item.ban_nhanh}</td>
             <td>{item.price}</td>
             <td>{item.competitive_price}</td>
 
@@ -212,19 +238,19 @@ const Product = () => {
 
 
         });
-        users.forEach(element => {
+        users && users.forEach(element => {
             element.products.forEach(element1 => {
                 if (element1.id === id) setId_user(element.id);
             });
         });
-        categories.forEach(i => {
+        categories && categories.forEach(i => {
 
             i.products.forEach(element => {
                 if (element.id === id) setId_Category(i.id)
             });
 
         });
-        supliers.forEach(i => {
+        supliers && supliers.forEach(i => {
 
             i.products.forEach(element => {
                 if (element.id === id) setId_Supplier(i.id)
@@ -278,19 +304,30 @@ const Product = () => {
             //console.log(teacherValue)
             if (isSave) {
                 setIsLoading(true)
+                let files = []
+                // console.log(img);
+                img && img.forEach(element => {
+                    files.push({
+                        file: element.url
+                    })
+                });
+                // console.log(files);
+                await axios.post(`/products`, {
+                    name: productValue.name,
+                    code: productValue.code,
+                    sort_description: productValue.sort_description,
+                    detail_description: productValue.detail_description,
+                    price: productValue.price,
+                    quantity: productValue.quantity,
+                    userId: res.id,
+                    categoriesId: productValue.category,
+                    suppliersId: productValue.supplier,
+                    listpictureProductDTOs: files
+                }
+                )
+                // })
 
 
-                await axios.post(`/products/categories/${productValue.category}/suppliers/${productValue.supplier}/users/${res.id} `, {
-                    ...productValue,
-                    avartar: img.url,
-                    featured: 0,
-                    status: 0,
-                    ban_nhanh: 0,
-                    competitive_price: 0,
-                    date_sale: new Date(),
-                    promotion: 0
-
-                })
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
@@ -376,6 +413,7 @@ const Product = () => {
         setIsImgInput(!IsImgInput)
 
     }
+    // console.log(imgArr);
     return (
         <>
 
@@ -388,6 +426,7 @@ const Product = () => {
                     isEdit={isEdit}
                     isSave={isSave}
                     img={img}
+                    img1={img1}
                     onCloseModal={onCloseModal}
                     handleUpLoad={handleUploadImg}
                     handleDestroy={handleDestroy}
@@ -398,6 +437,8 @@ const Product = () => {
                     onDelete={onDelete}
                     IsImgInput={IsImgInput}
                     closeImage={handleCloseImgaeInput}
+                    imgArr={imgArr}
+                    deleteImages={deleteImages}
                 />
                 <Search />
                 <div className='row'>
@@ -411,7 +452,7 @@ const Product = () => {
                                 <th scope='col'>Code</th>
                                 <th scope='col' >Mô tả</th>
                                 <th scope='col'>Chi tiết</th>
-                                <th scope='col'>Bán nhanh</th>
+                                <th scope='col'>Đã bán</th>
                                 <th scope='col'>Giá</th>
                                 <th scope='col'>Giá giảm</th>
                                 <th scope='col'>Ngày nhập</th>

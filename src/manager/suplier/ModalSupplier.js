@@ -3,7 +3,7 @@ import Spinner from '../../component/untill/Spinner'
 import ModalFooter from '../../component/view/ModalFooter'
 import { AiOutlineUpload } from 'react-icons/ai'
 const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave, onCloseModal, isLoading, onDelete, img, handleUpLoad, handleDestroy, IsImgInput, closeImage }) => {
-    console.log(img)
+
 
 
     return (

@@ -8,6 +8,8 @@ import ProductManager from "./manager/ProductManager";
 import User from "./manager/auth/User";
 import Login from "./manager/auth/Login";
 import { GlobalContext } from "./GlobalContext";
+import Seller from "./seller/Seller";
+import Orders from "./manager/orders/Orders";
 function App() {
   const [isMenu, setIsMenu] = useState(false)
   const showMenu = () => {
@@ -30,7 +32,8 @@ function App() {
               <Switch>
                 <Route path='/home' component={MainPage} exact />
                 <Route path='/product-manager' component={ProductManager} />
-                <Route path='/' component={User} />
+                <Route path='/user' component={User} />
+                <Route path='/orders' component={Orders} />
 
               </Switch>
 
@@ -39,6 +42,7 @@ function App() {
           </div>
           :
           <Route path='/' component={Login} exact />
+
 
 
       }

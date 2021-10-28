@@ -1,6 +1,6 @@
 .navabar {
     height: 100vh;
-    background: rgb(45, 45, 45);
+    background: rgb(0, 0, 0);
     display: flex;
     flex-direction: column;
     width: 17%;
@@ -25,7 +25,7 @@
     list-style: none;
 }
 .links ul li a {
-    color: #ccc;
+    color: white;
     text-decoration: none;
     font-size: 14px;
     font-weight: bold;

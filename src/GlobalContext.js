@@ -3,6 +3,7 @@ import CategoriesApi from "./api/CategoriesApi";
 import SupplierApi from "./api/SupplierApi";
 import ProductApi from './api/ProductApi'
 import UserApi from './api/UserApi'
+import OrdersApi from './api/OrderApi'
 export const GlobalContext = createContext()
 
 export const DataProvider = ({ children }) => {
@@ -21,7 +22,8 @@ export const DataProvider = ({ children }) => {
         suppliersApi: SupplierApi(),
         productsApi: ProductApi(),
         usersApi: UserApi(),
-        isLogin: [isLogin, setIsLogin]
+        isLogin: [isLogin, setIsLogin],
+        ordersApi: OrdersApi()
     }
     return (
         <GlobalContext.Provider value={data}>

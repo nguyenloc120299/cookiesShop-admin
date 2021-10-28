@@ -3,10 +3,14 @@ import Spinner from '../../component/untill/Spinner'
 import ModalFooter from '../../component/view/ModalFooter'
 import { AiOutlineUpload } from 'react-icons/ai'
 import { GlobalContext } from '../../GlobalContext'
-const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave, onCloseModal, isLoading, onDelete, img, handleUpLoad, handleDestroy, IsImgInput, closeImage }) => {
+import UploadImage from './UploadImage'
+const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
+    onCloseModal, isLoading, onDelete, img, handleUpLoad, handleDestroy,
+    IsImgInput, closeImage, imgArr, deleteImages }) => {
     const context = useContext(GlobalContext)
     const [categories] = context.categoriesApi.categories
     const [supliers] = context.suppliersApi.suppliers
+
     return (
         <div className='modal' tabIndex='-1' style={isModal ? { display: 'block' } : { display: 'none' }}>
 
@@ -115,112 +119,20 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                         </>
                         }
 
-                        {isSave && <>
-                            <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }}>
-                                <label htmlFor="fileInput">
-                                    <AiOutlineUpload style={{
-                                        fontSize: '50px'
-                                    }} />
-                                    <h6 style={{
-                                        marginLeft: '10px',
-                                        color: '#777',
-                                        fontWeight: 'bold'
-                                    }}>Hình ảnh</h6>
-                                </label>
+                        <UploadImage
+                            isSave={isSave}
+                            isEdit={isEdit}
+                            handleDestroy={handleDestroy}
+                            handleUpLoad={handleUpLoad}
+                            img={img}
+                            value={value}
+                            closeImage={closeImage}
+                            IsImgInput={IsImgInput}
+                            imgArr={imgArr}
+                            deleteImages={deleteImages}
 
-                                <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
+                        />
 
-                                    onChange={handleUpLoad} />
-
-
-                            </div>
-                            <div className='mb-3 img__input' style={img ? {
-                                position: 'relative',
-                                display: 'block'
-                            } : { display: 'none' }}>
-                                <img src={img.url} alt='' style={{
-                                    width: '80px',
-                                    height: '80px',
-
-                                }} />
-                                <p style={{
-                                    position: 'absolute',
-                                    top: '0',
-                                    right: '0',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer',
-                                    color: 'crimson'
-                                }} onClick={() => handleDestroy()}>X</p>
-                            </div>
-                        </>
-                        }
-                        {
-                            isEdit &&
-                            <>
-                                {
-                                    IsImgInput ?
-                                        <div className='mb-3 img__input' style={{
-                                            position: 'relative',
-                                            display: 'block'
-                                        }}
-                                        >
-                                            <img src={value.avartar} alt='' style={{
-                                                width: '80px',
-                                                height: '80px',
-
-                                            }} />
-                                            <p style={{
-                                                position: 'absolute',
-                                                top: '0',
-                                                right: '0',
-                                                fontWeight: 'bold',
-                                                cursor: 'pointer',
-                                                color: 'crimson'
-                                            }} onClick={() => closeImage()}>X</p>
-                                        </div>
-                                        :
-                                        <>
-                                            <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }}>
-                                                <label htmlFor="fileInput">
-                                                    <i className="fas fa-upload" />
-                                                    <span style={{
-                                                        marginLeft: '10px',
-                                                        color: '#777'
-                                                    }}>Hình ảnh</span>
-                                                </label>
-
-                                                <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
-
-                                                    onChange={handleUpLoad} />
-
-
-                                            </div>
-                                            <div className='mb-3 img__input' style={img ? {
-                                                position: 'relative',
-                                                display: 'block'
-                                            } : { display: 'none' }}>
-                                                <img src={img.url} alt='' style={{
-                                                    width: '80px',
-                                                    height: '80px',
-
-                                                }} />
-                                                <p style={{
-                                                    position: 'absolute',
-                                                    top: '0',
-                                                    right: '0',
-                                                    fontWeight: 'bold',
-                                                    cursor: 'pointer',
-                                                    color: 'crimson'
-                                                }} onClick={() => handleDestroy()}>X</p>
-                                            </div>
-                                        </>
-
-
-
-                                }
-
-                            </>
-                        }
                     </div>
 
                     <ModalFooter

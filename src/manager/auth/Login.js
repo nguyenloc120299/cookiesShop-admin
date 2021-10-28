@@ -21,7 +21,7 @@ const Login = () => {
     return (
         <div className='login mt-5'>
             <h2 className='text-center' style={{
-                border: '1px solid white',
+
                 padding: '5px'
             }}>Cookies Shop</h2>
 
@@ -43,7 +43,7 @@ const Login = () => {
                 />
             </div>
 
-            <button className="btn btn-outline-light" onClick={() => onSubmitLogin()}>Đăng nhập</button>
+            <button className="btn btn-outline-light w-100" onClick={() => onSubmitLogin()}>Đăng nhập</button>
 
 
         </div>
