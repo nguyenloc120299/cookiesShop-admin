@@ -308,36 +308,18 @@ const Product = () => {
         setIsLoading(true)
         if (type === 'status') {
             if (producta.status === 0) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${id_user}  `, {
-                    ...producta,
-                    status: 1,
-                })
+                await axios.post(`/status/products/${producta.id}/type/${1}`)
             }
             if (producta.status === 1) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${id_user}   `, {
-                    ...producta,
-
-                    status: 0,
-
-
-                })
+                await axios.post(`/status/products/${producta.id}/type/${0}`)
             }
         }
         if (type === 'featured') {
             if (producta.featured === 0) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${id_user}   `, {
-                    ...producta,
-                    featured: 1,
-                })
+                await axios.post(`/featured/products/${producta.id}/type/${1}`)
             }
             if (producta.featured === 1) {
-                await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${id_user}  `, {
-                    ...producta,
-
-                    featured: 0,
-
-
-                })
+                await axios.post(`/featured/products/${producta.id}/type/${0}`)
             }
         }
 
