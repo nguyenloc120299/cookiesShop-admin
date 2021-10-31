@@ -2,7 +2,7 @@ import React from 'react'
 import { AiOutlineUpload } from 'react-icons/ai'
 
 const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img, IsImgInput, value, closeImage, deleteImages }) => {
-
+    console.log(img);
 
     return (
         <>
@@ -56,28 +56,56 @@ const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img,
             }
             {
                 isEdit &&
+
                 <>
                     {
                         IsImgInput ?
-                            <div className='mb-3 img__input' style={{
-                                position: 'relative',
-                                display: 'block'
-                            }}
-                            >
-                                <img src={value.avartar} alt='' style={{
-                                    width: '100px',
-                                    height: '130px',
+                            <>
+                                {/* {
+                                    value && value.listpictureProductDTOs && value.listpictureProductDTOs.map(item => (
 
-                                }} />
-                                <p style={{
-                                    position: 'absolute',
-                                    top: '0',
-                                    right: '0',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer',
-                                    color: 'crimson'
-                                }} onClick={() => closeImage()}>X</p>
-                            </div>
+                                        <div className='mb-3 img__input' style={{
+                                            position: 'relative',
+                                            display: 'block'
+                                        }}
+                                        >
+                                            <img src={item.file} alt='' style={{
+                                                width: '100px',
+                                                height: '130px',
+
+                                            }} />
+                                            <p style={{
+                                                position: 'absolute',
+                                                top: '0',
+                                                right: '0',
+                                                fontWeight: 'bold',
+                                                cursor: 'pointer',
+                                                color: 'crimson'
+                                            }} onClick={() => closeImage()}>X</p>
+                                        </div>
+                                    ))
+                                } */}
+                                <div div className='mb-3 img__input' style={{
+                                    position: 'relative',
+                                    display: 'block'
+                                }}
+                                >
+                                    <img src={value.avartar} alt='' style={{
+                                        width: '100px',
+                                        height: '130px',
+
+                                    }} />
+                                    <p style={{
+                                        position: 'absolute',
+                                        top: '0',
+                                        right: '0',
+                                        fontWeight: 'bold',
+                                        cursor: 'pointer',
+                                        color: 'crimson'
+                                    }} onClick={() => closeImage()}>X</p>
+                                </div>
+
+                            </>
                             :
                             <>
                                 <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }}>

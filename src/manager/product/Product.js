@@ -12,6 +12,9 @@ import { BsFillCursorFill } from 'react-icons/bs'
 import { BsFillXSquareFill } from "react-icons/bs";
 import Alert from '../../component/untill/Alert'
 import swal from 'sweetalert';
+import { BsImageFill } from 'react-icons/all'
+import ImageModal from './ImageModal'
+import './product.css'
 const Product = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
@@ -30,6 +33,7 @@ const Product = () => {
     const [isEdit, setIsEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const PageVisited = pageNumber * totalItem
+    const [listPicture, setListPicture] = useState([])
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
@@ -37,6 +41,7 @@ const Product = () => {
     const [id_supplier, setId_Supplier] = useState('')
     const [img, setImg] = useState(false)
     const [imgArr, setImgArr] = useState([])
+    const [isShowListPicture, setisShowListPicture] = useState(false)
     const res = JSON.parse(localStorage.getItem('login_admin'))
     const handleUploadImg = async e => {
         e.preventDefault()
@@ -44,6 +49,7 @@ const Product = () => {
             const files = [...e.target.files];
             let newImage = []
             let newImageURL = []
+            if (files.length > 4) return swal("", "Chỉ được thêm ít nhất 4 ảnh", "warning");
             files.forEach(async file => {
 
 
@@ -120,6 +126,30 @@ const Product = () => {
         quantity: ''
 
     })
+
+    const showListPicture = (id) => {
+        setisShowListPicture(!isShowListPicture)
+        products.forEach(element => {
+            if (element.id === id) {
+                setProductValue({
+
+                    id: element.id,
+                    name: element.name,
+                    code: element.name,
+                    sort_description: element.sort_description,
+                    detail_description: element.detail_description,
+                    price: element.price,
+                    avartar: element.avartar,
+                    date_sale: element.date_sale,
+                    quantity: element.quantity,
+                    promotion: element.promotion,
+                    listpictureProductDTOs: element.listPictureproduct
+                })
+                setListPicture(element.listPictureproduct)
+
+            }
+        });
+    }
     const onChangeInput = e => {
         const { name, value } = e.target
         setProductValue({ ...productValue, [name]: value })
@@ -160,7 +190,21 @@ const Product = () => {
             products.forEach(product => {
                 if (product.id === id) {
 
-                    setProductValue({ ...product })
+                    setProductValue({
+
+                        id: product.id,
+                        name: product.name,
+                        code: product.name,
+                        sort_description: product.sort_description,
+                        detail_description: product.detail_description,
+                        price: product.price,
+                        avartar: product.avartar,
+                        date_sale: product.date_sale,
+                        quantity: product.quantity,
+                        promotion: product.promotion,
+
+                        listpictureProductDTOs: product.listPictureproduct
+                    })
                     setIsImgInput(product.avartar)
                 }
             });
@@ -220,6 +264,9 @@ const Product = () => {
                 {item.status === 1 ? <ImCheckmark /> : <MdCancel />}
             </button></td>
             <ButtonTable item={item} onChaneShowMoDal={onChaneShowMoDal} />
+            <td><button className='btn-detail-2'><BsImageFill style={{
+                fontSize: '22px'
+            }} onClick={() => showListPicture(item.id)} /></button></td>
         </tr>
 
     ))
@@ -350,20 +397,40 @@ const Product = () => {
                     });
 
                 });
-                console.log(supliers);
+                //  console.log(supliers);
                 //   console.log(id_category, id_supplier)
                 setIsLoading(true)
-                if (IsImgInput) await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}   `, {
-                    ...productValue,
-                })
-                else
-                    await await axios.put(`/products/categories/${id_category}/suppliers/${id_supplier}/users/${res.id}   `, {
-                        ...productValue,
+                if (IsImgInput)
 
-                        avartar: img.url,
+                    await axios.put(`/products`, {
+
+                        ...productValue,
+                        userId: res.id,
+                        categoriesId: id_category,
+                        suppliersId: id_supplier,
 
 
                     })
+                else {
+
+                    //  let files = []
+                    // console.log(img);
+                    // img && img.slice(1, 5).forEach(element => {
+                    //     files.push({
+                    //         file: element.url
+                    //     })
+                    // });
+                    await axios.put(`/products`, {
+                        ...productValue,
+
+                        avartar: img[0].url,
+                        // listpictureProductDTOs:file
+                        userId: res.id,
+                        categoriesId: id_category,
+                        suppliersId: id_supplier,
+
+                    })
+                }
 
                 setIsLoading(false)
                 setCallBack(!callBack)
@@ -373,7 +440,8 @@ const Product = () => {
             }
 
         } catch (err) {
-            ShowAlert(true, 'danger', err.response.data.msg)
+            //     ShowAlert(true, 'danger', err.response.data.msg)
+            console.log(err);
             setIsLoading(false)
         }
 
@@ -404,7 +472,8 @@ const Product = () => {
 
 
         } catch (err) {
-            ShowAlert(true, 'danger', err.response.data.msg)
+            console.log(err);
+            // ShowAlert(true, 'danger', err.response.data.msg)
             setIsLoading(false)
         }
 
@@ -421,6 +490,7 @@ const Product = () => {
             <div className='m-3'>
                 {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
                 <HeaderTitle title='sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
+
                 <ModalProduct
                     isModal={isModal}
                     isEdit={isEdit}
@@ -440,6 +510,14 @@ const Product = () => {
                     imgArr={imgArr}
                     deleteImages={deleteImages}
                 />
+                {
+                    isShowListPicture && <ImageModal
+                        setisShowListPicture={setisShowListPicture}
+                        listPicture={listPicture}
+                        setListPicture={setListPicture}
+                        value={productValue}
+                    />
+                }
                 <Search />
                 <div className='row'>
                     <table className='table-hover table'>
