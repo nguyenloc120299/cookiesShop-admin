@@ -78,7 +78,14 @@ const ListImg = ({ item, setId_img, setIsLoading, listPicture, id_img, setListPi
             console.log(error);
         }
     }
-
+    const deleImage = async (id) => {
+        const newImage = listPicture.filter(item => {
+            return item.id !== id
+        })
+        await axios.delete(`/pictureProduct/${id}`)
+        setCallBack(!callBack)
+        setListPicture(newImage)
+    }
     return (
         <>
             <div className='position-relative d-flex mb-3' key={item.id}>
@@ -114,8 +121,11 @@ const ListImg = ({ item, setId_img, setIsLoading, listPicture, id_img, setListPi
                                         fontWeight: 'bold',
                                         cursor: 'pointer',
                                         color: 'crimson'
-                                    }} onClick={() => onchangShow(item.id)}>X</p>
+                                    }} onClick={() => deleImage(item.id)}><i className="far fa-trash-alt"></i></p>
                             </label>
+                            <div onClick={() => onchangShow(item.id)}>
+                                <i className="fas fa-pencil-alt" />
+                            </div>
 
                         </>
                 }

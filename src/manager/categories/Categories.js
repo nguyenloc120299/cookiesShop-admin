@@ -12,6 +12,7 @@ const Categories = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
     const totalItem = 10;
+
     const [categories, setCategories] = context.categoriesApi.categories
     const pageCount = Math.ceil(categories.length / totalItem);
     const [isModal, setIsModal] = useState(false)
@@ -23,6 +24,36 @@ const Categories = () => {
     const PageVisited = pageNumber * totalItem
     const changePage = ({ selected }) => {
         setPageNumber(selected)
+    }
+    const [img, setImg] = useState(false)
+    const [IsImgInput, setIsImgInput] = useState(false)
+    const handleUploadImg = async e => {
+        e.preventDefault()
+        try {
+            const file = e.target.files[0];
+            if (!file) return alert("file không tồn tại")
+            if (file.type !== 'image/jpge' && file.type !== 'image/png') return alert('file không đúng định dạng')
+            let formData = new FormData()
+            formData.append('file', file)
+            setIsLoading(true)
+
+            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
+            setIsLoading(false)
+            setImg(res.data)
+        } catch (err) {
+
+        }
+    }
+    const handleDestroy = async () => {
+
+        try {
+            setIsLoading(true)
+            await axios.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: img.public_id })
+            setIsLoading(false)
+            setImg(false)
+        } catch (err) {
+            return err.response.data.msg
+        }
     }
     const removeAccents = (str) => {
         let AccentsMap = [
@@ -101,6 +132,12 @@ const Categories = () => {
 
         <tr key={item.id}>
             <td >{item.id}</td>
+            <td >
+                <img src={item.avartar} alt='' style={{
+
+                    width: '50px',
+                    height: '50px'
+                }} /></td>
             <td >{item.name}</td>
             <td>{item.code}</td>
             <td>{item.totalproduct}</td>
@@ -119,7 +156,7 @@ const Categories = () => {
             //console.log(teacherValue)
             if (isSave) {
                 setIsLoading(true)
-                await axios.post('/categories', { ...categoriesValue })
+                await axios.post('/categories', { ...categoriesValue, avartar: img.url })
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
@@ -127,7 +164,9 @@ const Categories = () => {
             }
             if (isEdit) {
                 setIsLoading(true)
-                await axios.put('/categories', { ...categoriesValue })
+                if (IsImgInput) await axios.put('/suppliers', { ...categoriesValue })
+                else
+                    await axios.put('/suppliers', { ...categoriesValue, avartar: img.url })
                 //   console.log(teacherValue)
                 setIsLoading(false)
                 setCallBack(!callBack)
@@ -157,7 +196,10 @@ const Categories = () => {
         }
 
     }
+    const handleCloseImgaeInput = () => {
+        setIsImgInput(!IsImgInput)
 
+    }
     const onSubmitSearch = (input) => {
         let arr = []
         //  setCallBack(!callBack)
@@ -178,6 +220,7 @@ const Categories = () => {
         }
         setCategories(arr)
     }
+
     return (
         <>
 
@@ -195,6 +238,11 @@ const Categories = () => {
                     value={categoriesValue}
                     isLoading={isLoading}
                     onDelete={onDelete}
+                    IsImgInput={IsImgInput}
+                    closeImage={handleCloseImgaeInput}
+                    img={img}
+                    handleDestroy={handleDestroy}
+                    handleUpLoad={handleUploadImg}
                 />
                 <Search onSubmitSearch={onSubmitSearch} />
                 <div className='row'>
@@ -203,6 +251,7 @@ const Categories = () => {
                         <thead >
                             <tr>
                                 <th scope='col'>ID</th>
+                                <th scope='col' >Logo</th>
                                 <th scope='col'>Tên loại</th>
                                 <th scope='col'>Code</th>
                                 <th scope='col' >Số lượng sản phẩm</th>

@@ -10,7 +10,7 @@
     z-index: 9999999999;
 }
 .form_modal {
-    max-width: 700px;
+    max-width: 400px;
     width: 100%;
     background: white;
     margin: 30px auto;
