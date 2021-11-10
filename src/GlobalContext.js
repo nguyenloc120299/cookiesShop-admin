@@ -30,7 +30,7 @@ export const DataProvider = ({ children }) => {
     const data = {
         categoriesApi: CategoriesApi(),
         suppliersApi: SupplierApi(),
-        productsApi: ProductApi(),
+        productsApi: ProductApi(isLogin),
         usersApi: UserApi(),
         isLogin: [isLogin, setIsLogin],
         ordersApi: OrdersApi(),
