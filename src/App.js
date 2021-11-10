@@ -10,6 +10,7 @@ import Login from "./manager/auth/Login";
 import { GlobalContext } from "./GlobalContext";
 import Seller from "./seller/Seller";
 import Orders from "./manager/orders/Orders";
+import ModalAddStore from "./component/untill/ModalAddStore";
 function App() {
   const [isMenu, setIsMenu] = useState(false)
   const showMenu = () => {
@@ -17,6 +18,9 @@ function App() {
   }
   const context = useContext(GlobalContext)
   const [isLogin] = context.isLogin
+  const [firstLogin] = context.isFirstLogin
+
+
 
   return (
     <Router>
@@ -26,6 +30,9 @@ function App() {
           ?
 
           <div className="App">
+            {
+              firstLogin && <ModalAddStore />
+            }
             <Navabar isMenu={isMenu} showMenu={showMenu} />
             <div className='main-page'>
               <Header showMenu={showMenu} isMenu={isMenu} />

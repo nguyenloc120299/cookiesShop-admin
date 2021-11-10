@@ -43,7 +43,9 @@ const Login = () => {
                 />
             </div>
 
-            <button className="btn btn-outline-light w-100" onClick={() => onSubmitLogin()}>Đăng nhập</button>
+            <button className="btn btn-primary w-100" onClick={() => onSubmitLogin()}
+
+            >Đăng nhập</button>
 
 
         </div>

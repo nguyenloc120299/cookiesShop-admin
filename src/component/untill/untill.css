@@ -6,6 +6,33 @@
     animation-name: alert;
     animation-duration: 3s;
 }
+
+.modal_store {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #0008;
+    z-index: 4;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    z-index: 9999999999;
+}
+.modal_store .form_modal {
+    max-width: 600px;
+    width: 100%;
+    background: white;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 5px;
+}
+.modal_store .form_modal .modal_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+}
 @keyframes alert {
     0% {
         left: 0;

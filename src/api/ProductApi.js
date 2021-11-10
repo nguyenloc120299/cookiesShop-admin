@@ -1,13 +1,20 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-function CategoriesApi() {
+function CategoriesApi(firstLogin, id_user) {
+    const res = JSON.parse(localStorage.getItem('login_admin'))
     const [products, setProducts] = useState([])
     const [callBack, setCallBack] = useState(false)
 
     const getCategories = async () => {
-        const res = await axios.get("/products")
-        if (res && res.data) setProducts(res.data)
+        if (res.token && res.roles[0].authority === 'Buyer') {
+            const res1 = await axios.get(`/products/users/${res.id}`)
+            if (res1 && res1.data) setProducts(res1.data)
+        }
+        else {
+            const res2 = await axios.get(`/products`)
+            if (res2 && res2.data) setProducts(res2.data)
+        }
     }
     useEffect(() => {
         getCategories()
