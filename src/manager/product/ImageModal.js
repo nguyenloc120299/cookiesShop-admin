@@ -16,7 +16,7 @@ const ModaliImage = ({ setisShowListPicture, listPicture, setListPicture, value 
     const [supliers] = context.suppliersApi.suppliers
     const [callBack, setCallBack] = context.productsApi.callBack
     const res_a = JSON.parse(localStorage.getItem('login_admin'))
-    //  console.log(value);
+    console.log(value);
     const onchangShow = (id) => {
         setIsImg(true)
         setId_img(id)
@@ -69,7 +69,7 @@ const ModaliImage = ({ setisShowListPicture, listPicture, setListPicture, value 
                 date_sale: value.date_sale,
                 quantity: value.quantity,
                 promotion: value.promotion,
-
+                status: value.status,
                 listpictureProductDTOs: [{
                     id: id_img,
                     file: res.data.url

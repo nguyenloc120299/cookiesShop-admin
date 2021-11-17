@@ -16,7 +16,7 @@ const Header = ({ showMenu }) => {
             </div>
             <div className='info'>
                 <div className="dropdown">
-                    <span style={{ fontWeight: 'bold' }} className='dropdown-toggle' id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">Xin chào : {res.name}</span>
+                    <span style={{ fontWeight: 'bold' }} className='dropdown-toggle' id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Xin chào : {res.name}</span>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenu2">
                         <li><button className="dropdown-item" type="button" onClick={() => logout()}>Đăng xuất</button></li>
                     </ul>

@@ -19,7 +19,7 @@ function CategoriesApi(isLogin) {
 
     }
     useEffect(() => {
-        if (isLogin) {
+        if (res.token) {
             getCategories()
         }
     }, [callBack])

@@ -87,22 +87,56 @@ const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img,
                                 } */}
                                 <div div className='mb-3 img__input' style={{
                                     position: 'relative',
-                                    display: 'block'
+                                    display: 'flex',
+                                    justifyContent: 'space-around'
+
                                 }}
                                 >
-                                    <img src={value.avartar} alt='' style={{
-                                        width: '100px',
-                                        height: '130px',
+                                    {
+                                        img ?
+                                            <>
+                                                {
+                                                    img.map((item, index) => (
+                                                        <img src={item.url} alt='' key={index} style={{
+                                                            width: '100px',
+                                                            height: '130px',
 
-                                    }} />
-                                    <p style={{
+                                                        }} />
+                                                    ))
+
+                                                }
+                                            </>
+
+                                            :
+
+                                            <img src={value.avartar} alt='' style={{
+                                                width: '100px',
+                                                height: '130px',
+
+                                            }} />
+                                    }
+                                    <div>
+                                        <label htmlFor="fileInput">
+                                            <i className="fas fa-edit"></i>
+                                            <span style={{
+                                                marginLeft: '10px',
+                                                color: '#777'
+                                            }}>Thay đổi</span>
+                                        </label>
+
+                                        <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
+
+                                            onChange={handleUpLoad} />
+                                    </div>
+
+                                    {/* <p style={{
                                         position: 'absolute',
                                         top: '0',
                                         right: '0',
                                         fontWeight: 'bold',
                                         cursor: 'pointer',
                                         color: 'crimson'
-                                    }} onClick={() => closeImage()}>X</p>
+                                    }} onClick={() => closeImage()}>X</p> */}
                                 </div>
 
                             </>
@@ -127,7 +161,7 @@ const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img,
                                     position: 'relative',
                                     display: 'block'
                                 } : { display: 'none' }}>
-                                    <img src={img.url} alt='' style={{
+                                    <img src={img && img[0].url} alt='' style={{
                                         width: '80px',
                                         height: '80px',
 

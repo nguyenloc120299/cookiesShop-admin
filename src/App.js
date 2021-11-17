@@ -37,7 +37,7 @@ function App() {
             <div className='main-page'>
               <Header showMenu={showMenu} isMenu={isMenu} />
               <Switch>
-                <Route path='/home' component={MainPage} exact />
+                <Route path='/' component={MainPage} exact />
                 <Route path='/product-manager' component={ProductManager} />
                 <Route path='/user' component={User} />
                 <Route path='/orders' component={Orders} />

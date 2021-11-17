@@ -28,12 +28,14 @@ const Product = () => {
     const pageCount = Math.ceil(products.length / totalItem);
     const [isModal, setIsModal] = useState(false)
     const [IsImgInput, setIsImgInput] = useState(false)
+    const [imgEdit, setImgEdit] = useState(false)
     const [img1, img2] = useState(false)
     const [isSave, SetIsSave] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const PageVisited = pageNumber * totalItem
     const [listPicture, setListPicture] = useState([])
+    // const [isImgInput, setIsImgInput] = useState(false)
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
@@ -49,29 +51,57 @@ const Product = () => {
             const files = [...e.target.files];
             let newImage = []
             let newImageURL = []
-            if (files.length > 4) return swal("", "Chỉ được thêm ít nhất 4 ảnh", "warning");
-            files.forEach(async file => {
+            if (isSave) {
+                if (files.length < 2) return swal("", "T    hêm nhiều hơn 2 ảnh", "warning")
+                if (files.length > 4) return swal("", "Chỉ được thêm ít nhất 4 ảnh", "warning");
+                files.forEach(async file => {
 
 
-                if (!file) return alert("file không tồn tại")
-                if (file.type !== 'image/jpge' && file.type !== 'image/png') return alert('file không đúng định dạng')
-                newImageURL.push(file)
-                let formData = new FormData()
-                formData.append('file', file)
-                setIsLoading(true)
+                    if (!file) return alert("file không tồn tại")
+                    if (file.type !== 'image/jpge' && file.type !== 'image/png') return alert('file không đúng định dạng')
+                    newImageURL.push(file)
+                    let formData = new FormData()
+                    formData.append('file', file)
+                    setIsLoading(true)
 
-                const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
-                setIsLoading(false)
-                //console.log(res.data);
+                    const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
+                    setIsLoading(false)
+                    //console.log(res.data);
 
-                if (res && res.data) newImage.push({ ...res.data })
+                    if (res && res.data) newImage.push({ ...res.data })
 
-                //setImg(res.data)
-                //console.log(newImage);
-            });
-            setImg(newImage)
-            //  console.log('aaaaaaa', ...newImageURL);
-            setImgArr([...imgArr, ...newImageURL])
+                    //setImg(res.data)
+                    //console.log(newImage);
+                });
+                setImg(newImage)
+                //  console.log('aaaaaaa', ...newImageURL);
+                setImgArr([...imgArr, ...newImageURL])
+            }
+            if (isEdit) {
+                setImgEdit(true)
+                files.forEach(async file => {
+
+
+                    if (!file) return alert("file không tồn tại")
+                    if (file.type !== 'image/jpge' && file.type !== 'image/png') return alert('file không đúng định dạng')
+                    newImageURL.push(file)
+                    let formData = new FormData()
+                    formData.append('file', file)
+                    setIsLoading(true)
+
+                    const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
+                    setIsLoading(false)
+                    //console.log(res.data);
+
+                    if (res && res.data) newImage.push({ ...res.data })
+
+                    //setImg(res.data)
+                    //console.log(newImage);
+                });
+                setImg(newImage)
+                //  console.log('aaaaaaa', ...newImageURL);
+                setImgArr([...imgArr, ...newImageURL])
+            }
         } catch (err) {
 
         }
@@ -143,6 +173,7 @@ const Product = () => {
                     date_sale: element.date_sale,
                     quantity: element.quantity,
                     promotion: element.promotion,
+                    status: element.status,
                     listpictureProductDTOs: element.listPictureproduct
                 })
                 setListPicture(element.listPictureproduct)
@@ -202,7 +233,7 @@ const Product = () => {
                         date_sale: product.date_sale,
                         quantity: product.quantity,
                         promotion: product.promotion,
-
+                        status: product.status,
                         listpictureProductDTOs: product.listPictureproduct
                     })
                     setIsImgInput(product.avartar)
@@ -254,20 +285,25 @@ const Product = () => {
             <td>{item.date_sale}</td>
             <td>{item.quantity}</td>
             <td>{item.promotion}</td>
-            <td><button className={item.featured === 1 ? 'btn btn-outline-success' : 'btn btn-outline-danger'}
+            {
+                (res.token && res.roles[0].authority === 'Admin') && <>
 
-                onClick={() => onChangeSatus(item.id, 'featured')}
-            >{item.featured === 1 ? <BsFillCursorFill /> : <BsFillXSquareFill />}</button></td>
-            <td><button className={item.status === 1 ? 'btn btn-outline-success' : 'btn btn-outline-danger'}
+                    <td><button className={item.featured === 1 ? 'btn btn-outline-success' : 'btn btn-outline-danger'}
 
-                onClick={() => onChangeSatus(item.id, 'status')}>
-                {item.status === 1 ? <ImCheckmark /> : <MdCancel />}
-            </button></td>
+                        onClick={() => onChangeSatus(item.id, 'featured')}
+                    >{item.featured === 1 ? <BsFillCursorFill /> : <BsFillXSquareFill />}</button></td>
+                    <td><button className={item.status === 1 ? 'btn btn-outline-success' : 'btn btn-outline-danger'}
+
+                        onClick={() => onChangeSatus(item.id, 'status')}>
+                        {item.status === 1 ? <ImCheckmark /> : <MdCancel />}
+                    </button></td>
+                </>
+            }
             <ButtonTable item={item} onChaneShowMoDal={onChaneShowMoDal} />
             <td><button className='btn-detail-2'><BsImageFill style={{
                 fontSize: '22px'
             }} onClick={() => showListPicture(item.id)} /></button></td>
-        </tr>
+        </tr >
 
     ))
     useEffect(() => {
@@ -363,6 +399,7 @@ const Product = () => {
                 swal("Thay đổi thành công!", "", "success");
             }
             if (isEdit) {
+                // console.log(IsImgInput);
                 setIsLoading(true)
                 let id_category, id_supplier;
                 categories.forEach(i => {
@@ -382,26 +419,28 @@ const Product = () => {
                 //  console.log(supliers);
                 //   console.log(id_category, id_supplier)
                 setIsLoading(true)
-                if (IsImgInput)
+                if (!imgEdit)
 
                     await axios.put(`/products`, {
 
                         ...productValue,
+
                         userId: res.id,
                         categoriesId: id_category,
                         suppliersId: id_supplier,
 
 
                     })
+
                 else {
 
-                    //  let files = []
-                    // console.log(img);
-                    // img && img.slice(1, 5).forEach(element => {
-                    //     files.push({
-                    //         file: element.url
-                    //     })
-                    // });
+                    let files = []
+                    console.log(img);
+                    img && img.slice(1, 5).forEach(element => {
+                        files.push({
+                            file: element.url
+                        })
+                    });
                     await axios.put(`/products`, {
                         ...productValue,
 
@@ -518,8 +557,13 @@ const Product = () => {
                                 <th scope='col'>Ngày nhập</th>
                                 <th scope='col'>Số lượng</th>
                                 <th scope='col'>Khuyến mãi</th>
-                                <th scope='col'>Nổi bật</th>
-                                <th scope='col'>Trang thái</th>
+                                {
+                                    (res.token && res.roles[0].authority === 'Admin') && <>
+                                        <th scope='col'>Nổi bật</th>
+                                        <th scope='col'>Trang thái</th>
+                                    </>
+                                }
+
 
                                 <th scope='col'></th>
                                 <th scope='col'></th>
