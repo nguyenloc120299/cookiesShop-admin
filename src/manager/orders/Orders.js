@@ -8,15 +8,26 @@ const Orders = () => {
     const context = useContext(GlobalContext)
     const res = JSON.parse(localStorage.getItem('login_admin'))
     const [orders] = context.ordersApi.orders
+    const [callback, setCallback] = context.ordersApi.callBack
     const totalItem = 10;
     const [pageNumber, setPageNumber] = useState(0)
     const [type, setType] = context.ordersApi.status
     const pageCount = Math.ceil(orders.length / totalItem);
 
-    console.log(orders);
     const PageVisited = pageNumber * totalItem
     const changePage = ({ selected }) => {
         setPageNumber(selected)
+    }
+
+    const onChangeStatus = async (status, id) => {
+        if (status === 0)
+            await axios.post(`/status/orderDetail/${id}/type/1`)
+        if (status === 1)
+            await axios.post(`/status/orderDetail/${id}/type/2`)
+        if (status === 3)
+            await axios.post(`/status/orderDetail/${id}/type/3`)
+
+        setCallback(!callback)
     }
     const displayOrder = orders.slice(PageVisited, totalItem + PageVisited).map((item, index) => (
         <tr key={index}>
@@ -41,10 +52,20 @@ const Orders = () => {
             <td
                 style={item.status === 0
                     ? { color: 'green', fontWeight: 'bold' }
-                    : { color: 'blue', fontWeight: "bold" }}
-            >{item.status === 0 ? 'Chưa xác nhận' : 'Đã giao hàng'}</td>
+                    : item.status === 1 ? { color: 'orange', fontWeight: "bold" } : {
+                        color: 'blue', fontWeight: "bold"
+                    }}
+            >{item.status === 0 ? 'Chưa xác nhận' : item.status === 1 ? 'Đang giao' : 'Đã giao'}</td>
 
-            <td><button className='btn btn-primary'>Tiếp tục</button></td>
+            <td>
+                {
+                    item.status === 2 ?
+                        <p style={{
+                            color: 'green',
+                            fontWeight: '700'
+                        }}>Hoàn tất</p> :
+                        <button className='btn btn-primary' onClick={() => onChangeStatus(item.status, item.id)}>Tiếp tục</button>
+                }</td>
         </tr>
     ))
 

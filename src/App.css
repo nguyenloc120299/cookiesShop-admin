@@ -38,3 +38,10 @@
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
+.modal {
+  background: #0008;
+  overflow: scroll;
+}
+.modal-dialog {
+  max-width: 750px !important;
+}

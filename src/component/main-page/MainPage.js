@@ -1,6 +1,29 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useContext, useEffect, useState } from 'react'
+import { GlobalContext } from '../../GlobalContext'
+import ChartColumn from './ChartColumn'
 
 const MainPage = () => {
+
+    const context = useContext(GlobalContext)
+    const [orders] = context.ordersApi.orders
+    const [products] = context.productsApi.products
+    const [totalRevent, setTotalRevent] = useState(0)
+    const { id } = JSON.parse(localStorage.getItem('login_admin'))
+    const numberFormat = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    });
+    const getTotalRevent = async () => {
+        const res = await axios.get(`/totalrevenue/user/${id}`)
+        if (res && res.data) setTotalRevent(res.data)
+    }
+    useEffect(() => {
+        getTotalRevent()
+    }, [])
+    const order = orders.filter(item => {
+        return item.status == 0
+    })
     return (
         <div className="Dashboard-mainPage">
             <div className="d-sm-flex align-items-center justify-content-between mb-4">
@@ -16,7 +39,7 @@ const MainPage = () => {
                                             doanh thu
                                         </div>
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount">
-                                            10000
+                                            {numberFormat.format(totalRevent)}
                                         </div>
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">
                                         </div>
@@ -37,7 +60,7 @@ const MainPage = () => {
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1">
                                             Chờ xác nhận</div>
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount">
-                                            2 đơn hàng
+                                            {order ? order.length : 0} đơn hàng
                                         </div>
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">
                                         </div>
@@ -55,7 +78,7 @@ const MainPage = () => {
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1">
                                             Số sản phẩm trong kho</div>
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount">
-                                            3 sản phẩm
+                                            {products ? products.length : 0} sản phẩm
                                         </div>
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">
                                         </div>
@@ -102,9 +125,10 @@ const MainPage = () => {
                         </div>
                     </div>
 
-                    {/* <div className='col-xl-12 col-md-6 mb-4 chartDemo'>
-                        <Chart />
-                    </div> */}
+                    <div className='col-xl-12 col-md-6 mb-4 chartDemo'>
+                        {/* <Chart /> */}
+                        <ChartColumn />
+                    </div>
                 </div>
 
             </div>
