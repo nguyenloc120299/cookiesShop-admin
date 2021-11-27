@@ -11,6 +11,7 @@ import { GlobalContext } from "./GlobalContext";
 import Seller from "./seller/Seller";
 import Orders from "./manager/orders/Orders";
 import ModalAddStore from "./component/untill/ModalAddStore";
+import Profile from "./component/Profile";
 function App() {
   const [isMenu, setIsMenu] = useState(false)
   const showMenu = () => {
@@ -41,7 +42,7 @@ function App() {
                 <Route path='/product-manager' component={ProductManager} />
                 <Route path='/user' component={User} />
                 <Route path='/orders' component={Orders} />
-
+                <Route path='/profile' component={Profile} />
               </Switch>
 
             </div>

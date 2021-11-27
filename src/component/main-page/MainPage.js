@@ -10,6 +10,7 @@ const MainPage = () => {
     const [products] = context.productsApi.products
     const [totalRevent, setTotalRevent] = useState(0)
     const { id } = JSON.parse(localStorage.getItem('login_admin'))
+
     const numberFormat = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
@@ -18,6 +19,7 @@ const MainPage = () => {
         const res = await axios.get(`/totalrevenue/user/${id}`)
         if (res && res.data) setTotalRevent(res.data)
     }
+    const productStatus = products.filter(item => { return item.status === 0 })
     useEffect(() => {
         getTotalRevent()
     }, [])
@@ -38,7 +40,7 @@ const MainPage = () => {
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1">
                                             doanh thu
                                         </div>
-                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount">
+                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount text-primary">
                                             {numberFormat.format(totalRevent)}
                                         </div>
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">
@@ -59,7 +61,7 @@ const MainPage = () => {
                                     <div className="col mr-2">
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1">
                                             Chờ xác nhận</div>
-                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount">
+                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount text-primary">
                                             {order ? order.length : 0} đơn hàng
                                         </div>
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">
@@ -77,7 +79,7 @@ const MainPage = () => {
                                     <div className="col mr-2">
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1">
                                             Số sản phẩm trong kho</div>
-                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount">
+                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount text-primary">
                                             {products ? products.length : 0} sản phẩm
                                         </div>
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">
@@ -94,9 +96,9 @@ const MainPage = () => {
                                 <div className="row no-gutters align-items-center ">
                                     <div className="col mr-2">
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1">
-                                            Tổng sản phẩm đã bán</div>
-                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount">
-                                            3 sản phẩm
+                                            Tổng đơn hàng</div>
+                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount text-primary">
+                                            {orders && orders.length} đơn
                                         </div>
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">
                                         </div>
@@ -113,8 +115,8 @@ const MainPage = () => {
                                     <div className="col mr-2">
                                         <div className="text-xxs font-weight-bold  text-uppercase mb-1">
                                             Sản phẩm chờ duyệt</div>
-                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount">
-                                            3 sản phẩm
+                                        <div className="text-xxs font-weight-bold  text-uppercase mb-1 dashboardCount text-primary">
+                                            {productStatus && productStatus.length} sản phẩm
                                         </div>
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">
                                         </div>
