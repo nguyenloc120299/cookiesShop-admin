@@ -11,7 +11,7 @@ import { GlobalContext } from "./GlobalContext";
 import Seller from "./seller/Seller";
 import Orders from "./manager/orders/Orders";
 import ModalAddStore from "./component/untill/ModalAddStore";
-import Profile from "./component/Profile";
+import Profile from "./component/view/Profile";
 function App() {
   const [isMenu, setIsMenu] = useState(false)
   const showMenu = () => {

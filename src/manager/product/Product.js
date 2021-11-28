@@ -15,6 +15,7 @@ import swal from 'sweetalert';
 import { BsImageFill } from 'react-icons/all'
 import ImageModal from './ImageModal'
 import './product.css'
+
 const Product = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)

@@ -19,7 +19,10 @@ const Header = ({ showMenu }) => {
                 <div className="dropdown">
                     <span style={{ fontWeight: 'bold' }} className='dropdown-toggle' id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Xin chào : {res.name}</span>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <li><Link to='/profile' className="dropdown-item" type="button">Profile</Link></li>
+                        {
+                            !(res.token && res.roles[0].authority === 'Admin') && <li><Link to='/profile' className="dropdown-item" type="button">Profile</Link></li>
+                        }
+
                         <li><button className="dropdown-item" type="button" onClick={() => logout()}>Đăng xuất</button></li>
                     </ul>
                 </div>
