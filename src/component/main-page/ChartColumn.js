@@ -18,35 +18,34 @@ ChartJS.register(
     Tooltip,
     Legend
 );
-export const options = {
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top',
-        },
-        title: {
-            display: true,
-            text: 'Doanh thu theo tháng',
-        },
-    },
-};
 
-const labels = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10'
-    , 'Tháng 11', 'Tháng 12'
-];
+const ChartColumn = ({ revenue }) => {
+    console.log(revenue);
+    const labels = revenue.map((item) => 'Tháng' + item.thang)
 
-export const data = {
-    labels,
-    datasets: [
-        {
-            label: 'Tổng tiền',
-            data: [20, 30, 40, 10, 20, 20, 30, 40, 10, 20, 50, 70],
-            backgroundColor: 'rgb(26, 148, 255)',
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Doanh thu theo tháng',
+            },
         },
+    };
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Tổng tiền',
+                data: revenue.map((item) => item.total),
+                backgroundColor: 'rgb(26, 148, 255)',
+            },
 
-    ],
-};
-const ChartColumn = () => {
+        ],
+    };
     return (
         <>
             <Bar options={options} data={data} />

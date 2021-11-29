@@ -10,7 +10,7 @@ const MainPage = () => {
     const [products] = context.productsApi.products
     const [totalRevent, setTotalRevent] = useState(0)
     const { id } = JSON.parse(localStorage.getItem('login_admin'))
-
+    const [revenue, setRevenue] = useState([])
     const numberFormat = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
@@ -19,9 +19,14 @@ const MainPage = () => {
         const res = await axios.get(`/totalrevenue/user/${id}`)
         if (res && res.data) setTotalRevent(res.data)
     }
+    const getRevenue = async () => {
+        const res = await axios.get(`/revenue/user/${id}`)
+        if (res && res.data) setRevenue(res.data.thongke)
+    }
     const productStatus = products.filter(item => { return item.status === 0 })
     useEffect(() => {
         getTotalRevent()
+        getRevenue()
     }, [])
     const order = orders.filter(item => {
         return item.status == 0
@@ -129,7 +134,7 @@ const MainPage = () => {
 
                     <div className='col-xl-12 col-md-6 mb-4 chartDemo'>
                         {/* <Chart /> */}
-                        <ChartColumn />
+                        <ChartColumn revenue={revenue} />
                     </div>
                 </div>
 
