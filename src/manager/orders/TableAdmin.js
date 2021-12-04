@@ -11,14 +11,14 @@ const TableAdmin = ({ displayOrder }) => {
                         <th scope="col">#</th>
 
 
-                        <th scope="col">Hình thức</th>
+                        <th scope="col">Thanh toán</th>
 
                         <th scope="col">Địa chỉ</th>
                         <th scope="col">Tên người đặt</th>
                         <th scope="col">Số điện thoại</th>
                         <th scope="col">Email</th>
                         <th scope="col">Ghi chú</th>
-                        <th scope="col">Số lượng đặt</th>
+                        <th scope="col">Trạng thái</th>
                         <th scope="col">Chi tiết</th>
                     </tr>
 

@@ -88,8 +88,17 @@ const Orders = () => {
             <td>{item.phone}</td>
             <td>{item.email}</td>
             <td>{item.note}</td>
-            <td>{item.listOrderDetail && item.listOrderDetail.length}</td>
-
+            <td
+                style={item.status === 0
+                    ? { color: 'green', fontWeight: 'bold' }
+                    : item.status === 1 ? { color: 'orange', fontWeight: "bold" } : {
+                        color: 'blue', fontWeight: "bold"
+                    }}
+            >{item.status === 0 ? 'Chưa xác nhận' : item.status === 1 ? 'Đang giao' : 'Đã giao'}</td>
+            <td><i className="fas fa-info-circle" style={{
+                fontSize: '2rem',
+                color: "GrayText"
+            }} /></td>
             {/* <td><button className='btn btn-primary'>Tiếp tục</button></td> */}
         </tr>
     ))
