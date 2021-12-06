@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../GlobalContext'
+import DetailListOrders from './DetailListOrders'
 import './order.css'
 import TableAdmin from './TableAdmin'
 import TableBuyer from './TableBuyer'
@@ -13,7 +14,7 @@ const Orders = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const [type, setType] = context.ordersApi.status
     const pageCount = Math.ceil(orders.length / totalItem);
-
+    const [detailOrder, setDetailOrder] = useState([])
     const PageVisited = pageNumber * totalItem
     const changePage = ({ selected }) => {
         setPageNumber(selected)
@@ -98,14 +99,18 @@ const Orders = () => {
             <td><i className="fas fa-info-circle" style={{
                 fontSize: '2rem',
                 color: "GrayText"
-            }} /></td>
+            }} data-toggle="modal" data-target="#exampleModal"
+                onClick={() => setDetailOrder(item.listOrderDetail)}
+            /></td>
             {/* <td><button className='btn btn-primary'>Tiếp tục</button></td> */}
         </tr>
     ))
 
     return (
         <div className='orders m-5'>
-
+            {
+                <DetailListOrders item={detailOrder} />
+            }
             <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li className="nav-item" onClick={() => setType(5)}>
                     <a className="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Tất cả </a>
