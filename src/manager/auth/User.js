@@ -1,11 +1,11 @@
 import axios from 'axios'
 import React, { useContext, useState } from 'react'
 import Search from '../../component/search/Search'
-import ButtonTable from '../../component/view/ButtonTable'
+// import ButtonTable from '../../component/view/ButtonTable'
 import HeaderTitle from '../../component/view/HeaderTitle'
 import Pagination from '../../component/view/Pagination'
 import { GlobalContext } from '../../GlobalContext'
-
+import swal from 'sweetalert'
 import { BsPersonFill } from 'react-icons/bs'
 import ModalUser from './ModalUser'
 import './auth.css'
@@ -124,6 +124,11 @@ const User = () => {
         })
         setCallBack(!callBack)
     }
+    const confirmBuyer = async (userId) => {
+        await axios.get(`/users/${userId}/confirm`)
+        swal("Tài khoản đã được duyệt", "", "success");
+        setCallBack(!callBack)
+    }
     const dislayTable = users.slice(PageVisited, totalItem + PageVisited).map(item => (
 
 
@@ -140,7 +145,7 @@ const User = () => {
             <td>{item.address}</td>
             <td>
                 <div className="dropdown">
-                    <span style={{ fontWeight: 'bold', cursor: 'pointer' }} className='dropdown-toggle' id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false"> {item.listroles[0].role}</span>
+                    <span style={{ fontWeight: 'bold', cursor: 'pointer' }} > {item.listroles[0].role}</span>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenu2">
                         <li><button className="dropdown-item" type="button" onClick={() => onChangeRoles(item.listroles[0].id, 'Admin', item.id)}>Admin</button></li>
                         <li><button className="dropdown-item" type="button" onClick={() => onChangeRoles(item.listroles[0].id, 'Buyer', item.id)}>Buyer</button></li>
@@ -149,9 +154,18 @@ const User = () => {
                 </div></td>
 
             <td>
-
+                <button type='button' className='btn btn-danger' onClick={() => onDelete(item.id)}>Xóa </button>
             </td>
-            <ButtonTable item={item} onChaneShowMoDal={onChaneShowMoDal} />
+
+            {
+                (item.listroles[0].role === 'Buyer' && item.status === 0)
+                &&
+                <td>
+                    <button className='btn btn-success' onClick={() => confirmBuyer(item.id)}>Duyệt</button>
+                </td>
+            }
+
+            {/* <ButtonTable item={item} onChaneShowMoDal={onChaneShowMoDal} /> */}
         </tr>
 
     ))
@@ -229,7 +243,7 @@ const User = () => {
             <div className='m-3 mt-5'>
                 <HeaderTitle title='người dùng' onChaneShowMoDal={onChaneShowMoDal} />
                 <Search />
-                <ModalUser
+                {/* <ModalUser
                     isModal={isModal}
                     isEdit={isEdit}
                     isSave={isSave}
@@ -245,7 +259,7 @@ const User = () => {
                     onDelete={onDelete}
                     IsImgInput={IsImgInput}
                     closeImage={handleCloseImgaeInput}
-                />
+                /> */}
                 <div className='row m-3'>
                     <table className='table-hover table'>
 

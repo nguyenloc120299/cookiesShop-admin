@@ -29,7 +29,7 @@ function CategoriesApi() {
     useEffect(() => {
         if (auth && auth.token)
             getCategories(type)
-    }, [type])
+    }, [callBack])
     return {
         orders: [orders, orders],
         callBack: [callBack, setCallBack],

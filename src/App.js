@@ -12,6 +12,7 @@ import Seller from "./seller/Seller";
 import Orders from "./manager/orders/Orders";
 import ModalAddStore from "./component/untill/ModalAddStore";
 import Profile from "./component/view/Profile";
+import Store from "./manager/store/Store";
 function App() {
   const [isMenu, setIsMenu] = useState(false)
   const showMenu = () => {
@@ -43,6 +44,7 @@ function App() {
                 <Route path='/user' component={User} />
                 <Route path='/orders' component={Orders} />
                 <Route path='/profile' component={Profile} />
+                <Route path='/store' component={Store} />
               </Switch>
 
             </div>

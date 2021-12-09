@@ -1,16 +1,19 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
+import PaginationReact from 'react-paginate'
+import swal from 'sweetalert'
 import { GlobalContext } from '../../GlobalContext'
 import DetailListOrders from './DetailListOrders'
 import './order.css'
 import TableAdmin from './TableAdmin'
 import TableBuyer from './TableBuyer'
+
 const Orders = () => {
     const context = useContext(GlobalContext)
     const res = JSON.parse(localStorage.getItem('login_admin'))
     const [orders] = context.ordersApi.orders
-    const [callback, setCallback] = context.ordersApi.callBack
-    const totalItem = 10;
+    const [callBack, setCallBack] = context.ordersApi.callBack
+    const totalItem = 18;
     const [pageNumber, setPageNumber] = useState(0)
     const [type, setType] = context.ordersApi.status
     const pageCount = Math.ceil(orders.length / totalItem);
@@ -19,16 +22,20 @@ const Orders = () => {
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
-
+    const confirmOrdersAdmin = async (orderId) => {
+        await axios.post(` /orders/${orderId}/verify`)
+        swal('Xác nhận đơn hàng thành công', 'Đã chuyển đơn hàng cho người bán', 'success')
+        setCallBack(!callBack)
+    }
     const onChangeStatus = async (status, id) => {
-        if (status === 0)
-            await axios.post(`/status/orderDetail/${id}/type/1`)
         if (status === 1)
             await axios.post(`/status/orderDetail/${id}/type/2`)
-        if (status === 3)
+        if (status === 2)
             await axios.post(`/status/orderDetail/${id}/type/3`)
+        if (status === 3)
+            await axios.post(`/status/orderDetail/${id}/type/4`)
 
-        setCallback(!callback)
+        setCallBack(!callBack)
     }
     const displayOrder = orders.slice(PageVisited, totalItem + PageVisited).map((item, index) => (
         <tr key={index}>
@@ -51,16 +58,16 @@ const Orders = () => {
 
             <td>{item.discount}</td>
             <td
-                style={item.status === 0
+                style={item.status === 1
                     ? { color: 'green', fontWeight: 'bold' }
-                    : item.status === 1 ? { color: 'orange', fontWeight: "bold" } : {
+                    : item.status === 2 ? { color: 'orange', fontWeight: "bold" } : {
                         color: 'blue', fontWeight: "bold"
                     }}
-            >{item.status === 0 ? 'Chưa xác nhận' : item.status === 1 ? 'Đang giao' : 'Đã giao'}</td>
+            >{item.status === 1 ? 'Chưa xác nhận' : item.status === 2 ? 'Đang giao' : 'Đã giao'}</td>
 
             <td>
                 {
-                    item.status === 2 ?
+                    item.status === 3 ?
                         <p style={{
                             color: 'green',
                             fontWeight: '700'
@@ -91,19 +98,22 @@ const Orders = () => {
             <td>{item.note}</td>
             <td
                 style={item.status === 0
-                    ? { color: 'green', fontWeight: 'bold' }
-                    : item.status === 1 ? { color: 'orange', fontWeight: "bold" } : {
+                    ? { color: 'orange', fontWeight: 'bold' }
+                    : item.status === 1 ? { color: 'green', fontWeight: "bold" } : {
                         color: 'blue', fontWeight: "bold"
                     }}
-            >{item.status === 0 ? 'Chưa xác nhận' : item.status === 1 ? 'Đang giao' : 'Đã giao'}</td>
+            >{item.status === 0 ? 'Chưa xác nhận' : item.status === 1 ? 'Đơn hàng đã duyệt' : 'Đã giao'}</td>
             <td><i className="fas fa-info-circle" style={{
                 fontSize: '2rem',
                 color: "GrayText"
             }} data-toggle="modal" data-target="#exampleModal"
                 onClick={() => setDetailOrder(item.listOrderDetail)}
             /></td>
-            {/* <td><button className='btn btn-primary'>Tiếp tục</button></td> */}
-        </tr>
+            {
+                item.status === 0 ? <td><button className='btn btn-primary' onClick={() => confirmOrdersAdmin(item.id)}>Xác nhận đơn hàng</button></td>
+                    : <td className='text-center'><i className="fas fa-check-circle text-success" /></td>
+            }
+        </tr >
     ))
 
     return (
@@ -112,18 +122,24 @@ const Orders = () => {
                 <DetailListOrders item={detailOrder} />
             }
             <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li className="nav-item" onClick={() => setType(5)}>
-                    <a className="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Tất cả </a>
-                </li>
-                <li className="nav-item" onClick={() => setType(0)}>
-                    <a className="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Chờ xác nhận </a>
-                </li>
-                <li className="nav-item" onClick={() => setType(1)}>
-                    <a className="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Đang giao </a>
-                </li>
-                <li className="nav-item" onClick={() => setType(2)}>
-                    <a className="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Đã giao </a>
-                </li>
+                {
+                    !(res.token && res.roles[0].authority === 'Admin') &&
+                    <>
+                        <li className="nav-item" onClick={() => setType(5)}>
+                            <a className="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Tất cả </a>
+                        </li>
+
+                        <li className="nav-item" onClick={() => setType(1)}>
+                            <a className="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Chờ xác nhận </a>
+                        </li>
+                        <li className="nav-item" onClick={() => setType(2)}>
+                            <a className="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Đang giao </a>
+                        </li>
+                        <li className="nav-item" onClick={() => setType(3)}>
+                            <a className="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Đã giao </a>
+                        </li>
+                    </>
+                }
             </ul>
             <div className="tab-content" id="pills-tabContent">
                 <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -143,6 +159,17 @@ const Orders = () => {
                     {res.token && res.roles[0].authority === 'Admin' ? <TableAdmin displayOrder={displayOrderAdmin} /> :
                         <TableBuyer displayOrder={displayOrder} />}
                 </div>
+            </div>
+            <div className='row'>
+                <PaginationReact previousLabel={"Trở lại"}
+                    nextLabel={"Tiếp theo"}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={"pagination"}
+                    previousLinkClassName={"previousBtn"}
+                    nextLinkClassName={"nextBttn"}
+                    disabledClassName={"paginationDisabled"}
+                    activeClassName={"paginationActive"} />
             </div>
         </div>
 

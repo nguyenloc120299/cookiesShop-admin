@@ -21,8 +21,10 @@ const Navabar = ({ isMenu, showMenu }) => {
                     <li><NavLink exact activeClassName='active_links' to='/'> <AiFillDashboard className='icon-nvarbar' />Dashboard</NavLink></li>
                     <li><NavLink exact activeClassName='active_links' to='/product-manager'> <ImListNumbered className='icon-nvarbar' />Quản lý sản phẩm</NavLink></li>
                     {
-                        (res.token && res.roles[0].authority === 'Admin') &&
-                        <li><NavLink exact activeClassName='active_links' to='/user'><VscAccount className='icon-nvarbar' />Quản lý người dùng</NavLink></li>
+                        (res.token && res.roles[0].authority === 'Admin') && <>
+                            <li><NavLink exact activeClassName='active_links' to='/user'><VscAccount className='icon-nvarbar' />Quản lý người dùng</NavLink></li>
+                            <li><NavLink exact activeClassName='active_links' to='/store'><VscAccount className='icon-nvarbar' />Quản lý cửa hàng</NavLink></li>
+                        </>
                     }
                     <li><NavLink exact activeClassName='active_links' to='/orders'><BsBag className='icon-nvarbar' />Quản lý đơn hàng</NavLink></li>
 

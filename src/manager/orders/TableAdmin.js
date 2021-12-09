@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Pagination from '../../component/view/Pagination'
 
 const TableAdmin = ({ displayOrder }) => {
     return (
@@ -21,6 +21,7 @@ const TableAdmin = ({ displayOrder }) => {
                         <th scope="col">Ghi chú</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Chi tiết</th>
+                        <td></td>
                     </tr>
 
 

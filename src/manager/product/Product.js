@@ -265,27 +265,29 @@ const Product = () => {
 
         <tr key={item.id}>
             <td >{item.id}</td>
-            <td ><img src={item.avartar} alt='' style={{
+            <td >
+                <div>{item.name}</div>
+                <img src={item.avartar} alt='' style={{
 
-                width: '100px',
-                height: '150px',
-                objectFit: 'cover'
-            }} />
+                    width: '150px',
+                    height: '150px',
+                    objectFit: 'cover'
+                }} />
 
 
 
             </td>
-            <td >{item.name}</td>
+
             <td>{item.code}</td>
             <td>{item.sort_description}</td>
             <td>{item.detail_description}</td>
             <td>{item.ban_nhanh}</td>
-            <td>{item.price}</td>
-            <td>{item.competitive_price}</td>
+            <td>{(item.price).toLocaleString()}</td>
+            <td>{(item.competitive_price).toLocaleString()}</td>
 
-            <td>{item.date_sale}</td>
-            <td>{item.quantity}</td>
-            <td>{item.promotion}</td>
+            <td>{new Date(item.date_sale).toLocaleDateString()}</td>
+            <td>{(item.quantity).toLocaleString()}</td>
+            <td>{item.promotion} %</td>
             {
                 (res.token && res.roles[0].authority === 'Admin') && <>
 
@@ -540,7 +542,7 @@ const Product = () => {
                         value={productValue}
                     />
                 }
-                <Search />
+
                 <div className='row'>
                     <table className='table-hover table'>
 
@@ -548,7 +550,6 @@ const Product = () => {
                             <tr>
                                 <th scope='col'>ID</th>
                                 <th scope='col'>Ảnh</th>
-                                <th scope='col'>Tên sản phẩm</th>
                                 <th scope='col'>Code</th>
                                 <th scope='col' >Mô tả</th>
                                 <th scope='col'>Chi tiết</th>
