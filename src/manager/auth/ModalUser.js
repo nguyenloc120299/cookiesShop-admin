@@ -6,7 +6,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
 
 
     return (
-        <div className='modal' tabIndex='-1' style={isModal ? { display: 'block' } : { display: 'none' }}>
+        <div className='modal' style={isModal ? { display: 'block' } : { display: 'none' }}>
 
             <div className='modal-dialog modal-dialog-centered'>
                 <div className='modal-content'>

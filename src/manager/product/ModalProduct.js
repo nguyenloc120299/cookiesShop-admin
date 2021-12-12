@@ -19,9 +19,9 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                     <div className='modal-header'>
                         {isEdit && <h5>Cập nhật nhà cung cấp</h5>}
                         {isSave && <h5>Thêm nhà cung cấp mới</h5>}
-                        <div style={{ margin: '20px' }}>
+                        {/* <div style={{ margin: '20px' }}>
                             <Spinner isLoading={isLoading} />
-                        </div>
+                        </div> */}
 
                         <p className="btn-close text-danger" disabled aria-label="Close" style={{
                             fontSize: '20px',

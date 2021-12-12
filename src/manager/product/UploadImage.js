@@ -2,8 +2,6 @@ import React from 'react'
 import { AiOutlineUpload } from 'react-icons/ai'
 
 const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img, IsImgInput, value, closeImage, deleteImages }) => {
-    console.log(img);
-
     return (
         <>
             {
@@ -26,15 +24,16 @@ const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img,
 
 
                     </div>
-                    {img && <div className='mb-3 img__input'>
+                    <div className='mb-3 img__input'>
 
                         {
-                            imgArr && imgArr.map((item, index) => (
+                            img && img.map((item, index) => (
                                 <div className='position-relative d-flex' key={index}>
 
                                     <img src={URL.createObjectURL(item)} alt='' style={{
                                         width: '100px',
-                                        height: '130px',
+                                        height: '100px',
+                                        marginBottom: '1rem'
 
                                     }} />
                                     <p style={{
@@ -51,17 +50,13 @@ const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img,
                         }
 
                     </div>
-                    }
+
                 </>
             }
             {
                 isEdit &&
-
                 <>
-                    {
-                        IsImgInput ?
-                            <>
-                                {/* {
+                    {/* {
                                     value && value.listpictureProductDTOs && value.listpictureProductDTOs.map(item => (
 
                                         <div className='mb-3 img__input' style={{
@@ -85,102 +80,34 @@ const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img,
                                         </div>
                                     ))
                                 } */}
-                                <div div className='mb-3 img__input' style={{
-                                    position: 'relative',
-                                    display: 'flex',
-                                    justifyContent: 'space-around'
+                    <div div className='mb-3 img__input' style={{
+                        position: 'relative',
+                        display: 'flex',
+                        justifyContent: 'space-around'
 
-                                }}
-                                >
-                                    {
-                                        img ?
-                                            <>
-                                                {
-                                                    img.map((item, index) => (
-                                                        <img src={item.url} alt='' key={index} style={{
-                                                            width: '100px',
-                                                            height: '130px',
+                    }}
+                    >
 
-                                                        }} />
-                                                    ))
+                        <img src={img ? URL.createObjectURL(img) : value.avartar} alt='' style={{
+                            width: '100px',
+                            height: '130px',
 
-                                                }
-                                            </>
+                        }} />
+                        <div>
+                            <label htmlFor="fileInput">
+                                <i className="fas fa-edit"></i>
+                                <span style={{
+                                    marginLeft: '10px',
+                                    color: '#777'
+                                }}>Thay đổi</span>
+                            </label>
 
-                                            :
+                            <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
 
-                                            <img src={value.avartar} alt='' style={{
-                                                width: '100px',
-                                                height: '130px',
+                                onChange={handleUpLoad} />
+                        </div>
 
-                                            }} />
-                                    }
-                                    <div>
-                                        <label htmlFor="fileInput">
-                                            <i className="fas fa-edit"></i>
-                                            <span style={{
-                                                marginLeft: '10px',
-                                                color: '#777'
-                                            }}>Thay đổi</span>
-                                        </label>
-
-                                        <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
-
-                                            onChange={handleUpLoad} />
-                                    </div>
-
-                                    {/* <p style={{
-                                        position: 'absolute',
-                                        top: '0',
-                                        right: '0',
-                                        fontWeight: 'bold',
-                                        cursor: 'pointer',
-                                        color: 'crimson'
-                                    }} onClick={() => closeImage()}>X</p> */}
-                                </div>
-
-                            </>
-                            :
-                            <>
-                                <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }}>
-                                    <label htmlFor="fileInput">
-                                        <i className="fas fa-upload" />
-                                        <span style={{
-                                            marginLeft: '10px',
-                                            color: '#777'
-                                        }}>Hình ảnh</span>
-                                    </label>
-
-                                    <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
-
-                                        onChange={handleUpLoad} />
-
-
-                                </div>
-                                <div className='mb-3 img__input' style={img ? {
-                                    position: 'relative',
-                                    display: 'block'
-                                } : { display: 'none' }}>
-                                    <img src={img && img[0].url} alt='' style={{
-                                        width: '80px',
-                                        height: '80px',
-
-                                    }} />
-                                    <p style={{
-                                        position: 'absolute',
-                                        top: '0',
-                                        right: '0',
-                                        fontWeight: 'bold',
-                                        cursor: 'pointer',
-                                        color: 'crimson'
-                                    }} onClick={() => handleDestroy()}>X</p>
-                                </div>
-                            </>
-
-
-
-                    }
-
+                    </div>
                 </>
             }
         </>

@@ -6,7 +6,6 @@ function CategoriesApi() {
     const [callBack, setCallBack] = useState(false)
     const [type, setType] = useState(5)
     const auth = JSON.parse(localStorage.getItem('login_admin'))
-
     const getCategories = async (type) => {
 
         if (auth.token && auth.roles[0].authority === 'Admin') {
@@ -29,7 +28,7 @@ function CategoriesApi() {
     useEffect(() => {
         if (auth && auth.token)
             getCategories(type)
-    }, [callBack])
+    }, [callBack, type])
     return {
         orders: [orders, orders],
         callBack: [callBack, setCallBack],

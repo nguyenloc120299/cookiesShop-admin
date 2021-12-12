@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useContext, useState, useEffect } from 'react'
 import Search from '../../component/search/Search'
+import { imageUpload } from '../../valid/uploadImage'
 import HeaderTitle from '../../component/view/HeaderTitle'
 import Pagination from '../../component/view/Pagination'
 import { GlobalContext } from '../../GlobalContext'
@@ -15,6 +16,7 @@ import swal from 'sweetalert';
 import { BsImageFill } from 'react-icons/all'
 import ImageModal from './ImageModal'
 import './product.css'
+import Loading from '../../valid/Loading'
 
 const Product = () => {
     const [pageNumber, setPageNumber] = useState(0)
@@ -43,71 +45,33 @@ const Product = () => {
     const [id_category, setId_Category] = useState('')
     const [id_supplier, setId_Supplier] = useState('')
     const [img, setImg] = useState(false)
-    const [imgArr, setImgArr] = useState([])
+    const [imgArr, setImgArr] = useState(false)
     const [isShowListPicture, setisShowListPicture] = useState(false)
     const res = JSON.parse(localStorage.getItem('login_admin'))
     const handleUploadImg = async e => {
-        e.preventDefault()
-        try {
+
+        if (isSave) {
             const files = [...e.target.files];
-            let newImage = []
-            let newImageURL = []
-            if (isSave) {
-                if (files.length < 2) return swal("", "Thêm nhiều hơn 2 ảnh", "warning")
-                if (files.length > 4) return swal("", "Chỉ được thêm ít nhất 4 ảnh", "warning");
-                files.forEach(async file => {
+            if (files.length < 2) return swal("", "Thêm nhiều hơn 2 ảnh", "warning")
+            if (files.length > 4) return swal("", "Chỉ được thêm ít nhất 4 ảnh", "warning");
+            files.forEach(async file => {
 
 
-                    if (!file) return alert("file không tồn tại")
-                    if (file.type !== 'image/jpge' && file.type !== 'image/png') return swal("", "File không đúng định dạng", "warning")
-                    newImageURL.push(file)
-                    let formData = new FormData()
-                    formData.append('file', file)
-                    setIsLoading(true)
+                if (!file) return alert("file không tồn tại")
+                if (file.type !== 'image/jpge' && file.type !== 'image/png') return swal("", "File không đúng định dạng", "warning")
 
-                    const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
-                    setIsLoading(false)
-                    //console.log(res.data);
+            })
+            setImg(files)
+        }
+        if (isEdit) {
+            const file = e.target.files[0];
+            if (!file) return swal('File không đúng định dạng', '', 'warning')
+            if (file.type !== 'image/jpg' && file.type !== 'image/png') return swal('file không đúng định dạng', '', 'warning')
+            setImg(file)
 
-                    if (res && res.data) newImage.push({ ...res.data })
-
-                    //setImg(res.data)
-                    //console.log(newImage);
-                });
-                setImg(newImage)
-                //  console.log('aaaaaaa', ...newImageURL);
-                setImgArr([...imgArr, ...newImageURL])
-            }
-            if (isEdit) {
-                setImgEdit(true)
-                files.forEach(async file => {
-
-
-                    if (!file) return alert("file không tồn tại")
-                    if (file.type !== 'image/jpge' && file.type !== 'image/png') return swal("", "File không đúng định dạng", "warning")
-                    newImageURL.push(file)
-                    let formData = new FormData()
-                    formData.append('file', file)
-                    setIsLoading(true)
-
-                    const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
-                    setIsLoading(false)
-                    //console.log(res.data);
-
-                    if (res && res.data) newImage.push({ ...res.data })
-
-                    //setImg(res.data)
-                    //console.log(newImage);
-                });
-                setImg(newImage)
-                //  console.log('aaaaaaa', ...newImageURL);
-                setImgArr([...imgArr, ...newImageURL])
-            }
-        } catch (err) {
 
         }
     }
-
     const deleteImages = (index) => {
         const newArr = [...imgArr]
         newArr.splice(index, 1)
@@ -372,9 +336,12 @@ const Product = () => {
             //console.log(teacherValue)
             if (isSave) {
                 setIsLoading(true)
+                let media
                 let files = []
+                console.log(img);
+                media = await imageUpload(img)
                 // console.log(img);
-                img && img.forEach(element => {
+                media.forEach(element => {
                     files.push({
                         file: element.url
                     })
@@ -391,14 +358,14 @@ const Product = () => {
                     categoriesId: productValue.category,
                     suppliersId: productValue.supplier,
                     listpictureProductDTOs: files
-                }
-                )
-                // })
+
+                })
 
 
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
+                setImg(false)
                 swal("Thay đổi thành công!", "", "success");
             }
             if (isEdit) {
@@ -419,36 +386,31 @@ const Product = () => {
                     });
 
                 });
-                //  console.log(supliers);
-                //   console.log(id_category, id_supplier)
+
                 setIsLoading(true)
-                if (!imgEdit)
+                if (!img)
 
                     await axios.put(`/products`, {
-
                         ...productValue,
-
                         userId: res.id,
                         categoriesId: id_category,
                         suppliersId: id_supplier,
-
-
                     })
 
                 else {
+                    let media
 
-                    let files = []
-                    console.log(img);
-                    img && img.slice(1, 5).forEach(element => {
-                        files.push({
-                            file: element.url
-                        })
-                    });
+                    media = await imageUpload([img])
+
+                    // img && img.slice(1, 5).forEach(element => {
+                    //     files.push({
+                    //         file: element.url
+                    //     })
+                    // });
                     await axios.put(`/products`, {
                         ...productValue,
 
-                        avartar: img[0].url,
-                        // listpictureProductDTOs:file
+                        avartar: media[0].url,
                         userId: res.id,
                         categoriesId: id_category,
                         suppliersId: id_supplier,
@@ -461,6 +423,7 @@ const Product = () => {
                 setIsModal(false)
                 swal("Thay đổi thành công!", "", "success");
                 setIsImgInput(false)
+                setImg(false)
             }
 
         } catch (err) {
@@ -514,7 +477,7 @@ const Product = () => {
             <div className='m-3'>
                 {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
                 <HeaderTitle title='sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
-
+                {isLoading && <Loading />}
                 <ModalProduct
                     isModal={isModal}
                     isEdit={isEdit}

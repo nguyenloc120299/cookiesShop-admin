@@ -88,6 +88,9 @@ const ListImg = ({ item, setId_img, setIsLoading, listPicture, id_img, setListPi
     }
     return (
         <>
+            {
+
+            }
             <div className='position-relative d-flex mb-3' key={item.id}>
                 {
                     isImg ? <>

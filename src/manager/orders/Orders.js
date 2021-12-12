@@ -28,13 +28,13 @@ const Orders = () => {
         setCallBack(!callBack)
     }
     const onChangeStatus = async (status, id) => {
+        if (status === 0)
+            await axios.post(`/status/orderDetail/${id}/type/1`)
         if (status === 1)
             await axios.post(`/status/orderDetail/${id}/type/2`)
         if (status === 2)
             await axios.post(`/status/orderDetail/${id}/type/3`)
-        if (status === 3)
-            await axios.post(`/status/orderDetail/${id}/type/4`)
-
+        swal('Hoàn tất', '', 'success')
         setCallBack(!callBack)
     }
     const displayOrder = orders.slice(PageVisited, totalItem + PageVisited).map((item, index) => (
@@ -56,14 +56,14 @@ const Orders = () => {
             <td>{item.quantity}</td>
 
 
-            <td>{item.discount}</td>
+            <td>{item.discount > 0 ? item.discount : item.totalmoney}</td>
             <td
-                style={item.status === 1
+                style={item.status === 0
                     ? { color: 'green', fontWeight: 'bold' }
-                    : item.status === 2 ? { color: 'orange', fontWeight: "bold" } : {
+                    : item.status === 1 ? { color: 'orange', fontWeight: "bold" } : {
                         color: 'blue', fontWeight: "bold"
                     }}
-            >{item.status === 1 ? 'Chưa xác nhận' : item.status === 2 ? 'Đang giao' : 'Đã giao'}</td>
+            >{item.status === 0 ? 'Chưa xác nhận' : item.status === 1 ? 'Đang giao' : 'Đã giao'}</td>
 
             <td>
                 {
@@ -72,7 +72,8 @@ const Orders = () => {
                             color: 'green',
                             fontWeight: '700'
                         }}>Hoàn tất</p> :
-                        <button className='btn btn-primary' onClick={() => onChangeStatus(item.status, item.id)}>Tiếp tục</button>
+                        <button className='btn btn-primary' onClick={() => onChangeStatus(item.status, item.id)}>{item.status === 2 ? 'Hoàn tất'
+                            : 'Tiếp tục'}</button>
                 }</td>
         </tr>
     ))
@@ -129,13 +130,13 @@ const Orders = () => {
                             <a className="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Tất cả </a>
                         </li>
 
-                        <li className="nav-item" onClick={() => setType(1)}>
+                        <li className="nav-item" onClick={() => setType(0)}>
                             <a className="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Chờ xác nhận </a>
                         </li>
-                        <li className="nav-item" onClick={() => setType(2)}>
+                        <li className="nav-item" onClick={() => setType(1)}>
                             <a className="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Đang giao </a>
                         </li>
-                        <li className="nav-item" onClick={() => setType(3)}>
+                        <li className="nav-item" onClick={() => setType(2)}>
                             <a className="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Đã giao </a>
                         </li>
                     </>
