@@ -1,7 +1,6 @@
-import axios from 'axios'
 import React, { useContext, useState } from 'react'
 import { GlobalContext } from '../../GlobalContext'
-
+import { apiInstance } from '../../baseApi'
 const ListImg = ({ item, setId_img, setIsLoading, listPicture, id_img, setListPicture, value }) => {
     const context = useContext(GlobalContext)
     const [isImg, setIsImg] = useState(false)
@@ -41,7 +40,7 @@ const ListImg = ({ item, setId_img, setIsLoading, listPicture, id_img, setListPi
             formData.append('file', file)
             setIsLoading(true)
 
-            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
+            const res = await apiInstance.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
 
             const newImage = listPicture.filter(item => {
                 return item.id !== id_img
@@ -51,7 +50,7 @@ const ListImg = ({ item, setId_img, setIsLoading, listPicture, id_img, setListPi
                 file: res.data.url
             }
             ])
-            await axios.put(`/products`, {
+            await apiInstance.put(`/products`, {
                 id: value.id,
                 name: value.name,
                 code: value.name,
@@ -82,7 +81,7 @@ const ListImg = ({ item, setId_img, setIsLoading, listPicture, id_img, setListPi
         const newImage = listPicture.filter(item => {
             return item.id !== id
         })
-        await axios.delete(`/pictureProduct/${id}`)
+        await apiInstance.delete(`/pictureProduct/${id}`)
         setCallBack(!callBack)
         setListPicture(newImage)
     }

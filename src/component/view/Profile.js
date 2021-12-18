@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiInstance } from '../../baseApi'
 import React, { useEffect, useState } from 'react'
 
 const Profile = () => {
@@ -8,11 +8,11 @@ const Profile = () => {
 
     const [user, setUser] = useState('')
     const getStore = async () => {
-        const res = await axios.get(` /store/user/${id}`)
+        const res = await apiInstance.get(` /store/user/${id}`)
         if (res && res.data) setStore(res.data)
     }
     const getUser = async () => {
-        const res = await axios.get(`/users/${id}`)
+        const res = await apiInstance.get(`/users/${id}`)
         if (res && res.data) setUser(res.data)
     }
     useEffect(() => {

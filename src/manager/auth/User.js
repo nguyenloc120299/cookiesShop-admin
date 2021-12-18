@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiInstance } from '../../baseApi'
 import React, { useContext, useState } from 'react'
 import Search from '../../component/search/Search'
 // import ButtonTable from '../../component/view/ButtonTable'
@@ -38,7 +38,7 @@ const User = () => {
             formData.append('file', file)
             setIsLoading(true)
 
-            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
+            const res = await apiInstance.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
             setIsLoading(false)
             setImg(res.data)
         } catch (err) {
@@ -49,7 +49,7 @@ const User = () => {
 
         try {
             setIsLoading(true)
-            await axios.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: img.public_id })
+            await apiInstance.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: img.public_id })
             setIsLoading(false)
             setImg(false)
         } catch (err) {
@@ -118,14 +118,14 @@ const User = () => {
         setIsModal(false)
     }
     const onChangeRoles = async (id_role, name, id_user) => {
-        await axios.put(`/roles/users/${id_user}`, {
+        await apiInstance.put(`/roles/users/${id_user}`, {
             id: id_role,
             role: name
         })
         setCallBack(!callBack)
     }
     const confirmBuyer = async (userId) => {
-        await axios.get(`/users/${userId}/confirm`)
+        await apiInstance.get(`/users/${userId}/confirm`)
         swal("Tài khoản đã được duyệt", "", "success");
         setCallBack(!callBack)
     }
@@ -176,7 +176,7 @@ const User = () => {
                 setIsLoading(true)
 
                 //console.log({ ...userValue });
-                await axios.post('/sigup', { ...userValue })
+                await apiInstance.post('/sigup', { ...userValue })
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
@@ -192,7 +192,7 @@ const User = () => {
                     email: userValue.email,
                     avartar: IsImgInput
                 });
-                if (IsImgInput) await axios.put('/users', {
+                if (IsImgInput) await apiInstance.put('/users', {
                     id,
                     name: userValue.name,
                     address: userValue.address,
@@ -201,7 +201,7 @@ const User = () => {
                     avartar: IsImgInput
                 })
                 else
-                    await axios.put('/users', { id, ...userValue, avartar: img.url })
+                    await apiInstance.put('/users', { id, ...userValue, avartar: img.url })
 
                 setCallBack(!callBack)
                 setIsModal(false)
@@ -222,7 +222,7 @@ const User = () => {
         try {
             setIsLoading(true)
             // console.log(id)
-            await axios.delete(`/users/${id}`)
+            await apiInstance.delete(`/users/${id}`)
             setIsLoading(false)
             setCallBack(!callBack)
             setIsModal(false)
@@ -242,7 +242,7 @@ const User = () => {
         <>
             <div className='m-3 mt-5'>
                 <HeaderTitle title='người dùng' onChaneShowMoDal={onChaneShowMoDal} />
-                <Search />
+                {/* <Search /> */}
                 {/* <ModalUser
                     isModal={isModal}
                     isEdit={isEdit}

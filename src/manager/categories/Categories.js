@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useContext, useState } from 'react'
 import Search from '../../component/search/Search'
 import Alert from '../../component/untill/Alert'
@@ -8,6 +7,10 @@ import Pagination from '../../component/view/Pagination'
 import { GlobalContext } from '../../GlobalContext'
 import './categories.css'
 import Modalcategories from './Modalcategories'
+import { apiInstance } from '../../baseApi'
+import { imageUpload } from '../../valid/uploadImage'
+import swal from 'sweetalert'
+import Loading from '../../valid/Loading'
 const Categories = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
@@ -29,26 +32,16 @@ const Categories = () => {
     const [IsImgInput, setIsImgInput] = useState(false)
     const handleUploadImg = async e => {
         e.preventDefault()
-        try {
-            const file = e.target.files[0];
-            if (!file) return alert("file không tồn tại")
-            if (file.type !== 'image/jpge' && file.type !== 'image/png') return alert('file không đúng định dạng')
-            let formData = new FormData()
-            formData.append('file', file)
-            setIsLoading(true)
-
-            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
-            setIsLoading(false)
-            setImg(res.data)
-        } catch (err) {
-
-        }
+        const file = e.target.files[0];
+        if (!file) return swal('File không đúng định dạng', '', 'warning')
+        if (file.type !== 'image/jpg' && file.type !== 'image/png') return swal('file không đúng định dạng', '', 'warning')
+        setImg(file)
     }
     const handleDestroy = async () => {
 
         try {
             setIsLoading(true)
-            await axios.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: img.public_id })
+            await apiInstance.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: img.public_id })
             setIsLoading(false)
             setImg(false)
         } catch (err) {
@@ -156,27 +149,42 @@ const Categories = () => {
             //console.log(teacherValue)
             if (isSave) {
                 setIsLoading(true)
-                await axios.post('/categories', { ...categoriesValue, avartar: img.url })
+                let media
+                media = await imageUpload([img])
+                await apiInstance.post('/categories', {
+                    ...categoriesValue,
+                    avartar: media[0].url
+                })
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
-                ShowAlert(true, 'success', 'Thành công')
+                setImg(false)
             }
             if (isEdit) {
                 setIsLoading(true)
-                if (IsImgInput) await axios.put('/suppliers', { ...categoriesValue })
-                else
-                    await axios.put('/suppliers', { ...categoriesValue, avartar: img.url })
-                //   console.log(teacherValue)
+                if (!img) await apiInstance.put('/suppliers', { ...categoriesValue })
+                else {
+                    let media
+                    media = await imageUpload([img])
+                    await apiInstance.put('/suppliers', {
+                        ...categoriesValue,
+                        avartar: media[0].url
+                    })
+                    //   console.log(teacherValue)
+
+
+                }
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
-                ShowAlert(true, 'success', 'Thành công')
+                setImg(false)
             }
-
+            swal('Thành công !!!', '', 'success')
         } catch (err) {
-            ShowAlert(true, 'danger', err.response.data.msg)
+            swal('Có lỗi xảy ra', 'Thử lại sau', 'error')
             setIsLoading(false)
+            setIsModal(false)
+            setImg(false)
         }
 
 
@@ -185,7 +193,7 @@ const Categories = () => {
         try {
             setIsLoading(true)
             // console.log(id)
-            await axios.delete(`/categories/${id}`)
+            await apiInstance.delete(`/categories/${id}`)
             setIsLoading(false)
             setCallBack(!callBack)
             setIsModal(false)
@@ -227,6 +235,9 @@ const Categories = () => {
             <div className='m-3'>
                 {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
                 <HeaderTitle title='loại sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
+                {
+                    isLoading && <Loading />
+                }
                 <Modalcategories
                     isModal={isModal}
                     isEdit={isEdit}
@@ -244,7 +255,7 @@ const Categories = () => {
                     handleDestroy={handleDestroy}
                     handleUpLoad={handleUploadImg}
                 />
-                <Search onSubmitSearch={onSubmitSearch} />
+
                 <div className='row'>
                     <table className='table-hover table'>
 

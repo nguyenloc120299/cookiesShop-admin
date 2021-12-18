@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiInstance } from '../baseApi'
 import { useEffect, useState } from 'react'
 
 function SupplierApi() {
@@ -6,7 +6,7 @@ function SupplierApi() {
     const [callBack, setCallBack] = useState(false)
 
     const getUsers = async () => {
-        const res = await axios.get("/users")
+        const res = await apiInstance.get("/users")
         if (res && res.data) setUsers(res.data)
     }
     useEffect(() => {

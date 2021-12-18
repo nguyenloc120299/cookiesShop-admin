@@ -1,9 +1,9 @@
 import React from 'react'
 import Spinner from '../../component/untill/Spinner'
 import ModalFooter from '../../component/view/ModalFooter'
-import { AiOutlineUpload } from 'react-icons/ai'
+import { AiOutlineUpload, BiCamera } from 'react-icons/all'
 const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave, onCloseModal, isLoading, onDelete, img, handleUpLoad, handleDestroy, IsImgInput, closeImage }) => {
-
+    console.log(img);
 
 
     return (
@@ -14,16 +14,16 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                     <div className='modal-header'>
                         {isEdit && <h5>Cập nhật nhà cung cấp</h5>}
                         {isSave && <h5>Thêm nhà cung cấp mới</h5>}
-                        <div style={{ margin: '20px' }}>
+                        {/* <div style={{ margin: '20px' }}>
                             <Spinner isLoading={isLoading} />
-                        </div>
+                        </div> */}
 
                         <p className="btn-close text-danger" disabled aria-label="Close" style={{
                             fontSize: '20px',
                             fontWeight: 'bold',
                             cursor: 'pointer'
                         }}
-                            onClick={() => onCloseModal()}></p>
+                            onClick={() => onCloseModal()}>X</p>
 
                     </div>
                     <div className='modal-body p-3'>
@@ -65,112 +65,74 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                                 onChange={onChangeInput} />
 
                         </div>
-                        {isSave && <>
-                            <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }}>
-                                <label htmlFor="fileInput">
-                                    <AiOutlineUpload style={{
-                                        fontSize: '50px'
-                                    }} />
-                                    <h6 style={{
-                                        marginLeft: '10px',
-                                        color: '#777',
-                                        fontWeight: 'bold'
-                                    }}>Logo</h6>
-                                </label>
+                        {
+                            isSave && <div div className='d-flex'>
+                                <div className='mb-3'>
+                                    <label htmlFor="fileInput">
+                                        <BiCamera style={{
+                                            fontSize: '50px'
+                                        }} />
+                                        <h6 style={{
+                                            marginLeft: '10px',
+                                            color: '#777',
+                                            fontWeight: 'bold'
+                                        }}>Logo</h6>
+                                    </label>
 
-                                <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
+                                    <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
 
-                                    onChange={handleUpLoad} />
+                                        onChange={handleUpLoad} />
 
+
+                                </div>
+                                {
+
+                                    img &&
+                                    <div className='mb-3 img__input' >
+                                        <img src={URL.createObjectURL(img)} alt='' style={{
+                                            width: '100px',
+                                            height: '80px',
+
+                                        }} />
+                                    </div>
+                                }
 
                             </div>
-                            <div className='mb-3 img__input' style={img ? {
-                                position: 'relative',
-                                display: 'block'
-                            } : { display: 'none' }}>
-                                <img src={img.url} alt='' style={{
-                                    width: '80px',
-                                    height: '80px',
-
-                                }} />
-                                <p style={{
-                                    position: 'absolute',
-                                    top: '0',
-                                    right: '0',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer',
-                                    color: 'crimson'
-                                }} onClick={() => handleDestroy()}>X</p>
-                            </div>
-                        </>
                         }
                         {
                             isEdit &&
-                            <>
-                                {
-                                    IsImgInput ?
-                                        <div className='mb-3 img__input' style={{
-                                            position: 'relative',
-                                            display: 'block'
-                                        }}
-                                        >
-                                            <img src={value.logo} alt='' style={{
-                                                width: '80px',
-                                                height: '80px',
+                            // <>
+                            //     {
 
-                                            }} />
-                                            <p style={{
-                                                position: 'absolute',
-                                                top: '0',
-                                                right: '0',
-                                                fontWeight: 'bold',
-                                                cursor: 'pointer',
-                                                color: 'crimson'
-                                            }} onClick={() => closeImage()}>X</p>
-                                        </div>
-                                        :
-                                        <>
-                                            <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }}>
-                                                <label htmlFor="fileInput">
-                                                    <i className="fas fa-upload" />
-                                                    <span style={{
-                                                        marginLeft: '10px',
-                                                        color: '#777'
-                                                    }}>Logo</span>
-                                                </label>
+                            <div className='mb-3 img__input' style={{
+                                position: 'relative',
+                                display: 'flex'
+                            }}
+                            >
+                                <img src={img ? URL.createObjectURL(img) : value.logo} alt='' style={{
+                                    width: '100px',
+                                    height: '80px',
 
-                                                <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
+                                }} />
+                                <div className='mb-3'>
+                                    <label htmlFor="fileInput">
+                                        <BiCamera style={{
+                                            fontWeight: "bold"
+                                        }} />
 
-                                                    onChange={handleUpLoad} />
+                                    </label>
+
+                                    <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'
+
+                                        onChange={handleUpLoad} />
 
 
-                                            </div>
-                                            <div className='mb-3 img__input' style={img ? {
-                                                position: 'relative',
-                                                display: 'block'
-                                            } : { display: 'none' }}>
-                                                <img src={img.url} alt='' style={{
-                                                    width: '80px',
-                                                    height: '80px',
+                                </div>
+                            </div>
 
-                                                }} />
-                                                <p style={{
-                                                    position: 'absolute',
-                                                    top: '0',
-                                                    right: '0',
-                                                    fontWeight: 'bold',
-                                                    cursor: 'pointer',
-                                                    color: 'crimson'
-                                                }} onClick={() => handleDestroy()}>X</p>
-                                            </div>
-                                        </>
-
-
-
-                                }
-
-                            </>
                         }
+
+
                     </div>
 
                     <ModalFooter

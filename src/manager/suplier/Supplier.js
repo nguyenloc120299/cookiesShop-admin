@@ -1,4 +1,4 @@
-import axios from 'axios'
+
 import React, { useContext, useState } from 'react'
 import Search from '../../component/search/Search'
 import ButtonTable from '../../component/view/ButtonTable'
@@ -6,7 +6,10 @@ import HeaderTitle from '../../component/view/HeaderTitle'
 import Pagination from '../../component/view/Pagination'
 import { GlobalContext } from '../../GlobalContext'
 import ModalSupplier from './ModalSupplier'
-
+import { apiInstance } from '../../baseApi'
+import swal from 'sweetalert'
+import Loading from '../../valid/Loading'
+import { imageUpload } from '../../valid/uploadImage'
 const Supplier = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
@@ -26,57 +29,41 @@ const Supplier = () => {
 
     const [img, setImg] = useState(false)
 
+    // const handleUploadImg = async e => {
+    //     e.preventDefault()
+    //     try {
+    //         const file = e.target.files[0];
+    //         if (!file) return alert("file không tồn tại")
+    //         if (file.type !== 'image/jpge' && file.type !== 'image/png') return alert('file không đúng định dạng')
+    //         let formData = new FormData()
+    //         formData.append('file', file)
+    //         setIsLoading(true)
+
+    //         const res = await apiInstance.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
+    //         setIsLoading(false)
+    //         setImg(res.data)
+    //     } catch (err) {
+
+    //     }
+    // }
+
     const handleUploadImg = async e => {
-        e.preventDefault()
-        try {
-            const file = e.target.files[0];
-            if (!file) return alert("file không tồn tại")
-            if (file.type !== 'image/jpge' && file.type !== 'image/png') return alert('file không đúng định dạng')
-            let formData = new FormData()
-            formData.append('file', file)
-            setIsLoading(true)
-
-            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
-            setIsLoading(false)
-            setImg(res.data)
-        } catch (err) {
-
-        }
+        const file = e.target.files[0];
+        if (!file) return swal('File không đúng định dạng', '', 'warning')
+        if (file.type !== 'image/jpg' && file.type !== 'image/png') return swal('file không đúng định dạng', '', 'warning')
+        setImg(file)
     }
     const handleDestroy = async () => {
 
         try {
             setIsLoading(true)
-            await axios.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: img.public_id })
+            await apiInstance.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: img.public_id })
             setIsLoading(false)
             setImg(false)
         } catch (err) {
-            return err.response.data.msg
+            console.log(err);
         }
     }
-    // const removeAccents = (str) => {
-    //     let AccentsMap = [
-    //         "aàảãáạăằẳẵắặâầẩẫấậ",
-    //         "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
-    //         "dđ", "DĐ",
-    //         "eèẻẽéẹêềểễếệ",
-    //         "EÈẺẼÉẸÊỀỂỄẾỆ",
-    //         "iìỉĩíị",
-    //         "IÌỈĨÍỊ",
-    //         "oòỏõóọôồổỗốộơờởỡớợ",
-    //         "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
-    //         "uùủũúụưừửữứự",
-    //         "UÙỦŨÚỤƯỪỬỮỨỰ",
-    //         "yỳỷỹýỵ",
-    //         "YỲỶỸÝỴ"
-    //     ];
-    //     for (let i = 0; i < AccentsMap.length; i++) {
-    //         let re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
-    //         let char = AccentsMap[i][0];
-    //         str = str.replace(re, char);
-    //     }
-    //     return str;
-    // }
     const [supplierValue, setSuppplierValue] = useState({
         name: '',
         code: '',
@@ -166,13 +153,14 @@ const Supplier = () => {
 
     ))
     const onSubmit = async () => {
+
         try {
             //console.log(teacherValue)
             if (isSave) {
                 setIsLoading(true)
-
-                //console.log({ ...supplierValue, logo: img.url });
-                await axios.post('/suppliers', { ...supplierValue, logo: img.url })
+                let media
+                media = await imageUpload([img])
+                await apiInstance.post('/suppliers', { ...supplierValue, logo: media[0].url })
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
@@ -180,19 +168,27 @@ const Supplier = () => {
             }
             if (isEdit) {
                 setIsLoading(true)
-                if (IsImgInput) await axios.put('/suppliers', { ...supplierValue })
-                else
-                    await axios.put('/suppliers', { ...supplierValue, logo: img.url })
+
+                if (!img) await apiInstance.put('/suppliers', { ...supplierValue })
+                else {
+                    let media
+                    media = await imageUpload([img])
+
+                    await apiInstance.put('/suppliers', {
+                        ...supplierValue,
+                        logo: media[0].url
+                    })
+                }
                 //   console.log(teacherValue)
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
-                ShowAlert(true, 'success', 'Thành công')
+
                 setIsImgInput(false)
             }
-
+            swal('Thành công !!!', '', 'success')
         } catch (err) {
-            ShowAlert(true, 'danger', err.response.data.msg)
+            swal('Có lỗi xảy ra', 'Thử lại sau', 'error')
             setIsLoading(false)
         }
 
@@ -202,13 +198,13 @@ const Supplier = () => {
         try {
             setIsLoading(true)
             // console.log(id)
-            await axios.delete(`/suppliers/${id}`)
+            await apiInstance.delete(`/suppliers/${id}`)
             setIsLoading(false)
             setCallBack(!callBack)
             setIsModal(false)
             ShowAlert(true, 'success', "Đã xóa thành công")
         } catch (err) {
-            ShowAlert(true, 'danger', err.response.data)
+            swal('Có lỗi xảy ra', '', 'error')
             setIsLoading(false)
         }
 
@@ -220,6 +216,9 @@ const Supplier = () => {
     return (
         <>
             <div className='m-3'>
+                {
+                    isLoading && <Loading />
+                }
                 <ModalSupplier
                     isModal={isModal}
                     isEdit={isEdit}
@@ -238,7 +237,7 @@ const Supplier = () => {
                     closeImage={handleCloseImgaeInput}
                 />
                 <HeaderTitle title='nhà cung cấp' onChaneShowMoDal={onChaneShowMoDal} />
-                <Search />
+
                 <div className='row m-3'>
                     <table className='table-hover table'>
 

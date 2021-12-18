@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { AiOutlineUpload } from 'react-icons/ai'
-import swal from 'sweetalert'
-import axios from 'axios'
 import Spinner from '../untill/Spinner'
 import { GlobalContext } from '../../GlobalContext'
+import { apiInstance } from '../../baseApi'
+import swal from 'sweetalert'
 const ModalAddStore = () => {
     const context = useContext(GlobalContext)
     const [firstLogin, setFirstLogin] = context.isFirstLogin
@@ -32,7 +32,7 @@ const ModalAddStore = () => {
             fromData.append('file', file)
             console.log(fromData)
             setIsLoading(true)
-            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', fromData, { headers: { 'content-type': 'multipart/form-data' } })
+            const res = await apiInstance.post('https://polar-woodland-25756.herokuapp.com/upload', fromData, { headers: { 'content-type': 'multipart/form-data' } })
             setIsLoading(false)
             setImg(res.data)
 
@@ -46,7 +46,7 @@ const ModalAddStore = () => {
 
         try {
             setIsLoading(true)
-            await axios.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: item.public_id })
+            await apiInstance.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: item.public_id })
             setIsLoading(false)
             setImg(false)
         } catch (err) {
@@ -56,7 +56,7 @@ const ModalAddStore = () => {
     const addStore = async () => {
         try {
             setIsLoading(true)
-            const res1 = await axios.post(`/store/user/${res.id}`, {
+            const res1 = await apiInstance.post(`/store/user/${res.id}`, {
                 name,
                 code: makeid(5),
                 logo: img.url

@@ -12,7 +12,7 @@ const Navabar = ({ isMenu, showMenu }) => {
             <div className='close-menu' onClick={() => showMenu()}>X</div>
             <div className='logo'>
                 <Link to='/' ><h2 style={{
-                    border: "1px solid",
+
                     padding: "5px"
                 }}>Cookies</h2></Link>
             </div>

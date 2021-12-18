@@ -1,9 +1,10 @@
-//import axios from 'axios'
-import axios from 'axios'
+//import apiInstance from 'apiInstance'
 import React, { useContext, useState } from 'react'
 import Spinner from '../../component/untill/Spinner'
 import { GlobalContext } from '../../GlobalContext'
 import ListImg from './ListImg'
+import Loading from '../../valid/Loading'
+import { apiInstance } from '../../baseApi'
 
 const ModaliImage = ({ setisShowListPicture, listPicture, setListPicture, value }) => {
     //   console.log(listPicture);
@@ -16,7 +17,7 @@ const ModaliImage = ({ setisShowListPicture, listPicture, setListPicture, value 
     const [supliers] = context.suppliersApi.suppliers
     const [callBack, setCallBack] = context.productsApi.callBack
     const res_a = JSON.parse(localStorage.getItem('login_admin'))
-    console.log(value);
+
     const onchangShow = (id) => {
         setIsImg(true)
         setId_img(id)
@@ -48,7 +49,7 @@ const ModaliImage = ({ setisShowListPicture, listPicture, setListPicture, value 
             formData.append('file', file)
             setIsLoading(true)
 
-            const res = await axios.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
+            const res = await apiInstance.post('https://polar-woodland-25756.herokuapp.com/upload', formData, { headers: { 'content-type': 'multipart/form-data' } })
 
             const newImage = listPicture.filter(item => {
                 return item.id !== id_img
@@ -58,7 +59,7 @@ const ModaliImage = ({ setisShowListPicture, listPicture, setListPicture, value 
                 file: res.data.url
             }
             ])
-            await axios.put(`/products`, {
+            await apiInstance.put(`/products`, {
                 id: value.id,
                 name: value.name,
                 code: value.name,
@@ -88,12 +89,15 @@ const ModaliImage = ({ setisShowListPicture, listPicture, setListPicture, value 
     //  console.log(listPicture);
     return (
         <div className='img_modal'>
+            {
+                isLoading && <Loading />
+            }
             <div className='form_modal'>
                 <div className='modal_header'>
                     <h3>Danh sách ảnh</h3>
-                    <div style={{ margin: '20px' }}>
+                    {/* <div style={{ margin: '20px' }}>
                         <Spinner isLoading={isLoading} />
-                    </div>
+                    </div> */}
                     <span onClick={() => setisShowListPicture(false)}>&times;</span>
                 </div>
                 <div className='modal_body'>

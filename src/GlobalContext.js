@@ -4,7 +4,7 @@ import SupplierApi from "./api/SupplierApi";
 import ProductApi from './api/ProductApi'
 import UserApi from './api/UserApi'
 import OrdersApi from './api/OrderApi'
-import axios from 'axios'
+import { apiInstance } from "./baseApi";
 export const GlobalContext = createContext()
 
 export const DataProvider = ({ children }) => {
@@ -12,7 +12,7 @@ export const DataProvider = ({ children }) => {
     const [isLogin, setIsLogin] = useState(false)
     const [firstLogin, setFirstLogin] = useState(false)
     const getUser = async (id) => {
-        const res = await axios.get(`/store/user/${id}`)
+        const res = await apiInstance.get(`/store/user/${id}`)
         if (!res.data) setFirstLogin(true);
         else setFirstLogin(false)
     }

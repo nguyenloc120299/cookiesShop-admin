@@ -1,12 +1,11 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
-
+import { apiInstance } from '../baseApi'
 function SupplierApi() {
     const [suppliers, setSuppliers] = useState([])
     const [callBack, setCallBack] = useState(false)
 
     const getSupplier = async () => {
-        const res = await axios.get("/suppliers")
+        const res = await apiInstance.get("/suppliers")
         if (res && res.data) setSuppliers(res.data)
     }
     useEffect(() => {

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiInstance } from '../../baseApi'
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../GlobalContext'
 import ChartColumn from './ChartColumn'
@@ -16,11 +16,11 @@ const MainPage = () => {
         currency: 'VND',
     });
     const getTotalRevent = async () => {
-        const res = await axios.get(`/totalrevenue/user/${id}`)
+        const res = await apiInstance.get(`/totalrevenue/user/${id}`)
         if (res && res.data) setTotalRevent(res.data)
     }
     const getRevenue = async () => {
-        const res = await axios.get(`/revenue/user/${id}`)
+        const res = await apiInstance.get(`/revenue/user/${id}`)
         if (res && res.data) setRevenue(res.data.thongke)
     }
     const productStatus = products.filter(item => { return item.status === 0 })

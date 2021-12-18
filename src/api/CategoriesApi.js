@@ -1,12 +1,11 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
-
+import { apiInstance } from '../baseApi'
 function CategoriesApi() {
     const [categories, setCategories] = useState([])
     const [callBack, setCallBack] = useState(false)
 
     const getCategories = async () => {
-        const res = await axios.get("/categories")
+        const res = await apiInstance.get("/categories")
         if (res && res.data) setCategories(res.data)
     }
     useEffect(() => {

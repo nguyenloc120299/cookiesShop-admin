@@ -1,10 +1,11 @@
-import axios from 'axios'
+
 import React, { useEffect, useState } from 'react'
 import './store.css'
+import { apiInstance } from '../../baseApi'
 const Store = () => {
     const [stores, setStores] = useState([])
     const getStore = async () => {
-        const res = await axios.get('/admin/stores')
+        const res = await apiInstance.get('/admin/stores')
         setStores(res.data.listSotre);
     }
     useEffect(() => {
@@ -12,7 +13,7 @@ const Store = () => {
     }, [])
 
     const deleteStore = async (id) => {
-        await axios.delete(` /store/${id}`)
+        await apiInstance.delete(` /store/${id}`)
     }
     return (
         <div className='store mt-5'>

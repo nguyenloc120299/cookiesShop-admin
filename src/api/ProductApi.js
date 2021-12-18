@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiInstance } from '../baseApi'
 import { useEffect, useState } from 'react'
 
 function CategoriesApi(isLogin) {
@@ -9,17 +9,17 @@ function CategoriesApi(isLogin) {
     const getCategories = async () => {
 
         if (res.token && res.roles[0].authority === 'Buyer') {
-            const res1 = await axios.get(`/products/users/${res.id}`)
+            const res1 = await apiInstance.get(`/products/users/${res.id}`)
             if (res1 && res1.data) setProducts(res1.data)
         }
         else {
-            const res2 = await axios.get(`/products`)
+            const res2 = await apiInstance.get(`/products`)
             if (res2 && res2.data) setProducts(res2.data)
         }
 
     }
     useEffect(() => {
-        if (res.token) {
+        if (res) {
             getCategories()
         }
     }, [callBack])

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import PaginationReact from 'react-paginate'
 import swal from 'sweetalert'
@@ -7,7 +6,7 @@ import DetailListOrders from './DetailListOrders'
 import './order.css'
 import TableAdmin from './TableAdmin'
 import TableBuyer from './TableBuyer'
-
+import { apiInstance } from '../../baseApi'
 const Orders = () => {
     const context = useContext(GlobalContext)
     const res = JSON.parse(localStorage.getItem('login_admin'))
@@ -23,17 +22,17 @@ const Orders = () => {
         setPageNumber(selected)
     }
     const confirmOrdersAdmin = async (orderId) => {
-        await axios.post(` /orders/${orderId}/verify`)
+        await apiInstance.post(` /orders/${orderId}/verify`)
         swal('Xác nhận đơn hàng thành công', 'Đã chuyển đơn hàng cho người bán', 'success')
         setCallBack(!callBack)
     }
     const onChangeStatus = async (status, id) => {
         if (status === 0)
-            await axios.post(`/status/orderDetail/${id}/type/1`)
+            await apiInstance.post(`/status/orderDetail/${id}/type/1`)
         if (status === 1)
-            await axios.post(`/status/orderDetail/${id}/type/2`)
+            await apiInstance.post(`/status/orderDetail/${id}/type/2`)
         if (status === 2)
-            await axios.post(`/status/orderDetail/${id}/type/3`)
+            await apiInstance.post(`/status/orderDetail/${id}/type/3`)
         swal('Hoàn tất', '', 'success')
         setCallBack(!callBack)
     }

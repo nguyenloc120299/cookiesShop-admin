@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiInstance } from '../../baseApi'
 import React, { useState } from 'react'
 
 const Login = () => {
@@ -13,7 +13,7 @@ const Login = () => {
         setUserLogin({ ...userLogin, [name]: value })
     }
     const onSubmitLogin = async () => {
-        const res = await axios.post('/signin', { ...userLogin })
+        const res = await apiInstance.post('/signin', { ...userLogin })
         // localStorage.setItem('login_admin', true)
         localStorage.setItem('login_admin', JSON.stringify(res.data))
         window.location.href = '/'

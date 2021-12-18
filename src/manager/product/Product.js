@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useContext, useState, useEffect } from 'react'
 import Search from '../../component/search/Search'
 import { imageUpload } from '../../valid/uploadImage'
@@ -17,7 +16,7 @@ import { BsImageFill } from 'react-icons/all'
 import ImageModal from './ImageModal'
 import './product.css'
 import Loading from '../../valid/Loading'
-
+import { apiInstance } from '../../baseApi'
 const Product = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
@@ -81,7 +80,7 @@ const Product = () => {
 
         try {
             setIsLoading(true)
-            await axios.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: item.public_id })
+            await apiInstance.post('https://polar-woodland-25756.herokuapp.com/destroy', { public_id: item.public_id })
             setIsLoading(false)
             setImg(false)
         } catch (err) {
@@ -311,18 +310,18 @@ const Product = () => {
         setIsLoading(true)
         if (type === 'status') {
             if (producta.status === 0) {
-                await axios.post(`/status/products/${producta.id}/type/${1}`)
+                await apiInstance.post(`/status/products/${producta.id}/type/${1}`)
             }
             if (producta.status === 1) {
-                await axios.post(`/status/products/${producta.id}/type/${0}`)
+                await apiInstance.post(`/status/products/${producta.id}/type/${0}`)
             }
         }
         if (type === 'featured') {
             if (producta.featured === 0) {
-                await axios.post(`/featured/products/${producta.id}/type/${1}`)
+                await apiInstance.post(`/featured/products/${producta.id}/type/${1}`)
             }
             if (producta.featured === 1) {
-                await axios.post(`/featured/products/${producta.id}/type/${0}`)
+                await apiInstance.post(`/featured/products/${producta.id}/type/${0}`)
             }
         }
 
@@ -347,7 +346,7 @@ const Product = () => {
                     })
                 });
                 // console.log(files);
-                await axios.post(`/products`, {
+                await apiInstance.post(`/products`, {
                     name: productValue.name,
                     code: productValue.code,
                     sort_description: productValue.sort_description,
@@ -390,7 +389,7 @@ const Product = () => {
                 setIsLoading(true)
                 if (!img)
 
-                    await axios.put(`/products`, {
+                    await apiInstance.put(`/products`, {
                         ...productValue,
                         userId: res.id,
                         categoriesId: id_category,
@@ -407,7 +406,7 @@ const Product = () => {
                     //         file: element.url
                     //     })
                     // });
-                    await axios.put(`/products`, {
+                    await apiInstance.put(`/products`, {
                         ...productValue,
 
                         avartar: media[0].url,
@@ -436,32 +435,37 @@ const Product = () => {
     }
     const onDelete = async (id) => {
         try {
-            setIsLoading(true)
-            // console.log(id)
-            swal({
-                title: " Bạn có chắc không? ",
 
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then(async (willDelete) => {
-                    if (willDelete) {
-                        await axios.delete(`/products/${id}`)
-                        setIsLoading(false)
-                        setCallBack(!callBack)
-                        setIsModal(false)
-                        swal(" Bạn đã xóa sản phẩm khỏi giỏi hàng ", {
-                            icon: "success",
-                        });
-                    }
-                });
+            // console.log(id)
+            // swal({
+            //     title: " Bạn có chắc không? ",
+
+            //     icon: "warning",
+            //     buttons: true,
+            //     dangerMode: true,
+            // })
+            //     .then(async (willDelete) => {
+            //         if (willDelete) {
+            setIsLoading(true)
+            await apiInstance.delete(`/products/${id}`)
+            setIsLoading(false)
+            setCallBack(!callBack)
+            setIsModal(false)
+            // swal(" Bạn đã xóa sản phẩm này ", {
+            //     icon: "success",
+            //     });
+            // }
+
+            // });
+
 
 
         } catch (err) {
+            setIsLoading(false)
             console.log(err);
             // ShowAlert(true, 'danger', err.response.data.msg)
-            setIsLoading(false)
+            // setIsLoading(false)
+            swal(`${err.response.data.message}`, '', 'error')
         }
 
     }
