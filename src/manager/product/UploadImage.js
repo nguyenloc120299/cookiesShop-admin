@@ -1,5 +1,7 @@
 import React from 'react'
 import { AiOutlineUpload } from 'react-icons/ai'
+import { BiCameraHome } from 'react-icons/bi'
+import { FaCamera } from 'react-icons/fa'
 
 const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img, IsImgInput, value, closeImage, deleteImages }) => {
     return (
@@ -8,14 +10,14 @@ const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img,
                 isSave && <>
                     <div className='mb-3' style={img ? { display: 'none' } : { display: 'block' }} >
                         <label htmlFor="fileInput">
-                            <AiOutlineUpload style={{
+                            <FaCamera style={{
                                 fontSize: '50px'
                             }} />
                             <h6 style={{
                                 marginLeft: '10px',
                                 color: '#777',
                                 fontWeight: 'bold'
-                            }}>Hình ảnh</h6>
+                            }}>Hình ảnh (Thêm ít nhất 2 ảnh )</h6>
                         </label>
 
                         <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'

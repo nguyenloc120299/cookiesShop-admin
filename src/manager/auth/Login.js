@@ -2,7 +2,7 @@ import { apiInstance } from '../../baseApi'
 import React, { useState } from 'react'
 
 const Login = () => {
-
+    const [isLogin, setIsLogin] = useState(false)
     const [userLogin, setUserLogin] = useState({
         username: '',
         password: ''
@@ -13,10 +13,16 @@ const Login = () => {
         setUserLogin({ ...userLogin, [name]: value })
     }
     const onSubmitLogin = async () => {
-        const res = await apiInstance.post('/signin', { ...userLogin })
-        // localStorage.setItem('login_admin', true)
-        localStorage.setItem('login_admin', JSON.stringify(res.data))
-        window.location.href = '/'
+        try {
+            setIsLogin(true)
+            const res = await apiInstance.post('/signin', { ...userLogin })
+            // localStorage.setItem('login_admin', true)
+            localStorage.setItem('login_admin', JSON.stringify(res.data))
+            window.location.href = '/'
+        } catch (error) {
+
+        }
+
     }
     return (
         <div className='login mt-5'>

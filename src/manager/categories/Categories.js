@@ -162,11 +162,11 @@ const Categories = () => {
             }
             if (isEdit) {
                 setIsLoading(true)
-                if (!img) await apiInstance.put('/suppliers', { ...categoriesValue })
+                if (!img) await apiInstance.put('/categories', { ...categoriesValue })
                 else {
                     let media
                     media = await imageUpload([img])
-                    await apiInstance.put('/suppliers', {
+                    await apiInstance.put('/categories', {
                         ...categoriesValue,
                         avartar: media[0].url
                     })

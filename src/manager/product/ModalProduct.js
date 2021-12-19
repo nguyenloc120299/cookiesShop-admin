@@ -17,8 +17,8 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
             <div className='modal-dialog modal-dialog-centered'>
                 <div className='modal-content'>
                     <div className='modal-header'>
-                        {isEdit && <h5>Cập nhật nhà cung cấp</h5>}
-                        {isSave && <h5>Thêm nhà cung cấp mới</h5>}
+                        {isEdit && <h5>Cập nhật sản phẩm</h5>}
+                        {isSave && <h5>Thêm nhà sản phẩm mới</h5>}
                         {/* <div style={{ margin: '20px' }}>
                             <Spinner isLoading={isLoading} />
                         </div> */}
@@ -33,7 +33,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                     </div>
                     <div className='modal-body p-3'>
                         <div className='mb-3'>
-
+                            <label>Tên sản phẩm</label>
                             <input type='text' className='form-control' placeholder='Tên sản phẩm'
                                 name='name'
                                 value={value.name}
@@ -42,6 +42,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
 
                         </div>
                         <div className='mb-3'>
+                            <label>Code</label>
                             <input type='text' className='form-control' placeholder='Mã Code'
                                 name='code'
                                 value={value.code}
@@ -50,6 +51,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
 
                         </div>
                         <div className='mb-3'>
+                            <label>Mô tả ngắn</label>
                             <input type='text' className='form-control' placeholder='Mô tả ngắn'
                                 name='sort_description'
                                 value={value.sort_description}
@@ -57,6 +59,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
 
                         </div>
                         <div className='mb-3'>
+                            <label>Mô tả chi tiết</label>
                             <textarea type='text' className='form-control' placeholder='Mô tả chi tiết'
                                 name='detail_description' rows={5}
                                 value={value.detail_description}
@@ -65,6 +68,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                         </div>
                         {isEdit &&
                             <div className='mb-3'>
+                                <label>Giảm giá (%)</label>
                                 <input type='text' className='form-control' placeholder='Khuyến mãi'
                                     name='promotion'
                                     value={value.promotion}
@@ -74,13 +78,16 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
 
                         }
                         <div className='mb-3'>
+                            <label>Giá</label>
                             <input type='text' className='form-control' placeholder='Giá'
+
                                 name='price'
                                 value={value.price}
                                 onChange={onChangeInput} />
 
                         </div>
                         <div className='mb-3'>
+                            <label>Số lượng</label>
                             <input type='text' className='form-control' placeholder='Số lượng'
                                 name='quantity'
                                 value={value.quantity}
@@ -89,9 +96,10 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                         </div>
                         {isSave && <>
                             <div className='mb-3'>
+                                <label>Loại sản phẩm</label>
                                 <select className='form-control' placeholder=''
                                     name='category'
-                                    value={value.quantity}
+                                    value={value.categories}
                                     onChange={onChangeInput} >
                                     <option>Chọn loại sản phẩm</option>
                                     {
@@ -103,9 +111,10 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
 
                             </div>
                             <div className='mb-3'>
-                                <select className='form-control' placeholder=''
+                                <label>Nhà cung cấp</label>
+                                <select className='form-control'
                                     name='supplier'
-                                    value={value.quantity}
+                                    value={value.suppliers}
                                     onChange={onChangeInput} >
                                     <option>Chọn nhà cung cấp</option>
                                     {

@@ -37,6 +37,7 @@ const Product = () => {
     const [isLoading, setIsLoading] = useState(false)
     const PageVisited = pageNumber * totalItem
     const [listPicture, setListPicture] = useState([])
+    const [isMore, setIsMore] = useState(false)
     // const [isImgInput, setIsImgInput] = useState(false)
     const changePage = ({ selected }) => {
         setPageNumber(selected)
@@ -115,7 +116,7 @@ const Product = () => {
         code: '',
         sort_description: '',
         detail_description: '',
-        price: '',
+        price: 0,
         avartar: '',
         quantity: ''
 
@@ -227,7 +228,6 @@ const Product = () => {
     const dislayTable = products.slice(PageVisited, totalItem + PageVisited).map(item => (
 
         <tr key={item.id}>
-            <td >{item.id}</td>
             <td >
                 <div>{item.name}</div>
                 <img src={item.avartar} alt='' style={{
@@ -242,11 +242,18 @@ const Product = () => {
             </td>
 
             <td>{item.code}</td>
-            <td>{item.sort_description}</td>
-            <td>{item.detail_description}</td>
+            <td style={{
+                minWidth: '10rem'
+            }}>{item.sort_description}</td>
+            <td style={{
+                minWidth: '12rem'
+            }}>{item.detail_description.length < 150 ? item.detail_description : `
+                ${item.detail_description.slice(0, isMore ? 500 : 150)} `}<a href='#'
+                    onClick={() => setIsMore(!isMore)}
+                >{item.detail_description.length > 150 && (isMore ? 'Thu gọn' : '...Xem thêm')}</a></td>
             <td>{item.ban_nhanh}</td>
             <td>{(item.price).toLocaleString()}</td>
-            <td>{(item.competitive_price).toLocaleString()}</td>
+            {/* <td>{(item.competitive_price).toLocaleString()}</td> */}
 
             <td>{new Date(item.date_sale).toLocaleDateString()}</td>
             <td>{(item.quantity).toLocaleString()}</td>
@@ -515,14 +522,14 @@ const Product = () => {
 
                         <thead >
                             <tr>
-                                <th scope='col'>ID</th>
+
                                 <th scope='col'>Ảnh</th>
                                 <th scope='col'>Code</th>
                                 <th scope='col' >Mô tả</th>
                                 <th scope='col'>Chi tiết</th>
                                 <th scope='col'>Đã bán</th>
                                 <th scope='col'>Giá</th>
-                                <th scope='col'>Giá giảm</th>
+                                {/* <th scope='col'>Giá giảm</th> */}
                                 <th scope='col'>Ngày nhập</th>
                                 <th scope='col'>Số lượng</th>
                                 <th scope='col'>Khuyến mãi</th>
