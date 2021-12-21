@@ -1,7 +1,7 @@
 import React from 'react'
 import Spinner from '../../component/untill/Spinner'
 import ModalFooter from '../../component/view/ModalFooter'
-import { AiOutlineUpload, BiCamera } from 'react-icons/all'
+import { FaCamera } from 'react-icons/all'
 const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave, onCloseModal, isLoading, onDelete, img, handleUpLoad, handleDestroy, IsImgInput, closeImage }) => {
     console.log(img);
 
@@ -28,7 +28,7 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                     </div>
                     <div className='modal-body p-3'>
                         <div className='mb-3'>
-
+                            <label>Name</label>
                             <input type='text' className='form-control' placeholder='Tên nhà cung cấp'
                                 name='name'
                                 value={value.name}
@@ -37,6 +37,7 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
 
                         </div>
                         <div className='mb-3'>
+                            <label>Code</label>
                             <input type='text' className='form-control' placeholder='Mã Code'
                                 name='code'
                                 value={value.code}
@@ -45,6 +46,7 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
 
                         </div>
                         <div className='mb-3'>
+                            <label>Email</label>
                             <input type='text' className='form-control' placeholder='Email'
                                 name='email'
                                 value={value.email}
@@ -52,6 +54,7 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
 
                         </div>
                         <div className='mb-3'>
+                            <label>Phone</label>
                             <input type='text' className='form-control' placeholder='Số điện thoại'
                                 name='phone'
                                 value={value.phone}
@@ -59,6 +62,7 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
 
                         </div>
                         <div className='mb-3'>
+                            <label>Address</label>
                             <input type='text' className='form-control' placeholder='Địa chỉ'
                                 name='address'
                                 value={value.address}
@@ -69,8 +73,8 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                             isSave && <div div className='d-flex'>
                                 <div className='mb-3'>
                                     <label htmlFor="fileInput">
-                                        <BiCamera style={{
-                                            fontSize: '50px'
+                                        <FaCamera style={{
+                                            fontSize: '3rem'
                                         }} />
                                         <h6 style={{
                                             marginLeft: '10px',
@@ -91,7 +95,9 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                                     <div className='mb-3 img__input' >
                                         <img src={URL.createObjectURL(img)} alt='' style={{
                                             width: '100px',
-                                            height: '80px',
+                                            height: '100px',
+                                            objectFit: 'cover',
+                                            marginLeft: '2rem'
 
                                         }} />
                                     </div>
@@ -111,13 +117,16 @@ const ModalSupplier = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave
                             >
                                 <img src={img ? URL.createObjectURL(img) : value.logo} alt='' style={{
                                     width: '100px',
-                                    height: '80px',
+                                    height: '100px',
+                                    objectFit: 'cover'
 
                                 }} />
                                 <div className='mb-3'>
                                     <label htmlFor="fileInput">
-                                        <BiCamera style={{
-                                            fontWeight: "bold"
+                                        <FaCamera style={{
+                                            fontWeight: "bold",
+                                            fontSize: "3rem",
+                                            marginLeft: '2rem'
                                         }} />
 
                                     </label>

@@ -139,8 +139,9 @@ const Supplier = () => {
             <td >{item.id}</td>
             <td ><img src={item.logo} alt='' style={{
 
-                width: '50px',
-                height: '50px'
+                width: '100px',
+                height: '100px',
+                objectFit: 'cover'
             }} /></td>
             <td >{item.name}</td>
             <td>{item.code}</td>
@@ -169,13 +170,26 @@ const Supplier = () => {
             if (isEdit) {
                 setIsLoading(true)
 
-                if (!img) await apiInstance.put('/suppliers', { ...supplierValue })
+                if (!img) await apiInstance.put('/suppliers', {
+                    address: supplierValue.address,
+                    code: supplierValue.code,
+                    email: supplierValue.email,
+                    id: supplierValue.id,
+                    logo: supplierValue.logo,
+                    name: supplierValue.name,
+                    phone: supplierValue.phone
+                })
                 else {
                     let media
                     media = await imageUpload([img])
 
                     await apiInstance.put('/suppliers', {
-                        ...supplierValue,
+                        address: supplierValue.address,
+                        code: supplierValue.code,
+                        email: supplierValue.email,
+                        id: supplierValue.id,
+                        name: supplierValue.name,
+                        phone: supplierValue.phone,
                         logo: media[0].url
                     })
                 }

@@ -2,8 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import './store.css'
 import { apiInstance } from '../../baseApi'
+import swal from 'sweetalert'
+import Loading from '../../valid/Loading'
 const Store = () => {
     const [stores, setStores] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const getStore = async () => {
         const res = await apiInstance.get('/admin/stores')
         setStores(res.data.listSotre);
@@ -13,10 +16,16 @@ const Store = () => {
     }, [])
 
     const deleteStore = async (id) => {
-        await apiInstance.delete(` /store/${id}`)
+        setIsLoading(true)
+        await apiInstance.delete(`/store/${id}`)
+        setIsLoading(false)
+        swal('Đã xóa', '', 'success')
     }
     return (
         <div className='store mt-5'>
+            {
+                isLoading && <Loading />
+            }
             <h5 className='text-left ml-3'>Thông tin tất cả cửa hàng</h5>
             <div className='row p-5'>
                 <table className='table-hover table'>

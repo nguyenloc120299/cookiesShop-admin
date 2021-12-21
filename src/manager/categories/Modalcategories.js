@@ -2,7 +2,7 @@ import React from 'react'
 import Spinner from '../../component/untill/Spinner'
 import ModalFooter from '../../component/view/ModalFooter'
 import { AiOutlineUpload } from 'react-icons/ai'
-import { BiCamera } from 'react-icons/bi'
+import { FaCamera } from 'react-icons/all'
 const Modalcategories = ({ isModal, onChangeInput, value, onSubmit, isEdit,
     isSave, onCloseModal, isLoading, onDelete, handleDestroy, handleUpLoad, img, closeImage, IsImgInput }) => {
     return (
@@ -43,7 +43,7 @@ const Modalcategories = ({ isModal, onChangeInput, value, onSubmit, isEdit,
                             <div div className='d-flex'>
                                 <div className='mb-3'>
                                     <label htmlFor="fileInput">
-                                        <BiCamera style={{
+                                        <FaCamera style={{
                                             fontSize: '50px'
                                         }} />
                                         <h6 style={{
@@ -65,7 +65,8 @@ const Modalcategories = ({ isModal, onChangeInput, value, onSubmit, isEdit,
                                     <div className='mb-3 img__input' >
                                         <img src={URL.createObjectURL(img)} alt='' style={{
                                             width: '100px',
-                                            height: '80px',
+                                            height: '100px',
+                                            objectFit: 'cover'
 
                                         }} />
                                     </div>
@@ -82,13 +83,15 @@ const Modalcategories = ({ isModal, onChangeInput, value, onSubmit, isEdit,
                             >
                                 <img src={img ? URL.createObjectURL(img) : value.avartar} alt='' style={{
                                     width: '100px',
-                                    height: '80px',
+                                    height: '100px',
+                                    objectFit: 'cover'
 
                                 }} />
                                 <div className='mb-3'>
                                     <label htmlFor="fileInput">
-                                        <BiCamera style={{
-                                            fontWeight: "bold"
+                                        <FaCamera style={{
+                                            fontWeight: "bold",
+                                            fontSize: '2rem'
                                         }} />
 
                                     </label>

@@ -38,14 +38,14 @@ const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img,
                                         marginBottom: '1rem'
 
                                     }} />
-                                    <p style={{
+                                    {/* <p style={{
                                         position: 'absolute',
                                         top: '0',
                                         right: '0',
                                         fontWeight: 'bold',
                                         cursor: 'pointer',
                                         color: 'crimson'
-                                    }} onClick={() => deleteImages(index)}>X</p>
+                                    }} onClick={() => deleteImages(index)}>X</p> */}
 
                                 </div>
                             ))
@@ -92,16 +92,16 @@ const UploadImage = ({ imgArr, isSave, isEdit, handleDestroy, handleUpLoad, img,
 
                         <img src={img ? URL.createObjectURL(img) : value.avartar} alt='' style={{
                             width: '100px',
-                            height: '130px',
+                            height: '100px',
+                            objectFit: 'cover'
 
                         }} />
                         <div>
                             <label htmlFor="fileInput">
-                                <i className="fas fa-edit"></i>
-                                <span style={{
+                                <FaCamera style={{
                                     marginLeft: '10px',
-                                    color: '#777'
-                                }}>Thay đổi</span>
+                                    fontSize: '3rem'
+                                }}></FaCamera>
                             </label>
 
                             <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'

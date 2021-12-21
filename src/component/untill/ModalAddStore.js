@@ -4,6 +4,9 @@ import Spinner from '../untill/Spinner'
 import { GlobalContext } from '../../GlobalContext'
 import { apiInstance } from '../../baseApi'
 import swal from 'sweetalert'
+import { imageUpload } from '../../valid/uploadImage'
+import Loading from '../../valid/Loading'
+import { FaCamera } from 'react-icons/fa'
 const ModalAddStore = () => {
     const context = useContext(GlobalContext)
     const [firstLogin, setFirstLogin] = context.isFirstLogin
@@ -28,13 +31,13 @@ const ModalAddStore = () => {
 
             if (!file) return alert("file not exist")
             if (file.type !== 'image/jpg' && file.type !== 'image/png') return alert('file format is incorrect')
-            let fromData = new FormData()
-            fromData.append('file', file)
-            console.log(fromData)
-            setIsLoading(true)
-            const res = await apiInstance.post('https://polar-woodland-25756.herokuapp.com/upload', fromData, { headers: { 'content-type': 'multipart/form-data' } })
-            setIsLoading(false)
-            setImg(res.data)
+            // let fromData = new FormData()
+            // fromData.append('file', file)
+            // console.log(fromData)
+            // setIsLoading(true)
+            // const res = await apiInstance.post('https://polar-woodland-25756.herokuapp.com/upload', fromData, { headers: { 'content-type': 'multipart/form-data' } })
+            // setIsLoading(false)
+            setImg(file)
 
         } catch (err) {
             console.log(err);
@@ -56,10 +59,11 @@ const ModalAddStore = () => {
     const addStore = async () => {
         try {
             setIsLoading(true)
+            let media = await imageUpload([img])
             const res1 = await apiInstance.post(`/store/user/${res.id}`, {
                 name,
                 code: makeid(5),
-                logo: img.url
+                logo: media.url
             })
             setIsLoading(false)
             setFirstLogin(!firstLogin)
@@ -72,13 +76,16 @@ const ModalAddStore = () => {
     }
     return (
         <div className='modal_store'>
+            {
+                isLoading && <Loading />
+            }
             <div className='form_modal'>
                 <div className='modal_header'>
                     <h5 style={{
                         textAlign: 'center',
                         width: '100%'
                     }}>Vui lòng thêm thông tin cửa hàng để tiếp tục</h5>
-                    <Spinner isLoading={isLoading} />
+                    {/* <Spinner isLoading={isLoading} /> */}
 
                 </div>
                 <div className='modal_body'>
@@ -92,7 +99,7 @@ const ModalAddStore = () => {
                             !img ? <>
 
                                 <label htmlFor="fileInput">
-                                    <AiOutlineUpload style={{
+                                    <FaCamera style={{
                                         fontSize: '50px'
                                     }} />
                                     <h5 style={{
@@ -108,22 +115,26 @@ const ModalAddStore = () => {
                                 />
                             </> :
 
-                                <div className='position-relative d-flex mt-3' >
+                                <div className='img_store position-relative' style={{
+                                    width: "150px",
+                                    height: "150px",
 
-                                    <img src={img.url} alt='' style={{
-                                        width: '100px',
-                                        height: '130px',
+                                    objectFit: 'cover',
+                                    overflow: 'hidden'
+                                }} >
+                                    <img src={URL.createObjectURL(img)} alt='' style={{
+                                        width: '100%',
+                                        height: '100%',
 
                                     }} />
-                                    <p style={{
-                                        position: 'absolute',
-                                        top: '0',
-                                        right: '0',
-                                        fontWeight: 'bold',
-                                        cursor: 'pointer',
-                                        color: 'crimson'
-                                    }} onClick={() => handleDestroy(img)}>X</p>
-
+                                    <span className='d-flex justify-content-center'>
+                                        <label htmlFor="fileInputStore">
+                                            <FaCamera style={{
+                                                fontSize: '20px'
+                                            }} />
+                                            <input type='file' id='fileInputStore' onChange={handleUploadImg} style={{ display: 'none' }} />
+                                        </label>
+                                    </span>
                                 </div>
                         }
                     </div>

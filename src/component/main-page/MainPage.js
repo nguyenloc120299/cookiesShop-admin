@@ -2,7 +2,7 @@ import { apiInstance } from '../../baseApi'
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../GlobalContext'
 import ChartColumn from './ChartColumn'
-
+import { BiCalendar } from 'react-icons/bi'
 const MainPage = () => {
 
     const context = useContext(GlobalContext)
@@ -51,6 +51,18 @@ const MainPage = () => {
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">
                                         </div>
 
+                                    </div>
+                                    <div className='d-flex align-items-center'>
+                                        {/* <label >
+                                            <BiCalendar style={{
+                                                fontSize: '50px'
+                                            }} />
+
+                                        </label>
+
+                                        <input id="fileInput1" type="date" className='form-control'
+
+                                        /> */}
                                     </div>
 
                                 </div>

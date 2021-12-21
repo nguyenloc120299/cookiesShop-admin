@@ -5,6 +5,7 @@ import { GlobalContext } from '../../GlobalContext'
 import ListImg from './ListImg'
 import Loading from '../../valid/Loading'
 import { apiInstance } from '../../baseApi'
+import { FaCamera } from 'react-icons/fa'
 
 const ModaliImage = ({ setisShowListPicture, listPicture, setListPicture, value }) => {
     //   console.log(listPicture);
@@ -125,11 +126,12 @@ const ModaliImage = ({ setisShowListPicture, listPicture, setListPicture, value 
 
                     <div className='modal_footer'>
                         <label htmlFor="fileInput">
-                            <i className="fas fa-upload" />
-                            <span style={{
-                                marginLeft: '10px',
-                                color: '#777'
-                            }}>Hình ảnh</span>
+                            <FaCamera
+                                style={{
+                                    marginLeft: '10px',
+                                    color: '#777',
+                                    fontSize: '3rem'
+                                }} />
                         </label>
 
                         <input id="fileInput" type="file" style={{ display: "none" }} className='form-control' placeholder='Địa chỉ'

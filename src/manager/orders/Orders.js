@@ -5,6 +5,7 @@ import { GlobalContext } from '../../GlobalContext'
 import DetailListOrders from './DetailListOrders'
 import './order.css'
 import TableAdmin from './TableAdmin'
+import Loading from '../../valid/Loading'
 import TableBuyer from './TableBuyer'
 import { apiInstance } from '../../baseApi'
 const Orders = () => {
@@ -13,6 +14,7 @@ const Orders = () => {
     const [orders] = context.ordersApi.orders
     const [callBack, setCallBack] = context.ordersApi.callBack
     const totalItem = 18;
+    const [isLoading, setIsLoading] = useState(false)
     const [pageNumber, setPageNumber] = useState(0)
     const [type, setType] = context.ordersApi.status
     const pageCount = Math.ceil(orders.length / totalItem);
@@ -22,9 +24,11 @@ const Orders = () => {
         setPageNumber(selected)
     }
     const confirmOrdersAdmin = async (orderId) => {
-        await apiInstance.post(` /orders/${orderId}/verify`)
+        setIsLoading(true)
+        await apiInstance.post(`/orders/${orderId}/verify`)
         swal('Xác nhận đơn hàng thành công', 'Đã chuyển đơn hàng cho người bán', 'success')
         setCallBack(!callBack)
+        setIsLoading(false)
     }
     const onChangeStatus = async (status, id) => {
         if (status === 0)
@@ -118,6 +122,9 @@ const Orders = () => {
 
     return (
         <div className='orders m-5'>
+            {
+                isLoading && <Loading />
+            }
             {
                 <DetailListOrders item={detailOrder} />
             }

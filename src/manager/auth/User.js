@@ -241,7 +241,7 @@ const User = () => {
     return (
         <>
             <div className='m-3 mt-5'>
-                <HeaderTitle title='người dùng' onChaneShowMoDal={onChaneShowMoDal} />
+                {/* <HeaderTitle title='người dùng' onChaneShowMoDal={onChaneShowMoDal} /> */}
                 {/* <Search /> */}
                 {/* <ModalUser
                     isModal={isModal}

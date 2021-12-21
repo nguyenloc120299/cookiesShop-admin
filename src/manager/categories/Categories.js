@@ -128,8 +128,9 @@ const Categories = () => {
             <td >
                 <img src={item.avartar} alt='' style={{
 
-                    width: '50px',
-                    height: '50px'
+                    width: '100px',
+                    height: '100px',
+                    objectFit: 'cover'
                 }} /></td>
             <td >{item.name}</td>
             <td>{item.code}</td>
@@ -162,12 +163,19 @@ const Categories = () => {
             }
             if (isEdit) {
                 setIsLoading(true)
-                if (!img) await apiInstance.put('/categories', { ...categoriesValue })
+                if (!img) await apiInstance.put('/categories', {
+                    avartar: categoriesValue.avartar,
+                    code: categoriesValue.code,
+                    id: categoriesValue.id,
+                    name: categoriesValue.name
+                })
                 else {
                     let media
                     media = await imageUpload([img])
                     await apiInstance.put('/categories', {
-                        ...categoriesValue,
+                        code: categoriesValue.code,
+                        id: categoriesValue.id,
+                        name: categoriesValue.name,
                         avartar: media[0].url
                     })
                     //   console.log(teacherValue)
@@ -194,10 +202,11 @@ const Categories = () => {
             setIsLoading(true)
             // console.log(id)
             await apiInstance.delete(`/categories/${id}`)
-            setIsLoading(false)
+
             setCallBack(!callBack)
             setIsModal(false)
-            ShowAlert(true, 'success', "Đã xóa thành công")
+            swal('Xóa thành công', '', 'success')
+            setIsLoading(false)
         } catch (err) {
             ShowAlert(true, 'danger', err.response.data.msg)
             setIsLoading(false)
