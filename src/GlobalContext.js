@@ -33,7 +33,7 @@ export const DataProvider = ({ children }) => {
         productsApi: ProductApi(isLogin),
         usersApi: UserApi(),
         isLogin: [isLogin, setIsLogin],
-        ordersApi: OrdersApi(),
+        ordersApi: OrdersApi(isLogin),
         isFirstLogin: [firstLogin, setFirstLogin]
     }
     return (

@@ -1,13 +1,13 @@
 import { apiInstance } from '../baseApi'
 import { useEffect, useState } from 'react'
 
-function CategoriesApi() {
+function CategoriesApi(isLogin) {
     const [orders, setOrders] = useState([])
     const [callBack, setCallBack] = useState(false)
     const [type, setType] = useState(5)
 
     const getCategories = async (type) => {
-
+        if(isLogin){
 
         const auth = JSON.parse(localStorage.getItem('login_admin'))
         if (auth.token && auth.roles[0].authority === 'Admin') {
@@ -24,6 +24,7 @@ function CategoriesApi() {
                 if (res1 && res1.data) setOrders(res1.data)
             }
         }
+    }
 
     }
 
