@@ -6,11 +6,11 @@ import { GlobalContext } from '../../GlobalContext'
 import UploadImage from './UploadImage'
 const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
     onCloseModal, isLoading, onDelete, img, handleUpLoad, handleDestroy,
-    IsImgInput, closeImage, imgArr, deleteImages }) => {
+    IsImgInput, closeImage, imgArr, deleteImages, errLog }) => {
     const context = useContext(GlobalContext)
     const [categories] = context.categoriesApi.categories
     const [supliers] = context.suppliersApi.suppliers
-
+    console.log(errLog);
     return (
         <div className='modal' tabIndex='-1' style={isModal ? { display: 'block' } : { display: 'none' }}>
 
@@ -47,6 +47,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                                 name='code'
                                 value={value.code}
                                 onChange={onChangeInput} />
+                            {errLog.code && <small className='text-danger'>{errLog.code}</small>}
 
 
                         </div>
@@ -84,6 +85,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                                 name='price'
                                 value={value.price}
                                 onChange={onChangeInput} />
+                            {errLog.price && <small className='text-danger'>{errLog.price}</small>}
 
                         </div>
                         <div className='mb-3'>
@@ -92,6 +94,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                                 name='quantity'
                                 value={value.quantity}
                                 onChange={onChangeInput} />
+                            {errLog.quantity && <small className='text-danger'>{errLog.quantity}</small>}
 
                         </div>
                         {isSave && <>

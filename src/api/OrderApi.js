@@ -7,14 +7,17 @@ function CategoriesApi(isLogin) {
     const [type, setType] = useState(5)
 
     const getCategories = async (type) => {
-        if(isLogin){
+
+
 
         const auth = JSON.parse(localStorage.getItem('login_admin'))
-        if (auth.token && auth.roles[0].authority === 'Admin') {
+        console.log(auth); if (auth && auth.roles[0].authority === 'Admin') {
             const res = await apiInstance.get("/orders")
-            if (res && res.data) setOrders(res.data)
+            if (res && res.data)
+
+                setOrders(res.data)
         }
-        if (auth.token && auth.roles[0].authority === 'Buyer') {
+        if (auth && auth.roles[0].authority === 'Buyer') {
             // let data = []
             if (type === 5) {
                 const res2 = await apiInstance.get(`/orderdetails/users/${auth.id}`)
@@ -24,14 +27,13 @@ function CategoriesApi(isLogin) {
                 if (res1 && res1.data) setOrders(res1.data)
             }
         }
-    }
+
 
     }
-
     useEffect(() => {
-
-        getCategories(type)
-    }, [callBack, type])
+        if (isLogin)
+            getCategories(type)
+    }, [callBack, type, isLogin])
     return {
         orders: [orders, orders],
         callBack: [callBack, setCallBack],

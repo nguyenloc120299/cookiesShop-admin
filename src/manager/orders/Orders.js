@@ -59,7 +59,7 @@ const Orders = () => {
             <td>{item.quantity}</td>
 
 
-            <td>{item.discount > 0 ? item.discount : item.totalmoney}</td>
+            <td>{item.discount > 0 ? (item.discount).toLocaleString() : item.totalmoney.toLocaleString()}</td>
             <td
                 style={item.status === 0
                     ? { color: 'green', fontWeight: 'bold' }

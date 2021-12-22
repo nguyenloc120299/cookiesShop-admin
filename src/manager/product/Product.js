@@ -17,6 +17,9 @@ import ImageModal from './ImageModal'
 import './product.css'
 import Loading from '../../valid/Loading'
 import { apiInstance } from '../../baseApi'
+function isNumeric(value) {
+    return /^\d+$/.test(value);
+}
 const Product = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
@@ -38,6 +41,7 @@ const Product = () => {
     const PageVisited = pageNumber * totalItem
     const [listPicture, setListPicture] = useState([])
     const [isMore, setIsMore] = useState(false)
+    const [errLog, setErrLog] = useState('')
     // const [isImgInput, setIsImgInput] = useState(false)
     const changePage = ({ selected }) => {
         setPageNumber(selected)
@@ -121,7 +125,19 @@ const Product = () => {
         quantity: ''
 
     })
-
+    const checkValue = ({
+        code,
+        price,
+        quantity }) => {
+        const err = {}
+        if (code.length > 7) err.code = 'Code nhỏ hơn 7 kí tự'
+        if (!isNumeric(price)) err.price = 'Giá tiền là số'
+        if (!isNumeric(quantity)) err.quantity = 'Số lượng là số'
+        return {
+            errMsg: err,
+            errLength: Object.keys(err).length
+        }
+    }
     const showListPicture = (id) => {
         setisShowListPicture(!isShowListPicture)
         products.forEach(element => {
@@ -340,101 +356,106 @@ const Product = () => {
     const onSubmit = async (id) => {
         try {
             //console.log(teacherValue)
-            if (isSave) {
-                setIsLoading(true)
-                let media
-                let files = []
-                console.log(img);
-                media = await imageUpload(img)
-                // console.log(img);
-                media.forEach(element => {
-                    files.push({
-                        file: element.url
-                    })
-                });
-                // console.log(files);
-                await apiInstance.post(`/products`, {
-                    name: productValue.name,
-                    code: productValue.code,
-                    sort_description: productValue.sort_description,
-                    detail_description: productValue.detail_description,
-                    price: productValue.price,
-                    quantity: productValue.quantity,
-                    userId: res.id,
-                    categoriesId: productValue.category,
-                    suppliersId: productValue.supplier,
-                    listpictureProductDTOs: files
-
-                })
-
-
-                setIsLoading(false)
-                setCallBack(!callBack)
-                setIsModal(false)
-                setImg(false)
-                swal("Thay đổi thành công!", "", "success");
-            }
-            if (isEdit) {
-                // console.log(IsImgInput);
-                setIsLoading(true)
-                let id_category, id_supplier;
-                categories.forEach(i => {
-
-                    i.products.forEach(element => {
-                        if (element.id === id) id_category = i.id
-                    });
-
-                });
-                supliers.forEach(i => {
-
-                    i.products.forEach(element => {
-                        if (element.id === id) id_supplier = i.id
-                    });
-
-                });
-
-                setIsLoading(true)
-                if (!img)
-
-                    await apiInstance.put(`/products`, {
-                        ...productValue,
-                        userId: res.id,
-                        categoriesId: id_category,
-                        suppliersId: id_supplier,
-                    })
-
-                else {
+            const check = checkValue(productValue)
+            if (check.errLength > 0) return setErrLog(check.errMsg)
+            else {
+                if (isSave) {
+                    setIsLoading(true)
                     let media
-
-                    media = await imageUpload([img])
-
-                    // img && img.slice(1, 5).forEach(element => {
-                    //     files.push({
-                    //         file: element.url
-                    //     })
-                    // });
-                    await apiInstance.put(`/products`, {
-                        ...productValue,
-
-                        avartar: media[0].url,
+                    let files = []
+                    console.log(img);
+                    media = await imageUpload(img)
+                    // console.log(img);
+                    media.forEach(element => {
+                        files.push({
+                            file: element.url
+                        })
+                    });
+                    // console.log(files);
+                    await apiInstance.post(`/products`, {
+                        name: productValue.name,
+                        code: productValue.code,
+                        sort_description: productValue.sort_description,
+                        detail_description: productValue.detail_description,
+                        price: productValue.price,
+                        quantity: productValue.quantity,
                         userId: res.id,
-                        categoriesId: id_category,
-                        suppliersId: id_supplier,
+                        categoriesId: productValue.category,
+                        suppliersId: productValue.supplier,
+                        listpictureProductDTOs: files
 
                     })
-                }
 
-                setIsLoading(false)
-                setCallBack(!callBack)
-                setIsModal(false)
-                swal("Thay đổi thành công!", "", "success");
-                setIsImgInput(false)
-                setImg(false)
+
+                    setIsLoading(false)
+                    setCallBack(!callBack)
+                    setIsModal(false)
+                    setImg(false)
+                    swal("Thay đổi thành công!", "", "success");
+                }
+                if (isEdit) {
+                    // console.log(IsImgInput);
+                    setIsLoading(true)
+                    let id_category, id_supplier;
+                    categories.forEach(i => {
+
+                        i.products.forEach(element => {
+                            if (element.id === id) id_category = i.id
+                        });
+
+                    });
+                    supliers.forEach(i => {
+
+                        i.products.forEach(element => {
+                            if (element.id === id) id_supplier = i.id
+                        });
+
+                    });
+
+                    setIsLoading(true)
+                    if (!img)
+
+                        await apiInstance.put(`/products`, {
+                            ...productValue,
+                            userId: res.id,
+                            categoriesId: id_category,
+                            suppliersId: id_supplier,
+                        })
+
+                    else {
+                        let media
+
+                        media = await imageUpload([img])
+
+                        // img && img.slice(1, 5).forEach(element => {
+                        //     files.push({
+                        //         file: element.url
+                        //     })
+                        // });
+                        await apiInstance.put(`/products`, {
+                            ...productValue,
+
+                            avartar: media[0].url,
+                            userId: res.id,
+                            categoriesId: id_category,
+                            suppliersId: id_supplier,
+
+                        })
+                    }
+
+                    setIsLoading(false)
+                    setCallBack(!callBack)
+                    setIsModal(false)
+                    swal("Thay đổi thành công!", "", "success");
+                    setIsImgInput(false)
+                    setImg(false)
+                }
             }
+            setErrLog('')
 
         } catch (err) {
             //     ShowAlert(true, 'danger', err.response.data.msg)
-            console.log(err);
+            swal('Có lỗi xảy ra vui lòng thử lại', '', 'error');
             setIsLoading(false)
         }
 
@@ -507,6 +528,7 @@ const Product = () => {
                     closeImage={handleCloseImgaeInput}
                     imgArr={imgArr}
                     deleteImages={deleteImages}
+                    errLog={errLog}
                 />
                 {
                     isShowListPicture && <ImageModal

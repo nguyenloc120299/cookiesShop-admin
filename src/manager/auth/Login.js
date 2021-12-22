@@ -1,12 +1,14 @@
 import { apiInstance } from '../../baseApi'
 import React, { useState } from 'react'
-
+import { useHistory } from 'react-router-dom'
+import swal from 'sweetalert'
 const Login = () => {
     const [isLogin, setIsLogin] = useState(false)
     const [userLogin, setUserLogin] = useState({
         username: '',
         password: ''
     })
+    const history = useHistory()
     const handleInput = e => {
         const { name, value } = e.target
 
@@ -20,7 +22,7 @@ const Login = () => {
             localStorage.setItem('login_admin', JSON.stringify(res.data))
             window.location.href = '/'
         } catch (error) {
-
+            swal('Tài khoản mật khẩu sai', '', 'error')
         }
 
     }
