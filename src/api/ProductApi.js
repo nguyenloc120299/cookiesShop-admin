@@ -19,9 +19,9 @@ function CategoriesApi(isLogin) {
 
     }
     useEffect(() => {
-        if (res) {
-            getCategories()
-        }
+
+        getCategories()
+
     }, [callBack])
     return {
         products: [products, setProducts],
