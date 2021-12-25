@@ -56,7 +56,7 @@ function App() {
 
 
       }
-      <Redirect to='/' />
+      {/* <Redirect to='/' /> */}
     </Router>
   );
 }

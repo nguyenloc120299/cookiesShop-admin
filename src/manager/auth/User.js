@@ -8,6 +8,7 @@ import { GlobalContext } from '../../GlobalContext'
 import swal from 'sweetalert'
 import { BsPersonFill } from 'react-icons/bs'
 import ModalUser from './ModalUser'
+import Loading from '../../valid/Loading'
 import './auth.css'
 const User = () => {
     const [pageNumber, setPageNumber] = useState(0)
@@ -227,9 +228,11 @@ const User = () => {
             setCallBack(!callBack)
             setIsModal(false)
             setIsLoading(false)
+            swal('Xóa thành công', '', 'success')
             //   ShowAlert(true, 'success', "Đã xóa thành công")
         } catch (err) {
             // ShowAlert(true, 'danger', err.response.data)
+            swal(`${err.response.data.message}`, '', 'error')
             setIsLoading(false)
         }
 
@@ -241,6 +244,9 @@ const User = () => {
     return (
         <>
             <div className='m-3 mt-5'>
+                {
+                    isLoading && <Loading />
+                }
                 {/* <HeaderTitle title='người dùng' onChaneShowMoDal={onChaneShowMoDal} /> */}
                 {/* <Search /> */}
                 {/* <ModalUser

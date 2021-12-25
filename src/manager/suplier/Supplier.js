@@ -48,11 +48,13 @@ const Supplier = () => {
     // }
 
     const handleUploadImg = async e => {
+
         const file = e.target.files[0];
         if (!file) return swal('File không đúng định dạng', '', 'warning')
         if (file.type !== 'image/jpg' && file.type !== 'image/png') return swal('file không đúng định dạng', '', 'warning')
         setImg(file)
     }
+    console.log('aaaaaaaaaaaaaaa', img);
     const handleDestroy = async () => {
 
         try {
@@ -119,20 +121,8 @@ const Supplier = () => {
     const onCloseModal = () => {
         setIsModal(false)
     }
-    const [alert, setAlert] = useState({
-        isShow: false,
-        type: '',
-        msg: ''
 
 
-    })
-    const ShowAlert = (isShow, type, msg) => {
-        setAlert({
-            isShow: isShow,
-            type: type,
-            msg: msg
-        })
-    }
     const dislayTable = supliers.slice(PageVisited, totalItem + PageVisited).map(item => (
 
         <tr key={item.id}>
@@ -165,7 +155,7 @@ const Supplier = () => {
                 setIsLoading(false)
                 setCallBack(!callBack)
                 setIsModal(false)
-                ShowAlert(true, 'success', 'Thành công')
+
             }
             if (isEdit) {
                 setIsLoading(true)
@@ -216,7 +206,7 @@ const Supplier = () => {
             setIsLoading(false)
             setCallBack(!callBack)
             setIsModal(false)
-            ShowAlert(true, 'success', "Đã xóa thành công")
+
         } catch (err) {
             swal('Có lỗi xảy ra', '', 'error')
             setIsLoading(false)

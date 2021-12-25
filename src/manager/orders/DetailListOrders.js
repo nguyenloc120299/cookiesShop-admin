@@ -37,9 +37,15 @@ const DetailListOrders = ({ item }) => {
                                                 }} />
                                             </td>
                                             <td>{item.quantity}</td>
-                                            <td>{item.totalmoney}</td>
-                                            <td>{item.discount}</td>
-                                            <td>{item.status}</td>
+                                            <td>{item.totalmoney && (item.totalmoney).toLocaleString()}</td>
+                                            <td>{item.discount && (item.discount).toLocaleString()}</td>
+                                            <td
+                                                style={{
+                                                    fontWeight: 'bold'
+                                                }}
+                                            >{item.status === 0 ? 'Chờ xác nhận' : item.status === 1 ? 'Đang giao'
+                                                : item.status === 2 ? 'Đã giao' : 'Đã giao'
+                                                }</td>
                                         </tr>
                                     ))
                                 }

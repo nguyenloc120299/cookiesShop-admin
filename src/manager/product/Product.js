@@ -58,11 +58,12 @@ const Product = () => {
             const files = [...e.target.files];
             if (files.length < 2) return swal("", "Thêm nhiều hơn 2 ảnh", "warning")
             if (files.length > 4) return swal("", "Chỉ được thêm ít nhất 4 ảnh", "warning");
+
             files.forEach(async file => {
 
 
                 if (!file) return alert("file không tồn tại")
-                if (file.type !== 'image/jpge' && file.type !== 'image/png') return swal("", "File không đúng định dạng", "warning")
+                if (file.type !== 'image/jpg' && file.type !== 'image/png') return swal("", "File không đúng định dạng", "warning")
 
             })
             setImg(files)
@@ -206,7 +207,7 @@ const Product = () => {
 
                         id: product.id,
                         name: product.name,
-                        code: product.name,
+                        code: product.code,
                         sort_description: product.sort_description,
                         detail_description: product.detail_description,
                         price: product.price,

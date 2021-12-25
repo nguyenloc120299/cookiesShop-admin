@@ -11,6 +11,7 @@ const Profile = () => {
     const [store, setStore] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [img, setImg] = useState(false)
+    const [callBack, setCallBack] = useState(false)
     const [dataSore, setDataStore] = useState({
         id: '',
         code: '',
@@ -41,7 +42,7 @@ const Profile = () => {
     useEffect(() => {
         getStore()
         getUser()
-    }, [])
+    }, [callBack])
     const isEditStore = () => {
         setIsEdit(true)
 
@@ -55,19 +56,30 @@ const Profile = () => {
     }
     const updateStore = async () => {
         try {
-            let media
+
             setIsLoading(true)
-            if (img)
+            if (img) {
+                let media
                 media = await imageUpload([img])
-            await apiInstance.put(`/stores/user/${id}`, {
-                id: dataSore.id,
-                code: dataSore.code,
-                name: dataSore.name,
-                date: dataSore.date,
-                logo: media ? media.url : dataSore.logo
-            })
+                await apiInstance.put(`/stores/user/${id}`, {
+                    id: dataSore.id,
+                    code: dataSore.code,
+                    name: dataSore.name,
+                    date: dataSore.date,
+                    logo: media[0].url
+                })
+            } else {
+                await apiInstance.put(`/stores/user/${id}`, {
+                    id: dataSore.id,
+                    code: dataSore.code,
+                    name: dataSore.name,
+                    date: dataSore.date,
+                    logo: dataSore.logo
+                })
+            }
             setIsLoading(false)
             setIsEdit(false)
+            setCallBack(!callBack)
             swal('Cập nhật thành công !!', '', 'success')
             setDataStore({
                 id: '',
@@ -86,7 +98,7 @@ const Profile = () => {
         const { name, value } = e.target
         setDataStore({ ...dataSore, [name]: value })
     }
-    console.log(1111111111111111, img);
+
     return (
         <div className='profile'>
             {

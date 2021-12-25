@@ -1,9 +1,16 @@
 import { apiInstance } from '../../baseApi'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import swal from 'sweetalert'
+import { GlobalContext } from '../../GlobalContext'
+import Loading from '../../valid/Loading'
 const Login = () => {
-    const [isLogin, setIsLogin] = useState(false)
+    // const [isLogin, setIsLogin] = useState(false)
+    const context = useContext(GlobalContext)
+    const [isLogin, setIsLogin] = context.isLogin
+    const [user] = context.usersApi.users
+    const [isLoding, setIsLoading] = useState(false)
+
     const [userLogin, setUserLogin] = useState({
         username: '',
         password: ''
@@ -16,11 +23,23 @@ const Login = () => {
     }
     const onSubmitLogin = async () => {
         try {
-            setIsLogin(true)
+            setIsLoading(true)
             const res = await apiInstance.post('/signin', { ...userLogin })
-            // localStorage.setItem('login_admin', true)
-            localStorage.setItem('login_admin', JSON.stringify(res.data))
-            window.location.href = '/'
+            setIsLoading(false)
+            const [userLogin1] = user.filter(item => {
+                return item.id === res.data.id
+            })
+            if (userLogin1.status === 1) {
+                localStorage.setItem('login_admin', JSON.stringify(res.data))
+                setIsLogin(!isLogin)
+            }
+
+            else {
+                swal('Chưa xác thực email', '', 'warning')
+            }
+
+            history.push('/')
+            // window.location.href = '/'
         } catch (error) {
             swal('Tài khoản mật khẩu sai', '', 'error')
         }
@@ -28,6 +47,9 @@ const Login = () => {
     }
     return (
         <div className='login mt-5'>
+            {
+                isLoding && <Loading />
+            }
             <h2 className='text-center' style={{
 
                 padding: '5px'
