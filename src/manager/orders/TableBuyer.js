@@ -14,7 +14,10 @@ const TableBuyer = ({ displayOrder }) => {
                         <th scope="col">Số lượng sản phẩm</th>
 
                         <th scope="col">Tổng tiền</th>
+
+                        <th scope="col">Ngày đặt</th>
                         <th scope="col">Trạng thái</th>
+                        <th scope='col'>Thông tin người mua</th>
                         <th scope="col">Thao tác</th>
 
                     </tr>

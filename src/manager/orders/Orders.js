@@ -9,6 +9,8 @@ import Loading from '../../valid/Loading'
 import TableBuyer from './TableBuyer'
 import { apiInstance } from '../../baseApi'
 import { Tab, Tabs } from 'react-bootstrap'
+import { RiUserLocationFill, RiUserSearchLine } from 'react-icons/ri'
+import { MdVerifiedUser } from 'react-icons/md'
 const Orders = () => {
     const context = useContext(GlobalContext)
     const res = JSON.parse(localStorage.getItem('login_admin'))
@@ -23,6 +25,7 @@ const Orders = () => {
     const pageCount = Math.ceil(orders.length / totalItem);
     const [detailOrder, setDetailOrder] = useState([])
     const PageVisited = pageNumber * totalItem
+    const [info, setInfo] = useState('')
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
@@ -32,6 +35,11 @@ const Orders = () => {
         swal('Xác nhận đơn hàng thành công', 'Đã chuyển đơn hàng cho người bán', 'success')
         setCallBack(!callBack)
         setIsLoading(false)
+    }
+    const getInfo = async (id) => {
+        const res = await apiInstance.get(`/orders/show-order/${id}`)
+        console.log(res.data);
+        if (res && res.data) setInfo(res.data)
     }
     const onChangeStatus = async (status, id) => {
         if (status === 0)
@@ -43,6 +51,7 @@ const Orders = () => {
         swal('Hoàn tất', '', 'success')
         setCallBack(!callBack)
     }
+
     const displayOrderAdminDetail = ordersDetailAdmin.slice(PageVisited, totalItem + PageVisited).map((item, index) => (
         <tr key={index}>
             <td>
@@ -103,6 +112,8 @@ const Orders = () => {
 
 
             <td>{item.discount > 0 ? (item.discount) : item.totalmoney}</td>
+            <td>{item.dateorder}</td>
+
             <td
                 style={item.status === 0
                     ? { color: 'green', fontWeight: 'bold' }
@@ -110,7 +121,11 @@ const Orders = () => {
                         color: 'blue', fontWeight: "bold"
                     }}
             >{item.status === 0 ? 'Chưa xác nhận' : item.status === 1 ? 'Đang giao' : 'Đã giao'}</td>
-
+            <td className=''><RiUserSearchLine style={{
+                fontSize: '2rem'
+            }} data-toggle="modal" data-target="#exampleModal111" type='button'
+                onClick={() => getInfo(item.id)}
+            /></td>
             <td>
                 {
                     item.status === 3 ?
@@ -275,6 +290,27 @@ const Orders = () => {
                     nextLinkClassName={"nextBttn"}
                     disabledClassName={"paginationDisabled"}
                     activeClassName={"paginationActive"} />
+            </div>
+            <div className="modal fade" id="exampleModal111" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title font-weight-bold text-center" id="exampleModalLabel">Thông tin <RiUserLocationFill /></h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <p className='font-weight-bold'>Họ tên người mua : <span className='text-primary'>{info.namecustomer}</span></p>
+                            <p className='font-weight-bold'>Ghi chú : <span className='text-primary'>{info.note}</span></p>
+                            <p className='font-weight-bold'>Số điện thoại: <span className='text-primary'>{info.phone}</span></p>
+                            <p className='font-weight-bold'>Email : <span className='text-primary'>{info.email}</span></p>
+                            <p className='font-weight-bold'>Địa chỉ nhận hàng :<span className='text-primary'>{info.deliveryaddress}</span></p>
+                            <p className='font-weight-bold'>Hình thức thanh toán :<span className='text-primary'>{info.payments === 0 ? 'Thanh toán trực tiếp' : 'Đã thanh toán online'}</span></p>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
 
