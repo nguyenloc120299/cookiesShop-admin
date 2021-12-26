@@ -36,7 +36,7 @@ function CategoriesApi(isLogin) {
     const getOrderDetailAdmin = async (type) => {
         const auth = JSON.parse(localStorage.getItem('login_admin'))
         if (type === 5) {
-            const res2 = await apiInstance.get(`/orderdetails/users/${auth.id}`)
+            const res2 = await apiInstance.get(`/orderdetails/users//orderdetails/users/${auth.id}`)
             if (res2 && res2.data) setOrdersDetailAdmin(res2.data)
         } else {
             const res1 = await apiInstance.get(`/orderdetails/users/${auth.id}/status/${type}`)

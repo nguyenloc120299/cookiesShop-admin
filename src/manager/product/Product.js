@@ -285,6 +285,14 @@ const Product = () => {
             <td>{(item.quantity).toLocaleString()}</td>
             <td>{item.promotion} %</td>
             {
+                !(res.token && res.roles[0].authority === 'Admin') &&
+                <td style={item.status === 0 ? { color: 'red', fontWeight: 'bold' }
+                    : { color: 'green', fontWeight: 'bold' }
+                }>
+                    {item.status === 0 ? 'Chưa duyệt' : 'Đã duyệt'}
+                </td>
+            }
+            {
                 (res.token && res.roles[0].authority === 'Admin') && <>
 
                     <td><button className={item.featured === 1 ? 'btn btn-outline-success' : 'btn btn-outline-danger'}
@@ -527,7 +535,6 @@ const Product = () => {
 
     const handleFilterProducts = async (e) => {
         const id = e.target.value
-        console.log(id === 0, id);
         if (id === '0') {
 
             const res = await apiInstance.get('/products/sellfast')
@@ -544,6 +551,20 @@ const Product = () => {
         if (id === '3') {
             const res = await apiInstance.get('/products')
             if (res && res.data) setProducts(res.data)
+        }
+
+    }
+    const handleProductTrongKho = async (e) => {
+        const id = e.target.value
+        if (id === '0') {
+            const res1 = await apiInstance.get(`/products/product-inventory/users/${res.id}`)
+
+            if (res1 && res1.data) setProducts(res1.data)
+        }
+        if (id === '1') {
+            const res1 = await apiInstance.get(`/products/product-sold/users/${res.id}`)
+
+            if (res1 && res1.data) setProducts(res1.data)
         }
     }
     return (
@@ -569,6 +590,16 @@ const Product = () => {
                                                 <option value={item.id}>{item.name}</option>
                                             ))
                                         }
+                                    </select>
+                                </div>
+                                <div className='my-3 w-100 mr-2'>
+                                    <label>Sản phẩm trong kho</label>
+                                    <select className="form-select" aria-label="Default select example"
+                                        onChange={handleProductTrongKho}
+                                    >
+                                        <option selected>Chọn</option>
+                                        <option value={0}>Sản phẩm tồn kho</option>
+                                        <option value={1}>Đã bán hết</option>
                                     </select>
                                 </div>
                                 {/* <div className='my-3 w-100 mr-2'>
@@ -671,7 +702,10 @@ const Product = () => {
                                         <th scope='col'>Trang thái</th>
                                     </>
                                 }
-
+                                {
+                                    !(res.token && res.roles[0].authority === 'Admin') &&
+                                    <th scope='col'>Trạng thái</th>
+                                }
 
                                 <th scope='col'></th>
                                 <th scope='col'></th>
