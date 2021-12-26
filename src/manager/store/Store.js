@@ -26,7 +26,7 @@ const Store = () => {
             {
                 isLoading && <Loading />
             }
-            <h5 className='text-left ml-3'>Thông tin tất cả cửa hàng</h5>
+            <h5 className='text-center ml-3 font-weight-bold my-3'>Thông tin tất cả cửa hàng</h5>
             <div className='row p-5'>
                 <table className='table-hover table'>
 

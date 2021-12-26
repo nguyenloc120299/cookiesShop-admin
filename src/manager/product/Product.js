@@ -12,7 +12,7 @@ import { BsFillCursorFill } from 'react-icons/bs'
 import { BsFillXSquareFill } from "react-icons/bs";
 import Alert from '../../component/untill/Alert'
 import swal from 'sweetalert';
-import { BsImageFill } from 'react-icons/all'
+import { BsImageFill, BiSearch } from 'react-icons/all'
 import ImageModal from './ImageModal'
 import './product.css'
 import Loading from '../../valid/Loading'
@@ -25,7 +25,7 @@ const Product = () => {
     const context = useContext(GlobalContext)
     const [users] = context.usersApi.users
     const [id_user, setId_user] = useState('')
-    const [products] = context.productsApi.products
+    const [products, setProducts] = context.productsApi.products
     const [categories] = context.categoriesApi.categories
     const [supliers] = context.suppliersApi.suppliers
     const totalItem = 6;
@@ -42,6 +42,15 @@ const Product = () => {
     const [listPicture, setListPicture] = useState([])
     const [isMore, setIsMore] = useState(false)
     const [errLog, setErrLog] = useState('')
+    const [valueSearch, setValueSearch] = useState('')
+    const handleOnChangeSearch = async (e) => {
+        const value = e.target.value
+        const res = await apiInstance.post('/products/searchtext', {
+            searchtext: value
+        })
+        if (res && res.data)
+            setProducts(res.data)
+    }
     // const [isImgInput, setIsImgInput] = useState(false)
     const changePage = ({ selected }) => {
         setPageNumber(selected)
@@ -228,20 +237,20 @@ const Product = () => {
     const onCloseModal = () => {
         setIsModal(false)
     }
-    const [alert, setAlert] = useState({
-        isShow: false,
-        type: '',
-        msg: ''
+    // const [alert, setAlert] = useState({
+    //     isShow: false,
+    //     type: '',
+    //     msg: ''
 
 
-    })
-    const ShowAlert = (isShow, type, msg) => {
-        setAlert({
-            isShow: isShow,
-            type: type,
-            msg: msg
-        })
-    }
+    // })
+    // const ShowAlert = (isShow, type, msg) => {
+    //     setAlert({
+    //         isShow: isShow,
+    //         type: type,
+    //         msg: msg
+    //     })
+    // }
     const dislayTable = products.slice(PageVisited, totalItem + PageVisited).map(item => (
 
         <tr key={item.id}>
@@ -503,13 +512,113 @@ const Product = () => {
 
     }
     // console.log(imgArr);
+
+    const handleOnChangeCate = async (e) => {
+        const id = e.target.value
+        const res = await apiInstance.get(`/products/categories/${id}`)
+        if (res && res.data) setProducts(res.data)
+    }
+
+    const handleOnChangeStatus = async (e) => {
+        const id = e.target.value
+        const res = await apiInstance.get(`/products/status/${id}`)
+        if (res && res.data) setProducts(res.data)
+    }
+
+    const handleFilterProducts = async (e) => {
+        const id = e.target.value
+        console.log(id === 0, id);
+        if (id === '0') {
+
+            const res = await apiInstance.get('/products/sellfast')
+            if (res && res.data) setProducts(res.data)
+        }
+        if (id === '1') {
+            const res = await apiInstance.get('/products/reduced')
+            if (res && res.data) setProducts(res.data)
+        }
+        if (id === '2') {
+            const res = await apiInstance.get('/products/increase')
+            if (res && res.data) setProducts(res.data)
+        }
+        if (id === '3') {
+            const res = await apiInstance.get('/products')
+            if (res && res.data) setProducts(res.data)
+        }
+    }
     return (
         <>
 
 
             <div className='m-3'>
-                {alert.isShow && <Alert {...alert} showAlert={ShowAlert} />}
+
                 <HeaderTitle title='sản phẩm' onChaneShowMoDal={onChaneShowMoDal} />
+                <div className='container-fluid'>
+                    <div className='row'>
+                        <div className='col'>
+                            <div className='d-flex justify-content-around'>
+                                <div className='my-3 w-100 mr-2'>
+                                    <label>Loại sản phẩm</label>
+                                    <select className="form-select" aria-label="Default select example"
+                                        onChange={handleOnChangeCate}
+                                    >
+                                        <option selected>Chọn loại sản phẩm</option>
+                                        {
+                                            categories.map(item => (
+
+                                                <option value={item.id}>{item.name}</option>
+                                            ))
+                                        }
+                                    </select>
+                                </div>
+                                {/* <div className='my-3 w-100 mr-2'>
+                                    <label>Loại sản phẩm</label>
+                                    <select className="form-select" aria-label="Default select example">
+
+
+                                        <option value={0}>Sản phẩm tồn kho</option>
+                                        <option value={1}>Sản phẩm đã bán hết</option>
+                                    </select>
+                                </div> */}
+                                <div className='my-3 w-100 mr-2'>
+                                    <label>Trạng thái sản phẩm</label>
+                                    <select className="form-select" aria-label="Default select example"
+                                        onChange={handleOnChangeStatus}
+                                    >
+                                        <option selected>Chọn trạng thái sản phẩm</option>
+
+                                        <option value={1}>Đã duyệt</option>
+                                        <option value={0}>Chưa duyệt</option>
+                                    </select>
+                                </div>
+                                <div className='my-3 w-100 mr-2'>
+                                    <label>Lọc sản phẩm</label>
+                                    <select className="form-select" aria-label="Default select example"
+                                        onChange={handleFilterProducts}
+                                    >
+                                        <option selected>Chọn lọc sản phẩm</option>
+                                        {/* <option value={0}>Mới nhất</option> */}
+                                        <option value={'3'}>Tất cả</option>
+                                        <option value={'0'}>Bán chạy</option>
+
+                                        <option value={'1'}>Giá từ cao đến thấp</option>
+                                        <option value={'2'}>Giá từ thấp đến cao</option>
+                                    </select>
+                                </div>
+                                <div className='my-3 w-100'>
+                                    <label>Tìm kiếm</label>
+                                    <form className="d-flex align-items-center position-relative">
+                                        <input className="form-control me-2" type="search" aria-label="Search" placeholder='Tìm'
+                                            onChange={handleOnChangeSearch}
+                                        />
+                                        {/* <button className="btn btn-outline-success" type="submit">Tìm</button> */}
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {isLoading && <Loading />}
                 <ModalProduct
                     isModal={isModal}

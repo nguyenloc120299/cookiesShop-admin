@@ -8,15 +8,18 @@ import TableAdmin from './TableAdmin'
 import Loading from '../../valid/Loading'
 import TableBuyer from './TableBuyer'
 import { apiInstance } from '../../baseApi'
+import { Tab, Tabs } from 'react-bootstrap'
 const Orders = () => {
     const context = useContext(GlobalContext)
     const res = JSON.parse(localStorage.getItem('login_admin'))
     const [orders] = context.ordersApi.orders
+    const [ordersDetailAdmin] = context.ordersApi.ordersDetailAdmin
     const [callBack, setCallBack] = context.ordersApi.callBack
     const totalItem = 18;
     const [isLoading, setIsLoading] = useState(false)
     const [pageNumber, setPageNumber] = useState(0)
     const [type, setType] = context.ordersApi.status
+    const [typeAdmin, setTypeAdmin] = context.ordersApi.typeAdmin
     const pageCount = Math.ceil(orders.length / totalItem);
     const [detailOrder, setDetailOrder] = useState([])
     const PageVisited = pageNumber * totalItem
@@ -40,6 +43,46 @@ const Orders = () => {
         swal('Hoàn tất', '', 'success')
         setCallBack(!callBack)
     }
+    const displayOrderAdminDetail = ordersDetailAdmin.slice(PageVisited, totalItem + PageVisited).map((item, index) => (
+        <tr key={index}>
+            <td>
+                {index}
+            </td>
+            <td>
+                <div className='d-flex flex-column justify-content-center'>
+                    <div>{item.name}</div>
+                    <img src={item.avartar} alt='' style={{
+                        width: '5rem',
+                        objectFit: "cover"
+                    }} />
+
+                </div>
+
+            </td>
+            <td>{item.quantity}</td>
+
+
+            <td>{item.discount > 0 ? (item.discount) : item.totalmoney}</td>
+            <td
+                style={item.status === 0
+                    ? { color: 'green', fontWeight: 'bold' }
+                    : item.status === 1 ? { color: 'orange', fontWeight: "bold" } : {
+                        color: 'blue', fontWeight: "bold"
+                    }}
+            >{item.status === 0 ? 'Chưa xác nhận' : item.status === 1 ? 'Đang giao' : 'Đã giao'}</td>
+
+            <td>
+                {
+                    item.status === 3 ?
+                        <p style={{
+                            color: 'green',
+                            fontWeight: '700'
+                        }}>Hoàn tất</p> :
+                        <button className='btn btn-primary' onClick={() => onChangeStatus(item.status, item.id)}>{item.status === 2 ? 'Hoàn tất'
+                            : 'Tiếp tục'}</button>
+                }</td>
+        </tr>
+    ))
     const displayOrder = orders.slice(PageVisited, totalItem + PageVisited).map((item, index) => (
         <tr key={index}>
             <td>
@@ -128,6 +171,57 @@ const Orders = () => {
             {
                 <DetailListOrders item={detailOrder} />
             }
+            {
+                (res.token && res.roles[0].authority === 'Admin') &&
+
+                <Tabs defaultActiveKey="home" className="mb-3 text-color-dark" >
+                    <Tab eventKey="home" title="Tất cả đơn hàng">
+                        <TableAdmin displayOrder={displayOrderAdmin} />
+                    </Tab>
+
+                    <Tab eventKey="loaiSP" title="Quản lý chi tiết đơn hàng admin">
+                        <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
+
+                            <li className="nav-item" onClick={() => setTypeAdmin(5)}>
+                                <a className="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Tất cả </a>
+                            </li>
+
+                            <li className="nav-item" onClick={() => setTypeAdmin(0)}>
+                                <a className="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Chờ xác nhận </a>
+                            </li>
+                            <li className="nav-item" onClick={() => setTypeAdmin(1)}>
+                                <a className="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Đang giao </a>
+                            </li>
+                            <li className="nav-item" onClick={() => setTypeAdmin(2)}>
+                                <a className="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Đã giao </a>
+                            </li>
+
+
+                        </ul>
+                        <div className="tab-content" id="pills-tabContent">
+                            <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+
+                                <TableBuyer displayOrder={displayOrderAdminDetail} />
+                            </div>
+                            <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+                                <TableBuyer displayOrder={displayOrderAdminDetail} />
+                            </div>
+                            <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+
+                                <TableBuyer displayOrder={displayOrderAdminDetail} />
+                            </div>
+                            <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+
+                                <TableBuyer displayOrder={displayOrderAdminDetail} />
+                            </div>
+                        </div>
+                    </Tab>
+
+
+                </Tabs>
+            }
             <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 {
                     !(res.token && res.roles[0].authority === 'Admin') &&
@@ -148,25 +242,29 @@ const Orders = () => {
                     </>
                 }
             </ul>
-            <div className="tab-content" id="pills-tabContent">
-                <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            {
+                (res && res.roles[0].authority === 'Buyer') &&
 
-                    {res.token && res.roles[0].authority === 'Admin' ? <TableAdmin displayOrder={displayOrderAdmin} /> :
-                        <TableBuyer displayOrder={displayOrder} />}
+                <div className="tab-content" id="pills-tabContent">
+                    <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+
+                        <TableBuyer displayOrder={displayOrder} />
+                    </div>
+                    <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+                        <TableBuyer displayOrder={displayOrder} />
+                    </div>
+                    <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+
+                        <TableBuyer displayOrder={displayOrder} />
+                    </div>
+                    <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+
+                        <TableBuyer displayOrder={displayOrder} />
+                    </div>
                 </div>
-                <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    {res.token && res.roles[0].authority === 'Admin' ? <TableAdmin displayOrder={displayOrderAdmin} /> :
-                        <TableBuyer displayOrder={displayOrder} />}
-                </div>
-                <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                    {res.token && res.roles[0].authority === 'Admin' ? <TableAdmin displayOrder={displayOrderAdmin} /> :
-                        <TableBuyer displayOrder={displayOrder} />}
-                </div>
-                <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                    {res.token && res.roles[0].authority === 'Admin' ? <TableAdmin displayOrder={displayOrderAdmin} /> :
-                        <TableBuyer displayOrder={displayOrder} />}
-                </div>
-            </div>
+            }
             <div className='row'>
                 <PaginationReact previousLabel={"Trở lại"}
                     nextLabel={"Tiếp theo"}

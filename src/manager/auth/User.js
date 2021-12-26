@@ -14,7 +14,7 @@ const User = () => {
     const [pageNumber, setPageNumber] = useState(0)
     const context = useContext(GlobalContext)
     const [users] = context.usersApi.users
-    const totalItem = 6;
+    const totalItem = 10;
     const pageCount = Math.ceil(users.length / totalItem);
     const [isModal, setIsModal] = useState(false)
     const [IsImgInput, setIsImgInput] = useState(false)

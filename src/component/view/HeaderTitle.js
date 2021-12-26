@@ -8,8 +8,8 @@ const HeaderTitle = ({ title, onChaneShowMoDal }) => {
             margin: '10px'
 
         }}>
-            <div className=''>
-                <h5>Danh sách {title}</h5>
+            <div className='w-100 d-flex justify-content-center align-items-center'>
+                <h5 className='font-weight-bold font-style-italic'>Danh sách {title}</h5>
             </div>
 
             <div className='' style={{

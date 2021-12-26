@@ -28,7 +28,7 @@ const ModalProduct = ({ isModal, onChangeInput, value, onSubmit, isEdit, isSave,
                             fontWeight: 'bold',
                             cursor: 'pointer'
                         }}
-                            onClick={() => onCloseModal()}>X</p>
+                            onClick={() => onCloseModal()}></p>
 
                     </div>
                     <div className='modal-body p-3'>
